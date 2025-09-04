@@ -1,3 +1,5 @@
+// Submission Link: https://leetcode.com/problems/trapping-rain-water/submissions/1759018110
+
 class Solution {
 public:
     int trap(vector<int> &vec) {
