@@ -17,7 +17,7 @@
   
 **Memory Usage:** 26.81 MB (Beats 44.85%)  
   
-**Time Complexity:** O(N)  
+**Time Complexity:** O(n)  
   
-**Space Complexity:** O(N)  
+**Space Complexity:** O(n)  
 

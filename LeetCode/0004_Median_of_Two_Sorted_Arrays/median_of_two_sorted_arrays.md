@@ -17,7 +17,7 @@
   
 **Memory Usage:** 94.89 MB (Beats 99.58%)  
   
-**Time Complexity:** O(log(min(N,M)))  
+**Time Complexity:** O(log(min(n, m)))  
   
 **Space Complexity:** O(1)  
 
