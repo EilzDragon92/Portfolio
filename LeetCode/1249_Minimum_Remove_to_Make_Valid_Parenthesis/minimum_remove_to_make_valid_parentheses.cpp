@@ -1,5 +1,3 @@
-// https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/submissions/1764575045
-
 class Solution {
 public:
     string minRemoveToMakeValid(string s) {

@@ -1,5 +1,3 @@
-// Submission Link: https://leetcode.com/problems/median-of-two-sorted-arrays/submissions/1759179837/
-
 class Solution {
 public:
     double findMedianSortedArrays(vector<int> &vec0, vector<int> &vec1) {

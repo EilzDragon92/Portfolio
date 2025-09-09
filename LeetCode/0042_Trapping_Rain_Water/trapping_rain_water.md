@@ -1,4 +1,4 @@
-# 042. Trapping Rain Water  
+# 42. Trapping Rain Water  
   
 **Link:** https://leetcode.com/problems/trapping-rain-water/description/  
   
@@ -9,7 +9,7 @@
   
 ## Solution  
   
-**Submission Link:** https://leetcode.com/problems/trapping-rain-water/submissions/1759018110  
+**Submission Link:** https://leetcode.com/problems/trapping-rain-water/submissions/1759018110/  
   
 **Language:** C++  
   
