@@ -9,7 +9,7 @@
   
 ## Solution  
   
-**Submission Link:** https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/submissions/1764575045  
+**Submission Link:** https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/submissions/1764575045/  
   
 **Language:** C++  
   

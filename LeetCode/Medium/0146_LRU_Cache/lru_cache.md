@@ -9,7 +9,7 @@
   
 ## Solution  
   
-**Submission Link:** https://leetcode.com/problems/lru-cache/submissions/1763431481  
+**Submission Link:** https://leetcode.com/problems/lru-cache/submissions/1763431481/  
   
 **Language:** C++  
   
