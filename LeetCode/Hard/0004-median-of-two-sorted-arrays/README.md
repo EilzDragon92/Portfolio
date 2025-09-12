@@ -9,6 +9,8 @@
 
 ## Approach
 
+I referred LeetCode editorial to solve this problem.
+
 1\. Core Concept: In a sorted array, the median value must have the same number of elements on its left and right, and the elements on the left of the median must be smaller or equal to those on the right of it.
 
 2\. Conduct binary search to find the index `crs0` on `vec0` and `crs1` on `vec1` which meet the conditions specified in 1.
