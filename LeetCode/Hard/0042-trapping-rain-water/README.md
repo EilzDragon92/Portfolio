@@ -11,7 +11,7 @@
 
 1\. For each index, calculate height of the highest wall in its right. Let `max_r[i]` be the height of the highest wall in the right of index `i`.
 
-2\. Iterate each index, calculate height of the highest wall in its left. Let `max_l` be the the height of the highest wall in the left of the current index.
+2\. Iterate each index, calculate height of the highest wall in its left. Let `max_l` be the height of the highest wall in the left of the current index.
 
 3\. Choose the smaller value among `max_l` and `max_r[i]`. Let it be `tmp`.
 
