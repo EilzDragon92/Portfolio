@@ -1,4 +1,4 @@
-# 4. Median of Two Sorted Arrays
+k# 4. Median of Two Sorted Arrays
 
 **Description:** https://leetcode.com/problems/median-of-two-sorted-arrays/description/
 
@@ -11,9 +11,11 @@
 
 I referred LeetCode editorial to solve this problem.
 
-1\. Core Concept: In a sorted array, the median value must have the same number of elements on its left and right, and the elements on the left of the median must be smaller or equal to those on the right of it.
+1\. In a sorted array, the median value must have the same number of elements on its left and right, and the elements on the left of the median must be not larger than those on the right of it.
 
-2\. Conduct binary search to find the index `crs0` on `vec0` and `crs1` on `vec1` which meet the conditions specified in 1.
+2\. Let `n` be the number of elements in the left of `crs0` on `vec0`. Let `m` be the number of elements in the left of `crs1` on `vec1`.
+
+3\. Conduct binary search on `vec0`. Set `crs1` so that `m + n = half`. If the maximum in the left of each index are not larger than the minimum in the right of both indices, the conditions specified in 1 are met and the median is found. Otherwise, continue the binary search.
 
 
 ## Result
