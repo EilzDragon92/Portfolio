@@ -1,4 +1,4 @@
-k# 4. Median of Two Sorted Arrays
+# 4. Median of Two Sorted Arrays
 
 **Description:** https://leetcode.com/problems/median-of-two-sorted-arrays/description/
 
@@ -8,8 +8,6 @@ k# 4. Median of Two Sorted Arrays
 
 
 ## Approach
-
-I referred LeetCode editorial to solve this problem.
 
 1\. In a sorted array, the median value must have the same number of elements on its left and right, and the elements on the left of the median must be not larger than those on the right of it.
 
@@ -31,3 +29,8 @@ I referred LeetCode editorial to solve this problem.
 **Time Complexity:** O(log(min(n, m)))
 
 **Space Complexity:** O(1)
+
+
+## Attribution
+
+LeetCode Editorial: https://leetcode.com/problems/median-of-two-sorted-arrays/editorial/
