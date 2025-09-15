@@ -11,7 +11,7 @@
 
 1\. Sort the array by increasing order.
 
-2\. Let the first interval be `cur`. If new interval overlaps with `cur`, merge it into `cur`. Else, add `cur` to result and set new interval to `cur`.
+2\. Let the first interval be `cur`. If new interval overlaps with `cur`, merge it into `cur`. Else, add `cur` to result and set the new interval to be `cur`.
 
 
 ## Result
