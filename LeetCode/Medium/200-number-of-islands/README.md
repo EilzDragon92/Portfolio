@@ -1,4 +1,4 @@
-# 1249. Minimum Remove to Make Valid Parentheses
+# 200. Number of Islands
 
 **Link:** https://leetcode.com/problems/number-of-islands/description/
 
