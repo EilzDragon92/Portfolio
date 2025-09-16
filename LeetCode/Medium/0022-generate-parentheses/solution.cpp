@@ -1,41 +1,40 @@
 class Solution {
 private:
     vector<string> res;
-    int l = 0, r = 0, max;
-    string tmp = "";
+    string tmp;
+    int l = 0, r = 0, crs = 0, max;
     
-    void func(int i) {
+    void func() {
         if (r == max) {
             res.push_back(tmp);
             return;
         }
         
         if (l < max) {
-            tmp.push_back('(');
+            tmp[crs++] = '(';
             l++;
             
-            func(i + 1);
+            func();
             
-            tmp.pop_back();
-            l--;
+            crs--, l--;
         }
         
-        if (l - r > 0) {
-            tmp.push_back(')');
+        if (l > r) {
+            tmp[crs++] = ')';
             r++;
             
-            func(i + 1);
+            func();
             
-            tmp.pop_back();
-            r--;
+            crs--, r--;
         }
     }
     
 public:
     vector<string> generateParenthesis(int n) {
         max = n;
-        
-        func(0);
+
+        tmp.resize(n * 2);
+        func();
         
         return res;
     }
