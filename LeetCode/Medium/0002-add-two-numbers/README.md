@@ -9,7 +9,7 @@
 
 ## Approach
 
-1\. Iterate two list simultaneously. Calculate the current digit and carry.
+1\. Iterate two lists simultaneously. Calculate the current digit and carry.
 
 2\. If one list ends, iterate the other, and do the same.
 
