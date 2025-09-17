@@ -9,7 +9,7 @@
 
 ## Approach
 
-1\. Locate a cursor `l` in the leftmost index and another cursor `r` in the rightmost index. Let `height[i]` be the height of the wall in the index `i`.
+1\. Locate a cursor `l` in the leftmost index and another cursor `r` in the rightmost index. Let `height[i]` be the height of the wall in the index `i`. The amount of water can be stored is `min(height[l], height[r]) * (r - l)`.
 
 2\. Move the cursor with the lower value to the other side until it finds a higher value than the last. As a cursor moves, the width of the "floor" narrows, so you have to find a higher wall to store more water.
 
