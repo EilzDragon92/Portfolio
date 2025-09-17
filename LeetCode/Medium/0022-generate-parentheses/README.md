@@ -1,6 +1,6 @@
 # 22. Generate Parentheses
 
-**Link:** https://leetcode.com/problems/generate-parentheses/
+**Link:** https://leetcode.com/problems/generate-parentheses/description/
 
 **Difficulty:** Medium
 
