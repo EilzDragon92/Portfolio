@@ -3,7 +3,6 @@
 #include <QFont>
 #include <QGuiApplication>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QRadioButton>
@@ -30,7 +29,22 @@ public:
         hBox->addWidget(radioButton1);
         hBox->addStretch();
 
-        hBox->setSpacing(12);
+        hBox->setSpacing(10);
+        hBox->setContentsMargins(0, 0, 0, 0);
+
+        setLayout(hBox);
+    }
+};
+
+class StartButton : public QWidget {
+public:
+    explicit StartButton(QWidget *parent = nullptr) : QWidget(parent) {
+        auto *button = new QPushButton("Start");
+        auto *hBox = new QHBoxLayout;
+
+        hBox->addWidget(button);
+        hBox->addStretch();
+
         hBox->setContentsMargins(0, 0, 0, 0);
 
         setLayout(hBox);
@@ -40,11 +54,11 @@ public:
 class MainWindow : public QWidget {
 public:
     explicit MainWindow(QWidget *parent = nullptr) : QWidget(parent) {
-        auto *button = new QPushButton("Start");
         auto *lineEdit0 = new QLineEdit;
         auto *lineEdit1 = new QLineEdit;
         auto *lineEdit2 = new QLineEdit;
-        auto *selectMode = new SelectMode();
+        auto *selectMode = new SelectMode;
+        auto *startButton = new StartButton;
         auto *vBox = new QVBoxLayout(this);
 
         lineEdit0->setPlaceholderText("Source File");
@@ -55,7 +69,7 @@ public:
         vBox->addWidget(lineEdit0);
         vBox->addWidget(lineEdit1);
         vBox->addWidget(lineEdit2);
-        vBox->addWidget(button);
+        vBox->addWidget(startButton);
 
         vBox->setSpacing(10);
         vBox->setContentsMargins(10, 10, 10, 10);
