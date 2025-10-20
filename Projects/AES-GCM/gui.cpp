@@ -22,19 +22,19 @@ class SelectMode : public QWidget {
 public:
     explicit SelectMode(QWidget *parent = nullptr) : QWidget(parent) {
         auto *hBox = new QHBoxLayout;
-        auto *radioButton0 = new QRadioButton("Encrypt");
-        auto *radioButton1 = new QRadioButton("Decrypt");
+        auto *radioBtn0 = new QRadioButton("Encrypt");
+        auto *radioBtn1 = new QRadioButton("Decrypt");
 
-        radioButton0->setChecked(false);
-        radioButton1->setChecked(false);
+        radioBtn0->setChecked(false);
+        radioBtn1->setChecked(false);
 
-        buttonGroup = new QButtonGroup(this);
-        buttonGroup->addButton(radioButton0, 0);
-        buttonGroup->addButton(radioButton1, 1);
-        buttonGroup->setExclusive(true);
+        btnGroup = new QButtonGroup(this);
+        btnGroup->addButton(radioBtn0, 0);
+        btnGroup->addButton(radioBtn1, 1);
+        btnGroup->setExclusive(true);
 
-        hBox->addWidget(radioButton0);
-        hBox->addWidget(radioButton1);
+        hBox->addWidget(radioBtn0);
+        hBox->addWidget(radioBtn1);
         hBox->addStretch();
         hBox->setSpacing(10);
         hBox->setContentsMargins(0, 0, 0, 0);
@@ -43,12 +43,54 @@ public:
     }
 
     int getMode() const {
-        auto *button = buttonGroup->checkedButton();
-        return button ? buttonGroup->id(button) : -1;
+        auto *btn = btnGroup->checkedButton();
+        return btn ? btnGroup->id(btn) : -1;
     }
 
 private:
-    QButtonGroup *buttonGroup;
+    QButtonGroup *btnGroup;
+};
+
+class KeyLineEdit : public QWidget {
+public:
+    explicit KeyLineEdit(QWidget *parent = nullptr) : QWidget(parent) {
+        auto *hBox = new QHBoxLayout;
+        maskBtn = new QPushButton("See");
+        lineEdit = new QLineEdit;
+
+        lineEdit->setPlaceholderText("Key");
+        lineEdit->setEchoMode(QLineEdit::Password);
+
+        maskBtn->setFixedSize(45, 30);
+
+        hBox->addWidget(lineEdit);
+        hBox->addWidget(maskBtn);
+        hBox->setSpacing(10);
+        hBox->setContentsMargins(0, 0, 0, 0);
+
+        connect(maskBtn, &QPushButton::clicked, this, &KeyLineEdit::onToggleKeyVisibility);
+
+        setLayout(hBox);
+    }
+
+    QString text() {
+        return lineEdit->text();
+    }
+
+private:
+    void onToggleKeyVisibility() {
+        if (lineEdit->echoMode() == QLineEdit::Password) {
+            lineEdit->setEchoMode(QLineEdit::Normal);
+            maskBtn->setText("Hide");
+        }
+        else {
+            lineEdit->setEchoMode(QLineEdit::Password);
+            maskBtn->setText("See");
+        }
+    }
+
+    QLineEdit *lineEdit;
+    QPushButton *maskBtn;
 };
 
 class MainWindow : public QWidget {
@@ -59,16 +101,15 @@ public:
         selectMode = new SelectMode;
         srcLineEdit = new QLineEdit;
         dstLineEdit = new QLineEdit;
-        keyLineEdit = new QLineEdit;
-        startButton = new QPushButton("Start");
+        keyLineEdit = new KeyLineEdit;
+        startBtn = new QPushButton("Start");
         hBox = new QHBoxLayout;
         vBox = new QVBoxLayout(this);
 
         srcLineEdit->setPlaceholderText("Source File");
         dstLineEdit->setPlaceholderText("Destination File");
-        keyLineEdit->setPlaceholderText("Key");
 
-        hBox->addWidget(startButton);
+        hBox->addWidget(startBtn);
         hBox->addStretch();
         hBox->setContentsMargins(0, 0, 0, 0);
 
@@ -80,7 +121,7 @@ public:
         vBox->setSpacing(10);
         vBox->setContentsMargins(10, 10, 10, 10);
 
-        connect(startButton, &QPushButton::clicked, this, &MainWindow::onStartButtonClicked);
+        connect(startBtn, &QPushButton::clicked, this, &MainWindow::onStartButtonClicked);
 
         setLayout(vBox);
         setWindowTitle("Cryption");
@@ -139,9 +180,10 @@ private:
     }
 
     SelectMode *selectMode;
-    QLineEdit *srcLineEdit, *dstLineEdit, *keyLineEdit;
-    QPushButton *startButton;
-    QHBoxLayout *hBox;
+    QLineEdit *srcLineEdit, *dstLineEdit;
+    KeyLineEdit *keyLineEdit;
+    QPushButton *startBtn, *maskingButton;
+    QHBoxLayout *keyHBox, *hBox;
     QVBoxLayout *vBox;
     UserInput userInput;
 };
