@@ -1,4 +1,6 @@
-﻿#include <QApplication>
+﻿#include "header.h"
+
+#include <QApplication>
 #include <QButtonGroup>
 #include <QFont>
 #include <QGuiApplication>
@@ -25,7 +27,7 @@ public:
 
         radioButton0->setChecked(false);
         radioButton1->setChecked(false);
-        
+
         buttonGroup = new QButtonGroup(this);
         buttonGroup->addButton(radioButton0, 0);
         buttonGroup->addButton(radioButton1, 1);
@@ -84,57 +86,67 @@ public:
         setWindowTitle("Cryption");
     }
 
+    UserInput getUserInput() const {
+        return userInput;
+    }
+
 private slots:
-    int onStartButtonClicked() {
+    void onStartButtonClicked() {
         int mode = selectMode->getMode();
-        auto *errMsg = new QMessageBox(this);
         QString src = srcLineEdit->text();
         QString dst = dstLineEdit->text();
         QString key = keyLineEdit->text();
-        
-        errMsg->setWindowTitle(tr("ERROR"));
-        errMsg->setStandardButtons(QMessageBox::Ok);
-        errMsg->setAttribute(Qt::WA_DeleteOnClose);
-
-        errMsg->layout()->setContentsMargins(10, 10, 10, 10);
-        errMsg->layout()->setSpacing(10);
 
         if (mode == -1) {
-            errMsg->setText(tr("Mode is not selected."));
-            errMsg->open();
-            return 1;
+            showError(tr("Mode is not selected."));
+            return;
         }
 
         if (src.isEmpty()) {
-            errMsg->setText(tr("Source file name or path is not input."));
-            errMsg->open();
-            return 1;
+            showError(tr("Source file name or path is not input."));
+            return;
         }
 
         if (dst.isEmpty()) {
-            errMsg->setText(tr("Destination file name or path is not input."));
-            errMsg->open();
-            return 1;
+            showError(tr("Destination file name or path is not input."));
+            return;
         }
 
         if (key.isEmpty()) {
-            errMsg->setText(tr("Key is not input."));
-            errMsg->open();
-            return 1;
+            showError(tr("Key is not input."));
+            return;
         }
 
-        return 0;
+        userInput.mode = mode;
+        userInput.src = src;
+        userInput.dst = dst;
+        userInput.key = key;
+
+        close();
     }
 
 private:
-    SelectMode *selectMode; 
+    void showError(const QString &msg) {
+        auto *msgBox = new QMessageBox(this);
+
+        msgBox->setWindowTitle(tr("ERROR"));
+        msgBox->setText(msg);
+        msgBox->setStandardButtons(QMessageBox::Ok);
+        msgBox->setAttribute(Qt::WA_DeleteOnClose);
+        msgBox->layout()->setContentsMargins(10, 10, 10, 10);
+        msgBox->layout()->setSpacing(10);
+        msgBox->open();
+    }
+
+    SelectMode *selectMode;
     QLineEdit *srcLineEdit, *dstLineEdit, *keyLineEdit;
     QPushButton *startButton;
     QHBoxLayout *hBox;
     QVBoxLayout *vBox;
+    UserInput userInput;
 };
 
-int show_gui(int argc, char *argv[]) {
+UserInput show_gui(int argc, char *argv[]) {
     QApplication app(argc, argv);
     MainWindow mainWindow;
 
@@ -150,12 +162,13 @@ int show_gui(int argc, char *argv[]) {
 
     int x = (rect.width() - mainWindow.width()) / 2;
     int y = (rect.height() - mainWindow.height()) / 2 - 50;
-
     mainWindow.move(x, y);
 
     mainWindow.show();
 
-    return app.exec();
+    app.exec();
+
+    return mainWindow.getUserInput();
 }
 
 #include "gui.moc"
