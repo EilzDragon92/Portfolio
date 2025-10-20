@@ -18,6 +18,7 @@
 #include <QGridLayout>
 #include <QBoxLayout>
 
+/* Mode selection buttons */
 class SelectMode : public QWidget {
 public:
     explicit SelectMode(QWidget *parent = nullptr) : QWidget(parent) {
@@ -25,16 +26,21 @@ public:
         auto *radioBtn0 = new QRadioButton("Encrypt");
         auto *radioBtn1 = new QRadioButton("Decrypt");
 
+        /* no button is selected by default */
         radioBtn0->setChecked(false);
         radioBtn1->setChecked(false);
 
+        /* group buttons */
         btnGroup = new QButtonGroup(this);
         btnGroup->addButton(radioBtn0, 0);
         btnGroup->addButton(radioBtn1, 1);
         btnGroup->setExclusive(true);
 
+        /* add components */
         hBox->addWidget(radioBtn0);
         hBox->addWidget(radioBtn1);
+
+        /* configure layout */
         hBox->addStretch();
         hBox->setSpacing(10);
         hBox->setContentsMargins(0, 0, 0, 0);
@@ -51,6 +57,7 @@ private:
     QButtonGroup *btnGroup;
 };
 
+/* Key input text box */
 class KeyLineEdit : public QWidget {
 public:
     explicit KeyLineEdit(QWidget *parent = nullptr) : QWidget(parent) {
@@ -58,27 +65,33 @@ public:
         maskBtn = new QPushButton("See");
         lineEdit = new QLineEdit;
 
+        /* apply masking by default */
         lineEdit->setPlaceholderText("Key");
         lineEdit->setEchoMode(QLineEdit::Password);
 
+        /* configure button size */
         maskBtn->setFixedSize(45, 30);
 
+        /* add components */
         hBox->addWidget(lineEdit);
         hBox->addWidget(maskBtn);
+
+        /* configure layout */
         hBox->setSpacing(10);
         hBox->setContentsMargins(0, 0, 0, 0);
 
-        connect(maskBtn, &QPushButton::clicked, this, &KeyLineEdit::onToggleKeyVisibility);
+        /* add button function */
+        connect(maskBtn, &QPushButton::clicked, this, &KeyLineEdit::toggleMasking);
 
         setLayout(hBox);
     }
-
-    QString text() {
+    
+    QString getText() {
         return lineEdit->text();
     }
 
 private:
-    void onToggleKeyVisibility() {
+    void toggleMasking() {
         if (lineEdit->echoMode() == QLineEdit::Password) {
             lineEdit->setEchoMode(QLineEdit::Normal);
             maskBtn->setText("Hide");
@@ -106,25 +119,35 @@ public:
         hBox = new QHBoxLayout;
         vBox = new QVBoxLayout(this);
 
+        /* show roles of each text box */
         srcLineEdit->setPlaceholderText("Source File");
         dstLineEdit->setPlaceholderText("Destination File");
 
+        /* start button sub-layout */
         hBox->addWidget(startBtn);
         hBox->addStretch();
         hBox->setContentsMargins(0, 0, 0, 0);
 
+        /* add components */
         vBox->addWidget(selectMode);
         vBox->addWidget(srcLineEdit);
         vBox->addWidget(dstLineEdit);
         vBox->addWidget(keyLineEdit);
         vBox->addLayout(hBox);
+
+        /* configure main layout */
         vBox->setSpacing(10);
         vBox->setContentsMargins(10, 10, 10, 10);
 
-        connect(startBtn, &QPushButton::clicked, this, &MainWindow::onStartButtonClicked);
+        /* add button function */
+        connect(startBtn, &QPushButton::clicked, this, &MainWindow::start);
 
         setLayout(vBox);
         setWindowTitle("Cryption");
+
+        /* initialize */
+        userInput.valid = 0;
+        userInput.mode = -1;
     }
 
     UserInput getUserInput() const {
@@ -132,11 +155,11 @@ public:
     }
 
 private slots:
-    void onStartButtonClicked() {
+    void start() {
         int mode = selectMode->getMode();
         QString src = srcLineEdit->text();
         QString dst = dstLineEdit->text();
-        QString key = keyLineEdit->text();
+        QString key = keyLineEdit->getText();
 
         if (mode == -1) {
             showError(tr("Mode is not selected."));
@@ -144,12 +167,12 @@ private slots:
         }
 
         if (src.isEmpty()) {
-            showError(tr("Source file name or path is not input."));
+            showError(tr("Source file is not input."));
             return;
         }
 
         if (dst.isEmpty()) {
-            showError(tr("Destination file name or path is not input."));
+            showError(tr("Destination file is not input."));
             return;
         }
 
@@ -158,6 +181,7 @@ private slots:
             return;
         }
 
+        userInput.valid = 1;
         userInput.mode = mode;
         userInput.src = src;
         userInput.dst = dst;
