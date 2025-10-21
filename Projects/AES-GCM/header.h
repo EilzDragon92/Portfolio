@@ -1,6 +1,9 @@
 #pragma once
 
 #include <QString>
+#include <io.h>
+
+using namespace std;
 
 /* User input from GUI */
 struct UserInput {
@@ -11,4 +14,4 @@ struct UserInput {
     QString key;
 };
 
-UserInput show_gui(int argc, char *argv[]);
+UserInput GetUserInput(int argc, char *argv[]);

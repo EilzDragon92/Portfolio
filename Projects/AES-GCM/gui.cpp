@@ -1,22 +1,16 @@
 ﻿#include "header.h"
 
 #include <QApplication>
+#include <QBoxLayout>
 #include <QButtonGroup>
 #include <QFont>
 #include <QGuiApplication>
-#include <QHBoxLayout>
-#include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QRadioButton>
 #include <QScreen>
-#include <QVBoxLayout>
 #include <QWidget>
-
-#include <QDialogButtonBox>
-#include <QGridLayout>
-#include <QBoxLayout>
 
 /* Mode selection buttons */
 class SelectMode : public QWidget {
@@ -212,7 +206,7 @@ private:
     UserInput userInput;
 };
 
-UserInput show_gui(int argc, char *argv[]) {
+UserInput GetUserInput(int argc, char *argv[]) {
     QApplication app(argc, argv);
     MainWindow mainWindow;
 
