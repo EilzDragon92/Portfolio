@@ -52,15 +52,15 @@ private:
 };
 
 /* Key input text box */
-class KeyLineEdit : public QWidget {
+class PWLineEdit : public QWidget {
 public:
-    explicit KeyLineEdit(QWidget *parent = nullptr) : QWidget(parent) {
+    explicit PWLineEdit(QWidget *parent = nullptr) : QWidget(parent) {
         auto *hBox = new QHBoxLayout;
         maskBtn = new QPushButton("See");
         lineEdit = new QLineEdit;
 
         /* apply masking by default */
-        lineEdit->setPlaceholderText("Key");
+        lineEdit->setPlaceholderText("Password");
         lineEdit->setEchoMode(QLineEdit::Password);
 
         /* configure button size */
@@ -75,7 +75,7 @@ public:
         hBox->setContentsMargins(0, 0, 0, 0);
 
         /* add button function */
-        connect(maskBtn, &QPushButton::clicked, this, &KeyLineEdit::toggleMasking);
+        connect(maskBtn, &QPushButton::clicked, this, &PWLineEdit::toggleMasking);
 
         setLayout(hBox);
     }
@@ -108,7 +108,7 @@ public:
         selectMode = new SelectMode;
         srcLineEdit = new QLineEdit;
         dstLineEdit = new QLineEdit;
-        keyLineEdit = new KeyLineEdit;
+        pwLineEdit = new PWLineEdit;
         startBtn = new QPushButton("Start");
         hBox = new QHBoxLayout;
         vBox = new QVBoxLayout(this);
@@ -126,7 +126,7 @@ public:
         vBox->addWidget(selectMode);
         vBox->addWidget(srcLineEdit);
         vBox->addWidget(dstLineEdit);
-        vBox->addWidget(keyLineEdit);
+        vBox->addWidget(pwLineEdit);
         vBox->addLayout(hBox);
 
         /* configure main layout */
@@ -153,7 +153,7 @@ private slots:
         int mode = selectMode->getMode();
         QString src = srcLineEdit->text();
         QString dst = dstLineEdit->text();
-        QString key = keyLineEdit->getText();
+        QString pw = pwLineEdit->getText();
 
         if (mode == -1) {
             showError(tr("Mode is not selected."));
@@ -170,8 +170,8 @@ private slots:
             return;
         }
 
-        if (key.isEmpty()) {
-            showError(tr("Key is not input."));
+        if (pw.isEmpty()) {
+            showError(tr("Password is not input."));
             return;
         }
 
@@ -179,7 +179,7 @@ private slots:
         userInput.mode = mode;
         userInput.src = src;
         userInput.dst = dst;
-        userInput.key = key;
+        userInput.pw = pw;
 
         close();
     }
@@ -199,7 +199,7 @@ private:
 
     SelectMode *selectMode;
     QLineEdit *srcLineEdit, *dstLineEdit;
-    KeyLineEdit *keyLineEdit;
+    PWLineEdit *pwLineEdit;
     QPushButton *startBtn, *maskingButton;
     QHBoxLayout *keyHBox, *hBox;
     QVBoxLayout *vBox;
