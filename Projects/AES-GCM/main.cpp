@@ -3,16 +3,6 @@
 FILE *srcFile, *dstFile;
 UserInput userInput;
 
-int GetFileSize(FILE *file) {
-    if (_fseeki64(file, 0, SEEK_END)) return -1;
-
-    int res = _ftelli64(file);
-
-    rewind(file);
-
-    return res;
-}
-
 int GetProcNum() {
     SYSTEM_INFO systemInfo;
 
@@ -57,13 +47,6 @@ void init(int argc, char *argv[]) {
 
     if (res == 4) {
         printf("ERROR: Failed to create destination file\n");
-        return;
-    }
-
-    fileSize = GetFileSize(srcFile);
-
-    if (fileSize == -1) {
-        printf("ERROR: Failed to read file size\n");
         return;
     }
 }
