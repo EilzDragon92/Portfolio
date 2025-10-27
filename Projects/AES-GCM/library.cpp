@@ -2,7 +2,7 @@
 
 int pnum;
 
-int GetFileSize(FILE *file) {
+int64_t GetFileSize(FILE *file) {
     if (_fseeki64(file, 0, SEEK_END)) return -1;
 
     int res = _ftelli64(file);

@@ -13,8 +13,12 @@ int GetProcNum() {
 
 int OpenFiles(int argc, char *argv[]) {
     userInput = GetUserInput(argc, argv);
-    const char *srcPath = userInput.src.toStdString().c_str();
-    const char *dstPath = userInput.dst.toStdString().c_str();
+
+    string tmp0 = userInput.src.toStdString();
+    string tmp1 = userInput.dst.toStdString();
+
+    const char *srcPath = tmp0.c_str();
+    const char *dstPath = tmp1.c_str();
 
     if (!userInput.valid) return 1;
 

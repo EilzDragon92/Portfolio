@@ -28,8 +28,8 @@ extern int pnum;
 
 UserInput GetUserInput(int argc, char *argv[]);
 
-int Argon2id(uint8_t salt[], const char pw[], uint8_t key[]);
+int64_t GetFileSize(FILE *file);
 
-int GetFileSize(FILE *file);
+int Argon2id(uint8_t salt[], const char pw[], uint8_t key[]);
 
 int Random(uint8_t *dst, int size);

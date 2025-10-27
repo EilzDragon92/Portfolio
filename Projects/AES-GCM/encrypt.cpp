@@ -1,12 +1,16 @@
 ﻿#include "header.h"
 
-#define BUFF_SIZE 4096
+#define AAD_LEN (IV_SIZE + SALT_SIZE)
 #define BLOC_SIZE 16
-#define IVEC_SIZE 12
+#define BUFF_SIZE 4096
+#define IV_SIZE 12
+#define TAG_SIZE 16
 
 class AES_GCM {
 public:
-	int setup(FILE *src) {
+	bool setup(FILE *src, FILE *dst) {
+		srcFile = src, dstFile = dst;
+
 		if (!(ctx = EVP_CIPHER_CTX_new())) {
 			printf("ERROR: Failed to create context\n");
 			return 1;
@@ -17,17 +21,17 @@ public:
 			return 1;
 		}
 
-		if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IVEC_SIZE, NULL) != 1) {
+		if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IV_SIZE, NULL) != 1) {
 			printf("ERROR: Failed to set initial vector size\n");
 			return 1;
 		}
 
-		if (EVP_EncryptInit_ex(ctx, NULL, NULL, key, ivec) != 1) {
+		if (EVP_EncryptInit_ex(ctx, NULL, NULL, key, iv) != 1) {
 			printf("ERROR: Failed to set key and initial vector\n");
 			return 1;
 		}
 
-		fsize = GetFileSize(src);
+		fsize = GetFileSize(srcFile);
 
 		if (fsize == -1) {
 			printf("ERROR: Failed to read file size\n");
@@ -37,58 +41,163 @@ public:
 		return 0;
 	}
 
-	void encrypt(FILE *src, FILE *dst, const char *pw) {
+	bool encryptSetup(const char *pw) {
 		if (Random(salt, SALT_SIZE)) {
 			printf("ERROR: Failed to generate salt\n");
-			return;
+			return 1;
 		}
 
 		if (Argon2id(salt, pw, key)) {
 			printf("ERROR: Failed to derive key\n");
-			return;
+			return 1;
 		}
 
-		if (Random(ivec, IVEC_SIZE)) {
+		if (Random(iv, IV_SIZE)) {
 			printf("ERROR: Failed to generate initial vector\n");
-			return;
+			return 1;
 		}
 
-		if (setup(src)) return;
+		if (fwrite(salt, sizeof(uint8_t), SALT_SIZE, dstFile) != SALT_SIZE) {
+			printf("ERROR: Failed to write salt\n");
+			return 1;
+		}
 
-		while (cur + BUFF_SIZE * BLOC_SIZE < fsize) {
-			if (!readBuffer(src)) {
-				printf("ERROR: Failed to read file\n");
-				return;
+		if (fwrite(iv, sizeof(uint8_t), IV_SIZE, dstFile) != IV_SIZE) {
+			printf("ERROR: Failed to write initial vector\n");
+			return 1;
+		}
+
+		return 0;
+	}
+
+	bool encryptAAD() {
+		uint8_t aad[AAD_LEN];
+
+		memcpy(aad, salt, SALT_SIZE);
+		memcpy(aad + SALT_SIZE, iv, IV_SIZE);
+
+		if (EVP_EncryptUpdate(ctx, NULL, NULL, aad, AAD_LEN) != 1) {
+			printf("ERROR: Failed to put AAD\n");
+			return 1;
+		}
+
+		return 0;
+	}
+
+	bool encryptBlock(uint8_t *src, uint8_t *dst, int size) {
+		if (EVP_EncryptUpdate(ctx, dst, NULL, src, size)) {
+			printf("ERROR: Failed to encrypt a block\n");
+			return 1;
+		}
+
+		return 0;
+	}
+
+	bool encryptBatch(uint8_t buff[][BLOC_SIZE]) {
+		while (cur + BUFF_SIZE * BLOC_SIZE <= fsize) {
+			if (readBuffer(buff, BUFF_SIZE * BLOC_SIZE)) return 1;
+
+			for (int i = 0; i < BUFF_SIZE; i++) {
+				if (encryptBlock(buff[i], buff[i], BLOC_SIZE)) return 1;
 			}
 
-			// encrypt buffer
-
-			if (!writeBuffer(dst)) {
-				printf("ERROR: Failed to write file\n");
-				return;
-			}
+			if (writeBuffer(buff, BUFF_SIZE * BLOC_SIZE)) return 1;
 
 			cur += BUFF_SIZE * BLOC_SIZE;
 		}
+
+		return 0;
 	}
 
-	void decrypt(FILE *src, FILE *dst, const char *pw) {
+	bool encryptBatchRemain(uint8_t buff[][BLOC_SIZE]) {
+		int crs = 0, rem = fsize % BLOC_SIZE;
+
+		while (cur + BLOC_SIZE <= fsize) {
+			if (readBuffer(buff[crs], BLOC_SIZE)) return 1;
+
+			if (encryptBlock(buff[crs], buff[crs], BLOC_SIZE)) return 1;
+
+			crs++;
+
+			cur += BLOC_SIZE;
+		}
+
+		if (readBuffer(buff[crs], rem)) return 1;
+
+		if (encryptBlock(buff[crs], buff[crs], rem)) return 1;
+
+		crs++;
+
+		cur += rem;
+
+		if (writeBuffer(buff, BLOC_SIZE * cur + rem)) return 1;
+
+		return 0;
+	}
+
+	bool encryptTag() {
+		uint8_t tag[16];
+
+		if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, TAG_SIZE, tag) != 1) {
+			printf("ERROR: Failed to get authentication tag\n");
+			return 1;
+		}
+
+		if (fwrite(tag, sizeof(uint8_t), TAG_SIZE, dstFile) != TAG_SIZE) {
+			printf("ERROR: Failed to write authentication tag\n");
+			return 1;
+		}
+
+		return 0;
+	}
+
+	bool encryptFile(FILE *src, FILE *dst, const char *pw) {
+		uint8_t buff[BUFF_SIZE][BLOC_SIZE];
+
+		if (setup(src, dst)) return 1;
+
+		if (encryptSetup(pw)) return 1;
+
+		if (encryptAAD()) return 1;
+
+		if (encryptBatch(buff)) return 1;
+
+		if (encryptBatchRemain(buff)) return 1;
+
+		// EVP_EncryptFinal_ex()
+
+		if (encryptTag()) return 1;
+
+		return 0;
+	}
+
+	void decryptFile(FILE *src, FILE *dst, const char *pw) {
 		// read salt and ivec
 
-		if (setup(src)) return;
+		if (setup(src, dst)) return;
 	}
 
 private:
 	EVP_CIPHER_CTX *ctx;
-	uint8_t buff[BUFF_SIZE][BLOC_SIZE];
-	uint8_t ivec[IVEC_SIZE], key[KEY_SIZE], salt[SALT_SIZE];
-	int cur = 0, fsize;
+	FILE *srcFile, *dstFile;
+	uint64_t cur = 0, fsize;
+	uint8_t iv[IV_SIZE], key[KEY_SIZE], salt[SALT_SIZE];
 
-	bool readBuffer(FILE *file) {
-		return fread(buff, sizeof(uint8_t), BUFF_SIZE * BLOC_SIZE, file) == BUFF_SIZE * BLOC_SIZE;
+	bool readBuffer(void *buff, int size) {
+		if (fread(buff, sizeof(uint8_t), size, srcFile) != size) {
+			printf("ERROR: Failed to read file\n");
+			return 1;
+		}
+
+		return 0;
 	}
 
-	bool writeBuffer(FILE *file) {
-		return fwrite(buff, sizeof(uint8_t), BUFF_SIZE * BLOC_SIZE, file) == BUFF_SIZE * BLOC_SIZE;
+	bool writeBuffer(void *buff, int size) {
+		if (fwrite(buff, sizeof(uint8_t), size, dstFile) != size) {
+			printf("ERROR: Failed to write file\n");
+			return 1;
+		}
+		
+		return 0;
 	}
 };
