@@ -159,8 +159,7 @@
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
     </QtMoc>
-    <ClCompile Include="argon2id.cpp" />
-    <ClCompile Include="encrypt.cpp" />
+    <ClCompile Include="aes-gcm.cpp" />
     <ClCompile Include="library.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

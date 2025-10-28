@@ -8,7 +8,14 @@
 
 class AES_GCM {
 public:
-	bool setup(FILE *src, FILE *dst) {
+	~AES_GCM() {
+		if (ctx) {
+			EVP_CIPHER_CTX_free(ctx);
+			ctx = NULL;
+		}
+	}
+
+	int setup(FILE *src, FILE *dst) {
 		srcFile = src, dstFile = dst;
 
 		if (!(ctx = EVP_CIPHER_CTX_new())) {
@@ -31,9 +38,9 @@ public:
 			return 1;
 		}
 
-		fsize = GetFileSize(srcFile);
+		fileSize = GetFileSize(srcFile);
 
-		if (fsize == -1) {
+		if (fileSize == -1) {
 			printf("ERROR: Failed to read file size\n");
 			return 1;
 		}
@@ -41,7 +48,7 @@ public:
 		return 0;
 	}
 
-	bool encryptSetup(const char *pw) {
+	int encryptSetup(const char *pw) {
 		if (Random(salt, SALT_SIZE)) {
 			printf("ERROR: Failed to generate salt\n");
 			return 1;
@@ -70,7 +77,7 @@ public:
 		return 0;
 	}
 
-	bool encryptAAD() {
+	int encryptAAD() {
 		uint8_t aad[AAD_LEN];
 
 		memcpy(aad, salt, SALT_SIZE);
@@ -84,8 +91,15 @@ public:
 		return 0;
 	}
 
-	bool encryptBlock(uint8_t *src, uint8_t *dst, int size) {
-		if (EVP_EncryptUpdate(ctx, dst, NULL, src, size)) {
+	int encryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
+		int dstLen;
+
+		if (!EVP_EncryptUpdate(ctx, dst, &dstLen, src, srcLen)) {
+			printf("ERROR: Failed to encrypt a block\n");
+			return 1;
+		}
+
+		if (dstLen != srcLen) {
 			printf("ERROR: Failed to encrypt a block\n");
 			return 1;
 		}
@@ -93,8 +107,8 @@ public:
 		return 0;
 	}
 
-	bool encryptBatch(uint8_t buff[][BLOC_SIZE]) {
-		while (cur + BUFF_SIZE * BLOC_SIZE <= fsize) {
+	int encryptBatch(uint8_t buff[][BLOC_SIZE]) {
+		while (cur + BUFF_SIZE * BLOC_SIZE <= fileSize) {
 			if (readBuffer(buff, BUFF_SIZE * BLOC_SIZE)) return 1;
 
 			for (int i = 0; i < BUFF_SIZE; i++) {
@@ -109,10 +123,10 @@ public:
 		return 0;
 	}
 
-	bool encryptBatchRemain(uint8_t buff[][BLOC_SIZE]) {
-		int crs = 0, rem = fsize % BLOC_SIZE;
+	int encryptRemain(uint8_t buff[][BLOC_SIZE]) {
+		int crs = 0, rem = fileSize % BLOC_SIZE;
 
-		while (cur + BLOC_SIZE <= fsize) {
+		while (cur + BLOC_SIZE <= fileSize) {
 			if (readBuffer(buff[crs], BLOC_SIZE)) return 1;
 
 			if (encryptBlock(buff[crs], buff[crs], BLOC_SIZE)) return 1;
@@ -122,21 +136,35 @@ public:
 			cur += BLOC_SIZE;
 		}
 
-		if (readBuffer(buff[crs], rem)) return 1;
+		if (rem) {
+			if (readBuffer(buff[crs], rem)) return 1;
 
-		if (encryptBlock(buff[crs], buff[crs], rem)) return 1;
+			if (encryptBlock(buff[crs], buff[crs], rem)) return 1;
 
-		crs++;
+			cur += rem;
+		}
 
-		cur += rem;
-
-		if (writeBuffer(buff, BLOC_SIZE * cur + rem)) return 1;
+		if (writeBuffer(buff, BLOC_SIZE * crs + rem)) return 1;
 
 		return 0;
 	}
 
-	bool encryptTag() {
-		uint8_t tag[16];
+	int encryptFinal() {
+		uint8_t final[BLOC_SIZE];
+		int finalLen;
+
+		if (EVP_EncryptFinal_ex(ctx, final, &finalLen) != 1) {
+			printf("ERROR: Failed to finalize encryption\n");
+			return 1;
+		}
+
+		if (finalLen > 0 && writeBuffer(final, finalLen)) return 1;
+
+		return 0;
+	}
+
+	int encryptTag() {
+		uint8_t tag[TAG_SIZE];
 
 		if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, TAG_SIZE, tag) != 1) {
 			printf("ERROR: Failed to get authentication tag\n");
@@ -151,7 +179,7 @@ public:
 		return 0;
 	}
 
-	bool encryptFile(FILE *src, FILE *dst, const char *pw) {
+	int encryptFile(FILE *src, FILE *dst, const char *pw) {
 		uint8_t buff[BUFF_SIZE][BLOC_SIZE];
 
 		if (setup(src, dst)) return 1;
@@ -162,28 +190,30 @@ public:
 
 		if (encryptBatch(buff)) return 1;
 
-		if (encryptBatchRemain(buff)) return 1;
+		if (encryptRemain(buff)) return 1;
 
-		// EVP_EncryptFinal_ex()
+		if (encryptFinal()) return 1;
 
 		if (encryptTag()) return 1;
 
 		return 0;
 	}
 
-	void decryptFile(FILE *src, FILE *dst, const char *pw) {
+	int decryptFile(FILE *src, FILE *dst, const char *pw) {
 		// read salt and ivec
 
-		if (setup(src, dst)) return;
+		if (setup(src, dst)) return 1;
+
+		return 0;
 	}
 
 private:
 	EVP_CIPHER_CTX *ctx;
 	FILE *srcFile, *dstFile;
-	uint64_t cur = 0, fsize;
+	uint64_t cur = 0, fileSize;
 	uint8_t iv[IV_SIZE], key[KEY_SIZE], salt[SALT_SIZE];
 
-	bool readBuffer(void *buff, int size) {
+	int readBuffer(void *buff, int size) {
 		if (fread(buff, sizeof(uint8_t), size, srcFile) != size) {
 			printf("ERROR: Failed to read file\n");
 			return 1;
@@ -192,7 +222,7 @@ private:
 		return 0;
 	}
 
-	bool writeBuffer(void *buff, int size) {
+	int writeBuffer(void *buff, int size) {
 		if (fwrite(buff, sizeof(uint8_t), size, dstFile) != size) {
 			printf("ERROR: Failed to write file\n");
 			return 1;

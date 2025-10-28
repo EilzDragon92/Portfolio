@@ -2,14 +2,7 @@
 
 FILE *srcFile, *dstFile;
 UserInput userInput;
-
-int GetProcNum() {
-    SYSTEM_INFO systemInfo;
-
-    GetSystemInfo(&systemInfo);
-    
-    return systemInfo.dwNumberOfProcessors;
-}
+int pnum;
 
 int OpenFiles(int argc, char *argv[]) {
     userInput = GetUserInput(argc, argv);
@@ -20,43 +13,44 @@ int OpenFiles(int argc, char *argv[]) {
     const char *srcPath = tmp0.c_str();
     const char *dstPath = tmp1.c_str();
 
-    if (!userInput.valid) return 1;
+    if (!userInput.valid) {
+        printf("ERROR: Input is invalid\n");
+        return 1;
+    }
 
-    if (fopen_s(&srcFile, srcPath, "rb")) return 2;
+    if (fopen_s(&srcFile, srcPath, "rb")) {
+        printf("ERROR: Failed to open source file\n");
+        return 1;
+    }
 
-    if (_access(dstPath, 0) != -1) return 3;
+    if (_access(dstPath, 0) != -1) {
+        printf("ERROR: Destination file already exists\n");
+        return 1;
+    }
 
-    if (fopen_s(&dstFile, dstPath, "wb+")) return 4;
+    if (fopen_s(&dstFile, dstPath, "wb+")) {
+        printf("ERROR: Failed to create destination file\n");
+        return 1;
+    }
 
     return 0;
 }
 
-void init(int argc, char *argv[]) {
-    int res = OpenFiles(argc, argv);
+int GetProcNum() {
+    SYSTEM_INFO systemInfo;
 
-    if (res == 1) {
-        printf("ERROR: Input is incomplete\n");
-        return;
-    }
+    GetSystemInfo(&systemInfo);
 
-    if (res == 2) {
-        printf("ERROR: Failed to open source file\n");
-        return;
-    }
-
-    if (res == 3) {
-        printf("ERROR: Destination file already exists\n");
-        return;
-    }
-
-    if (res == 4) {
-        printf("ERROR: Failed to create destination file\n");
-        return;
-    }
+    return systemInfo.dwNumberOfProcessors;
 }
 
 int main(int argc, char *argv[]) {
-    init(argc, argv);
+    if (OpenFiles(argc, argv)) {
+        if (srcFile) fclose(srcFile);
+        return 1;
+    }
+
+    pnum = GetProcNum();
 
     fclose(srcFile);
     fclose(dstFile);

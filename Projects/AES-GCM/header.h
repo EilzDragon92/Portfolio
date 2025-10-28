@@ -2,7 +2,6 @@
 #pragma comment(lib, "bcrypt.lib")
 
 #include <QString>
-
 #include <windows.h>
 #include <stdint.h>
 #include <openssl/evp.h>

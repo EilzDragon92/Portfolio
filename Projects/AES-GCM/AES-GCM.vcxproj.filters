@@ -18,13 +18,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="argon2id.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="library.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="encrypt.cpp">
+    <ClCompile Include="aes-gcm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
