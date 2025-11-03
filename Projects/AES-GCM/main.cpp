@@ -1,8 +1,8 @@
+#include "aes-gcm.h"
 #include "header.h"
 
 FILE *srcFile, *dstFile;
 UserInput userInput;
-int pnum;
 
 int OpenFiles(int argc, char *argv[]) {
     userInput = GetUserInput(argc, argv);

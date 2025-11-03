@@ -4,6 +4,8 @@
 #define MEM_COST 512 * 1024
 #define TIME_COST 4
 
+int pnum;
+
 int64_t GetFileSize(FILE *file) {
     if (_fseeki64(file, 0, SEEK_END)) return -1;
 
