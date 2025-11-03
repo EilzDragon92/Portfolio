@@ -20,6 +20,14 @@ int Argon2id(uint8_t salt[], const char pw[], uint8_t key[]) {
     return argon2id_hash_raw(TIME_COST, MEM_COST, pnum, pw, strlen(pw), salt, SALT_SIZE, key, KEY_SIZE);
 }
 
+int GetProcNum() {
+    SYSTEM_INFO systemInfo;
+
+    GetSystemInfo(&systemInfo);
+
+    return systemInfo.dwNumberOfProcessors;
+}
+
 int Random(uint8_t *dst, int size) {
     return BCryptGenRandom(NULL, dst, size, BCRYPT_USE_SYSTEM_PREFERRED_RNG);
 }
