@@ -13,8 +13,6 @@
 #define KEY_SIZE 32
 #define SALT_SIZE 16
 
-using namespace std;
-
 struct UserInput {
     bool valid;
     int mode;

@@ -1,21 +1,23 @@
 #include "aes-gcm.h"
 #include "header.h"
 
-int OpenFiles(FILE *srcFile, FILE *dstFile, const char *srcPath, const char *dstPath) {
-    if (fopen_s(&srcFile, srcPath, "rb")) {
+using namespace std;
+
+int OpenFiles(FILE **srcFile, FILE **dstFile, const char *srcPath, const char *dstPath) {
+    if (fopen_s(srcFile, srcPath, "rb")) {
         printf("ERROR: Failed to open source file\n");
         return 1;
     }
 
     if (_access(dstPath, 0) != -1) {
         printf("ERROR: Destination file already exists\n");
-        fclose(srcFile);
+        fclose(*srcFile);
         return 1;
     }
 
-    if (fopen_s(&dstFile, dstPath, "wb+")) {
+    if (fopen_s(dstFile, dstPath, "wb+")) {
         printf("ERROR: Failed to create destination file\n");
-        fclose(srcFile);
+        fclose(*srcFile);
         return 1;
     }
 
@@ -57,13 +59,15 @@ int main(int argc, char *argv[]) {
 
     /* Open files */
 
-    FILE *srcFile = NULL, *dstFile= NULL;
+    FILE *srcFile = nullptr, *dstFile = nullptr;
+
     string tmp0 = userInput.src.toStdString();
     string tmp1 = userInput.dst.toStdString();
+
     const char *srcPath = tmp0.c_str();
     const char *dstPath = tmp1.c_str();
 
-    if (OpenFiles(srcFile, dstFile, srcPath, dstPath)) return 1;
+    if (OpenFiles(&srcFile, &dstFile, srcPath, dstPath)) return 1;
 
 
     /* Get processor number */

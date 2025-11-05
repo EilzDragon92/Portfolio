@@ -1,7 +1,7 @@
 #include "header.h"
 #include <argon2.h>
 
-#define MEM_COST 512 * 1024
+#define MEM_COST (512 * 1024)
 #define TIME_COST 4
 
 int pnum;
