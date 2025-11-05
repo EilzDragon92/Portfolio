@@ -1,12 +1,6 @@
 ﻿#include "aes-gcm.h"
 #include "header.h"
 
-#define AAD_LEN (IV_SIZE + SALT_SIZE)
-#define BLOCK_SIZE 16
-#define BUFF_SIZE 4096
-#define IV_SIZE 12
-#define TAG_SIZE 16
-
 AES_GCM::~AES_GCM() {
 	SecureZeroMemory(buff, sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
 	SecureZeroMemory(iv, sizeof(uint8_t) * IV_SIZE);
@@ -21,10 +15,9 @@ AES_GCM::~AES_GCM() {
 
 int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw) {
 	srcFile = src, dstFile = dst;
+	cur = 0;
 
 	if (encryptInit(pw)) return 1;
-
-	if (encryptAAD()) return 1;
 
 	if (encryptBatch()) return 1;
 
@@ -39,10 +32,9 @@ int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw) {
 
 int AES_GCM::decrypt(FILE *src, FILE *dst, const char *pw) {
 	srcFile = src, dstFile = dst;
+	cur = 0;
 
 	if (decryptInit(pw)) return 1;
-
-	if (decryptAAD()) return 1;
 
 	if (decryptTag()) return 1;
 
@@ -74,6 +66,26 @@ int AES_GCM::writeBuffer(void *buff, int size) {
 }
 
 int AES_GCM::encryptInit(const char *pw) {
+	/* Generate salt, IV, and derive key */
+
+	if (Random(salt, SALT_SIZE)) {
+		printf("ERROR: Failed to generate salt\n");
+		return 1;
+	}
+
+	if (Random(iv, IV_SIZE)) {
+		printf("ERROR: Failed to generate initial vector\n");
+		return 1;
+	}
+
+	if (Argon2id(salt, pw, key)) {
+		printf("ERROR: Failed to derive key\n");
+		return 1;
+	}
+
+
+	/* Set encryption context */
+
 	if (!(ctx = EVP_CIPHER_CTX_new())) {
 		printf("ERROR: Failed to create context\n");
 		return 1;
@@ -89,32 +101,13 @@ int AES_GCM::encryptInit(const char *pw) {
 		return 1;
 	}
 
-	if (Random(salt, SALT_SIZE)) {
-		printf("ERROR: Failed to generate salt\n");
-		return 1;
-	}
-
-	if (Argon2id(salt, pw, key)) {
-		printf("ERROR: Failed to derive key\n");
-		return 1;
-	}
-
-	if (Random(iv, IV_SIZE)) {
-		printf("ERROR: Failed to generate initial vector\n");
-		return 1;
-	}
-
 	if (EVP_EncryptInit_ex(ctx, NULL, NULL, key, iv) != 1) {
 		printf("ERROR: Failed to set key and initial vector\n");
 		return 1;
 	}
 
-	fileSize = GetFileSize(srcFile);
 
-	if (fileSize == -1) {
-		printf("ERROR: Failed to read file size\n");
-		return 1;
-	}
+	/* Write salt and IV */
 
 	if (fwrite(salt, sizeof(uint8_t), SALT_SIZE, dstFile) != SALT_SIZE) {
 		printf("ERROR: Failed to write salt\n");
@@ -126,18 +119,13 @@ int AES_GCM::encryptInit(const char *pw) {
 		return 1;
 	}
 
-	return 0;
-}
 
-int AES_GCM::encryptAAD() {
-	uint8_t aad[AAD_LEN];
-	int len;
+	/* Get source file size */
 
-	memcpy(aad, salt, SALT_SIZE);
-	memcpy(aad + SALT_SIZE, iv, IV_SIZE);
+	fileSize = GetFileSize(srcFile);
 
-	if (EVP_EncryptUpdate(ctx, NULL, &len, aad, AAD_LEN) != 1) {
-		printf("ERROR: Failed to provide AAD\n");
+	if (fileSize == -1) {
+		printf("ERROR: Failed to read file size\n");
 		return 1;
 	}
 
@@ -233,6 +221,26 @@ int AES_GCM::encryptTag() {
 }
 
 int AES_GCM::decryptInit(const char *pw) {
+	/* Read salt, IV, and derive key */
+
+	if (fread(salt, sizeof(uint8_t), SALT_SIZE, srcFile) != SALT_SIZE) {
+		printf("ERROR: Failed to read salt\n");
+		return 1;
+	}
+
+	if (fread(iv, sizeof(uint8_t), IV_SIZE, srcFile) != IV_SIZE) {
+		printf("ERROR: Failed to read initial vector\n");
+		return 1;
+	}
+
+	if (Argon2id(salt, pw, key)) {
+		printf("ERROR: Failed to derive key\n");
+		return 1;
+	}
+
+
+	/* Set decryption context */
+
 	if (!(ctx = EVP_CIPHER_CTX_new())) {
 		printf("ERROR: Failed to create context\n");
 		return 1;
@@ -253,6 +261,9 @@ int AES_GCM::decryptInit(const char *pw) {
 		return 1;
 	}
 
+
+	/* Get source file size */
+
 	fileSize = GetFileSize(srcFile);
 
 	if (fileSize == -1) {
@@ -260,37 +271,7 @@ int AES_GCM::decryptInit(const char *pw) {
 		return 1;
 	}
 
-	fileSize -= TAG_SIZE;
-
-	if (fread(salt, sizeof(uint8_t), SALT_SIZE, srcFile) != SALT_SIZE) {
-		printf("ERROR: Failed to read salt\n");
-		return 1;
-	}
-
-	if (Argon2id(salt, pw, key)) {
-		printf("ERROR: Failed to derive key\n");
-		return 1;
-	}
-
-	if (fread(iv, sizeof(uint8_t), IV_SIZE, srcFile) != IV_SIZE) {
-		printf("ERROR: Failed to read initial vector\n");
-		return 1;
-	}
-
-	return 0;
-}
-
-int AES_GCM::decryptAAD() {
-	uint8_t aad[AAD_LEN];
-	int len;
-
-	memcpy(aad, salt, SALT_SIZE);
-	memcpy(aad + SALT_SIZE, iv, IV_SIZE);
-
-	if (EVP_DecryptUpdate(ctx, NULL, &len, aad, AAD_LEN) != 1) {
-		printf("ERROR: Failed to provide AAD\n");
-		return 1;
-	}
+	fileSize -= SALT_SIZE + IV_SIZE + TAG_SIZE;
 
 	return 0;
 }
@@ -298,7 +279,7 @@ int AES_GCM::decryptAAD() {
 int AES_GCM::decryptTag() {
 	uint8_t tag[TAG_SIZE];
 
-	if (_fseeki64(srcFile, fileSize, SEEK_SET)) {
+	if (_fseeki64(srcFile, -TAG_SIZE, SEEK_END)) {
 		printf("ERROR: Failed to move file pointer\n");
 		return 1;
 	}

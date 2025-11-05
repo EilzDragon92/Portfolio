@@ -2,7 +2,6 @@
 
 #include "header.h"
 
-#define AAD_LEN (IV_SIZE + SALT_SIZE)
 #define BLOCK_SIZE 16
 #define BUFF_SIZE 4096
 #define IV_SIZE 12
@@ -16,16 +15,15 @@ public:
 	int decrypt(FILE *src, FILE *dst, const char *pw);
 
 private:
-	EVP_CIPHER_CTX *ctx;
+	EVP_CIPHER_CTX *ctx = nullptr;
 	FILE *srcFile, *dstFile;
-	uint64_t cur = 0, fileSize;
+	uint64_t cur, fileSize;
 	uint8_t buff[BUFF_SIZE][BLOCK_SIZE], iv[IV_SIZE], key[KEY_SIZE], salt[SALT_SIZE];
 
 	int readBuffer(void *buff, int size);
 	int writeBuffer(void *buff, int size);
 
 	int encryptInit(const char *pw);
-	int encryptAAD();
 	int encryptBlock(uint8_t *src, uint8_t *dst, int srcLen);
 	int encryptBatch();
 	int encryptRemain();
@@ -33,7 +31,6 @@ private:
 	int encryptTag();
 
 	int decryptInit(const char *pw);
-	int decryptAAD();
 	int decryptTag();
 	int decryptBlock(uint8_t *src, uint8_t *dst, int srcLen);
 	int decryptBatch();
