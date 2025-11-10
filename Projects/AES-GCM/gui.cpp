@@ -5,6 +5,7 @@
 #include <QButtonGroup>
 #include <QFont>
 #include <QGuiApplication>
+#include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
@@ -12,7 +13,6 @@
 #include <QScreen>
 #include <QWidget>
 
-/* Mode selection buttons */
 class SelectMode : public QWidget {
 public:
     explicit SelectMode(QWidget *parent = nullptr) : QWidget(parent) {
@@ -51,7 +51,6 @@ private:
     QButtonGroup *btnGroup;
 };
 
-/* Key input text box */
 class PWLineEdit : public QWidget {
 public:
     explicit PWLineEdit(QWidget *parent = nullptr) : QWidget(parent) {
@@ -110,7 +109,8 @@ public:
         dstLineEdit = new QLineEdit;
         pwLineEdit = new PWLineEdit;
         startBtn = new QPushButton("Start");
-        hBox = new QHBoxLayout;
+        errMsg = new QLabel;
+        startHbox = new QHBoxLayout;
         vBox = new QVBoxLayout(this);
 
         /* show roles of each text box */
@@ -118,16 +118,17 @@ public:
         dstLineEdit->setPlaceholderText("Destination File");
 
         /* start button sub-layout */
-        hBox->addWidget(startBtn);
-        hBox->addStretch();
-        hBox->setContentsMargins(0, 0, 0, 0);
+        startHbox->addWidget(startBtn);
+        startHbox->addWidget(errMsg);
+        startHbox->addStretch();
+        startHbox->setContentsMargins(0, 0, 0, 0);
 
         /* add components */
         vBox->addWidget(selectMode);
         vBox->addWidget(srcLineEdit);
         vBox->addWidget(dstLineEdit);
         vBox->addWidget(pwLineEdit);
-        vBox->addLayout(hBox);
+        vBox->addLayout(startHbox);
 
         /* configure main layout */
         vBox->setSpacing(10);
@@ -137,7 +138,7 @@ public:
         connect(startBtn, &QPushButton::clicked, this, &MainWindow::start);
 
         setLayout(vBox);
-        setWindowTitle("Cryption");
+        setWindowTitle("AES-GCM");
 
         /* initialize */
         userInput.valid = 0;
@@ -156,22 +157,22 @@ private slots:
         QString pw = pwLineEdit->getText();
 
         if (mode == -1) {
-            showError(tr("Mode is not selected."));
+            errMsg->setText("Mode is not selected");
             return;
         }
 
         if (src.isEmpty()) {
-            showError(tr("Source file is not input."));
+            errMsg->setText("Source file is not input");
             return;
         }
 
         if (dst.isEmpty()) {
-            showError(tr("Destination file is not input."));
+            errMsg->setText("Destination file is not input");
             return;
         }
 
         if (pw.isEmpty()) {
-            showError(tr("Password is not input."));
+            errMsg->setText("Password is not input");
             return;
         }
 
@@ -185,23 +186,12 @@ private slots:
     }
 
 private:
-    void showError(const QString &msg) {
-        auto *msgBox = new QMessageBox(this);
-
-        msgBox->setWindowTitle(tr("ERROR"));
-        msgBox->setText(msg);
-        msgBox->setStandardButtons(QMessageBox::Ok);
-        msgBox->setAttribute(Qt::WA_DeleteOnClose);
-        msgBox->layout()->setContentsMargins(10, 10, 10, 10);
-        msgBox->layout()->setSpacing(10);
-        msgBox->open();
-    }
-
     SelectMode *selectMode;
     QLineEdit *srcLineEdit, *dstLineEdit;
     PWLineEdit *pwLineEdit;
-    QPushButton *startBtn, *maskingButton;
-    QHBoxLayout *keyHBox, *hBox;
+    QPushButton *maskBtn, *startBtn;
+    QLabel *errMsg;
+    QHBoxLayout *keyHBox, *startHbox;
     QVBoxLayout *vBox;
     UserInput userInput;
 };
