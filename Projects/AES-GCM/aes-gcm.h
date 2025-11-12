@@ -9,15 +9,22 @@
 
 class AES_GCM {
 public:
+	using ProgressCallback = std::function<void(int percentage, bool *cancelled)>;
+
 	~AES_GCM();
 
 	int encrypt(FILE *src, FILE *dst, const char *pw);
 	int decrypt(FILE *src, FILE *dst, const char *pw);
 
+	void setProgressCb(ProgressCallback pcb) {
+		this->pcb = pcb;
+	}
+
 private:
 	EVP_CIPHER_CTX *ctx = nullptr;
-	FILE *srcFile, *dstFile;
-	uint64_t cur, fileSize;
+	FILE *src, *dst;
+	ProgressCallback pcb = nullptr;
+	uint64_t cur = 0, size;
 	uint8_t buff[BUFF_SIZE][BLOCK_SIZE], iv[IV_SIZE], key[KEY_SIZE], salt[SALT_SIZE];
 
 	int readBuffer(void *buff, int size);
@@ -36,4 +43,6 @@ private:
 	int decryptBatch();
 	int decryptRemain();
 	int decryptFinal();
+
+	int reportProgress();
 };

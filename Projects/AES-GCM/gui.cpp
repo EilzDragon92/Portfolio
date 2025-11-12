@@ -1,4 +1,5 @@
-﻿#include "header.h"
+﻿#include "aes-gcm.h"
+#include "header.h"
 
 #include <QApplication>
 #include <QBoxLayout>
@@ -8,33 +9,31 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QProgressBar>
 #include <QPushButton>
 #include <QRadioButton>
 #include <QScreen>
+#include <QStackedWidget>
+#include <QThread>
 #include <QWidget>
 
-class SelectMode : public QWidget {
+class ModeButton : public QWidget {
 public:
-    explicit SelectMode(QWidget *parent = nullptr) : QWidget(parent) {
+    explicit ModeButton(QWidget *parent = nullptr) : QWidget(parent) {
         auto *hBox = new QHBoxLayout;
         auto *radioBtn0 = new QRadioButton("Encrypt");
         auto *radioBtn1 = new QRadioButton("Decrypt");
 
-        /* no button is selected by default */
         radioBtn0->setChecked(false);
         radioBtn1->setChecked(false);
 
-        /* group buttons */
         btnGroup = new QButtonGroup(this);
         btnGroup->addButton(radioBtn0, 0);
         btnGroup->addButton(radioBtn1, 1);
         btnGroup->setExclusive(true);
 
-        /* add components */
         hBox->addWidget(radioBtn0);
         hBox->addWidget(radioBtn1);
-
-        /* configure layout */
         hBox->addStretch();
         hBox->setSpacing(10);
         hBox->setContentsMargins(0, 0, 0, 0);
@@ -56,149 +55,431 @@ public:
     explicit PWLineEdit(QWidget *parent = nullptr) : QWidget(parent) {
         auto *hBox = new QHBoxLayout;
         maskBtn = new QPushButton("See");
-        lineEdit = new QLineEdit;
+        pwLine = new QLineEdit;
 
-        /* apply masking by default */
-        lineEdit->setPlaceholderText("Password");
-        lineEdit->setEchoMode(QLineEdit::Password);
+        pwLine->setPlaceholderText("Password");
+        pwLine->setEchoMode(QLineEdit::Password);
 
-        /* configure button size */
         maskBtn->setFixedSize(45, 30);
 
-        /* add components */
-        hBox->addWidget(lineEdit);
+        hBox->addWidget(pwLine);
         hBox->addWidget(maskBtn);
-
-        /* configure layout */
         hBox->setSpacing(10);
         hBox->setContentsMargins(0, 0, 0, 0);
 
-        /* add button function */
-        connect(maskBtn, &QPushButton::clicked, this, &PWLineEdit::toggleMasking);
+        connect(maskBtn, &QPushButton::clicked, this, &PWLineEdit::toggleMask);
 
         setLayout(hBox);
     }
     
     QString getText() {
-        return lineEdit->text();
+        return pwLine->text();
     }
 
 private:
-    void toggleMasking() {
-        if (lineEdit->echoMode() == QLineEdit::Password) {
-            lineEdit->setEchoMode(QLineEdit::Normal);
+    void toggleMask() {
+        if (pwLine->echoMode() == QLineEdit::Password) {
+            pwLine->setEchoMode(QLineEdit::Normal);
             maskBtn->setText("Hide");
         }
         else {
-            lineEdit->setEchoMode(QLineEdit::Password);
+            pwLine->setEchoMode(QLineEdit::Password);
             maskBtn->setText("See");
         }
     }
 
-    QLineEdit *lineEdit;
+    QLineEdit *pwLine;
     QPushButton *maskBtn;
 };
 
-class MainWindow : public QWidget {
+class InputWidget : public QWidget {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr) : QWidget(parent) {
-        selectMode = new SelectMode;
-        srcLineEdit = new QLineEdit;
-        dstLineEdit = new QLineEdit;
-        pwLineEdit = new PWLineEdit;
+    explicit InputWidget(QWidget *parent = nullptr) : QWidget(parent) {
+        modeBtn = new ModeButton;
+        srcLine = new QLineEdit;
+        dstLine = new QLineEdit;
+        pwLine = new PWLineEdit;
         startBtn = new QPushButton("Start");
         errMsg = new QLabel;
-        startHbox = new QHBoxLayout;
-        vBox = new QVBoxLayout(this);
+        hBox = new QHBoxLayout;
+        vBox = new QVBoxLayout;
 
-        /* show roles of each text box */
-        srcLineEdit->setPlaceholderText("Source File");
-        dstLineEdit->setPlaceholderText("Destination File");
+        srcLine->setPlaceholderText("Source File");
+        dstLine->setPlaceholderText("Destination File");
 
-        /* start button sub-layout */
-        startHbox->addWidget(startBtn);
-        startHbox->addWidget(errMsg);
-        startHbox->addStretch();
-        startHbox->setContentsMargins(0, 0, 0, 0);
+        hBox->addWidget(startBtn);
+        hBox->addWidget(errMsg);
+        hBox->addStretch();
+        hBox->setContentsMargins(0, 0, 0, 0);
 
-        /* add components */
-        vBox->addWidget(selectMode);
-        vBox->addWidget(srcLineEdit);
-        vBox->addWidget(dstLineEdit);
-        vBox->addWidget(pwLineEdit);
-        vBox->addLayout(startHbox);
-
-        /* configure main layout */
+        vBox->addWidget(modeBtn);
+        vBox->addWidget(srcLine);
+        vBox->addWidget(dstLine);
+        vBox->addWidget(pwLine);
+        vBox->addLayout(hBox);
         vBox->setSpacing(10);
         vBox->setContentsMargins(10, 10, 10, 10);
 
-        /* add button function */
-        connect(startBtn, &QPushButton::clicked, this, &MainWindow::start);
+        connect(startBtn, &QPushButton::clicked, this, &InputWidget::onStartClicked);
+
+        setLayout(vBox);
+    }
+
+signals:
+    void startRequested(const UserInput &input);
+
+private slots:
+    void onStartClicked() {
+        UserInput input;
+
+        input.valid = false;
+        input.mode = modeBtn->getMode();
+        input.src = srcLine->text();
+        input.dst = dstLine->text();
+        input.pw = pwLine->getText();
+
+        if (input.mode == -1) {
+            errMsg->setText("Mode is not selected");
+            return;
+        }
+
+        if (input.src.isEmpty()) {
+            errMsg->setText("Source file is not input");
+            return;
+        }
+
+        if (input.dst.isEmpty()) {
+            errMsg->setText("Destination file is not input");
+            return;
+        }
+
+        if (input.pw.isEmpty()) {
+            errMsg->setText("Password is not input");
+            return;
+        }
+
+        input.valid = true;
+
+        emit startRequested(input);
+    }
+
+private:
+    ModeButton *modeBtn;
+    PWLineEdit *pwLine;
+    QLineEdit *srcLine, *dstLine;
+    QPushButton *startBtn;
+    QLabel *errMsg;
+    QHBoxLayout *hBox;
+    QVBoxLayout *vBox;
+};
+
+class ProgressWidget : public QWidget {
+    Q_OBJECT
+
+public:
+    explicit ProgressWidget(QWidget *parent = nullptr) : QWidget(parent), cancelled(false) {
+        prgLabel = new QLabel("Initializing...");
+        resLabel = new QLabel;
+        prgBar = new QProgressBar;
+        cancelBtn = new QPushButton("Cancel");
+        closeBtn = new QPushButton("Close");
+        vBox = new QVBoxLayout;
+
+        prgBar->setRange(0, 100);
+        prgBar->setValue(0);
+        resLabel->setWordWrap(true);
+        resLabel->hide();
+        closeBtn->hide();
+
+        vBox->addWidget(prgLabel);
+        vBox->addWidget(prgBar);
+        vBox->addWidget(cancelBtn);
+        vBox->addWidget(resLabel);
+        vBox->addWidget(closeBtn);
+        vBox->addStretch();
+        vBox->setSpacing(10);
+        vBox->setContentsMargins(10, 10, 10, 10);
+
+        connect(cancelBtn, &QPushButton::clicked, this, &ProgressWidget::onCancelClicked);
+        connect(closeBtn, &QPushButton::clicked, this, &ProgressWidget::closeRequested);
+
+        setLayout(vBox);
+    }
+
+    void reset() {
+        cancelled = false;
+        prgBar->setValue(0);
+        prgLabel->setText("Initializing...");
+        resLabel->clear();
+        resLabel->hide();
+        cancelBtn->show();
+        cancelBtn->setEnabled(true);
+        closeBtn->hide();
+    }
+
+    void update(int value, const QString &status) {
+        prgBar->setValue(value);
+        prgLabel->setText(status);
+        QApplication::processEvents();
+    }
+
+    void showResult(bool success, const QString &message) {
+        prgLabel->setText(success ? "Complete" : "Failed");
+        prgBar->setValue(success ? 100 : 0);
+        cancelBtn->hide();
+
+        resLabel->setText(message);
+        resLabel->show();
+        closeBtn->show();
+    }
+
+    bool isCancelled() const {
+        return cancelled;
+    }
+
+signals:
+    void cancelRequested();
+    void closeRequested();
+
+private slots:
+    void onCancelClicked() {
+        cancelled = true;
+        cancelBtn->setEnabled(false);
+        prgLabel->setText("Cancelling...");
+        emit cancelRequested();
+    }
+
+private:
+    QLabel *prgLabel, *resLabel;
+    QPushButton *cancelBtn, *closeBtn;
+    QProgressBar *prgBar;
+    QVBoxLayout *vBox;
+    bool cancelled;
+};
+
+class Worker : public QObject {
+    Q_OBJECT
+
+public:
+    Worker(FILE *srcFile, FILE *dstFile, const char *dstPath, QByteArray pw, int mode) :
+        srcFile(srcFile), dstFile(dstFile), dstPath(dstPath), pw(pw), mode(mode) {
+    }
+
+signals:
+    void progressUpdate(int prc, QString status);
+
+    void finished(bool success, QString message);
+
+public slots:
+    void requestCancel() {
+        shouldCancel = true;
+    }
+
+    void work() {
+        AES_GCM aes;
+        QString msg;
+        bool res = false;
+
+        aes.setProgressCb([this](int prc, bool *cancelled) {
+            QString status;
+
+            if (mode == 0) {
+                status = QString("Encrypting... %1%").arg(prc);
+            }
+            else {
+                status = QString("Decrypting... %1%").arg(prc);
+            }
+
+            emit progressUpdate(prc, status);
+
+            *cancelled = shouldCancel;
+            });
+
+        if (mode == 0) {
+            if (aes.encrypt(srcFile, dstFile, pw)) {
+                msg = "Encryption failed\n";
+                _unlink(dstPath);
+            }
+            else {
+                if (shouldCancel) {
+                    msg = "Encryption canceled\n";
+                    _unlink(dstPath);
+                }
+                else {
+                    msg = "Encryption complete\n";
+                    res = true;
+                }
+            }
+        }
+        else {
+            if (aes.encrypt(srcFile, dstFile, pw)) {
+                msg = "Decryption failed\n";
+                _unlink(dstPath);
+            }
+            else {
+                if (shouldCancel) {
+                    msg = "Decryption canceled\n";
+                    _unlink(dstPath);
+                }
+                else {
+                    msg = "Decryption complete\n";
+                    res = true;
+                }
+            }
+        }
+
+        SecureZeroMemory(pw.data(), pw.size());
+
+        emit finished(res, msg);
+    }
+
+private:
+    FILE *srcFile, *dstFile;
+    QByteArray pw;
+    const char *dstPath;
+    bool shouldCancel;
+    int mode;
+};
+
+class MainGUI : public QWidget {
+    Q_OBJECT
+
+public:
+    explicit MainGUI(QWidget *parent = nullptr) : QWidget(parent) {
+        iWidget = new InputWidget;
+        pWidget = new ProgressWidget;
+        sWidget = new QStackedWidget;
+        vBox = new QVBoxLayout(this);
+
+        sWidget->addWidget(iWidget);
+        sWidget->addWidget(pWidget);
+
+        vBox->addWidget(sWidget);
+        vBox->setContentsMargins(0, 0, 0, 0);
 
         setLayout(vBox);
         setWindowTitle("AES-GCM");
 
-        /* initialize */
-        userInput.valid = 0;
-        userInput.mode = -1;
+        connect(iWidget, &InputWidget::startRequested, this, &MainGUI::onStartRequested);
+        connect(pWidget, &ProgressWidget::closeRequested, this, &QWidget::close);
+    }
+
+    ~MainGUI() {
+        clear();
     }
 
     UserInput getUserInput() const {
         return userInput;
     }
 
+    bool hasValidInput() const {
+        return userInput.valid;
+    }
+
+public slots:
+    int startProcessing() {
+        if (!userInput.valid) return 1;
+
+        if (openFiles()) return 1;
+
+        pWidget->reset();
+        sWidget->setCurrentWidget(pWidget);
+        resize(300, 150);
+
+        thread = new QThread(this);
+        worker = new Worker(srcFile, dstFile, userInput.dst.toStdString().c_str(), userInput.pw.toUtf8(), userInput.mode);
+        worker->moveToThread(thread);
+
+        connect(thread, &QThread::started, worker, &Worker::work);
+        connect(worker, &Worker::progressUpdate, this, &MainGUI::onProgressUpdated);
+        connect(worker, &Worker::finished, this, &MainGUI::onWorkFinished);
+        connect(pWidget, &ProgressWidget::cancelRequested, worker, &Worker::requestCancel);
+        connect(worker, & Worker::finished, thread, &QThread::quit);
+        connect(thread, &QThread::finished, this, &MainGUI::onThreadFinished);
+
+        thread->start();
+
+        return 0;
+    }
+
 private slots:
-    void start() {
-        int mode = selectMode->getMode();
-        QString src = srcLineEdit->text();
-        QString dst = dstLineEdit->text();
-        QString pw = pwLineEdit->getText();
+    void onStartRequested(const UserInput &input) {
+        userInput = input;
+    }
 
-        if (mode == -1) {
-            errMsg->setText("Mode is not selected");
-            return;
-        }
+    void onProgressUpdated(int percentage, QString status) {
+        pWidget->update(percentage, status);
+    }
 
-        if (src.isEmpty()) {
-            errMsg->setText("Source file is not input");
-            return;
-        }
+    void onWorkFinished(bool success, QString message) {
+        pWidget->showResult(success, message);
+    }
 
-        if (dst.isEmpty()) {
-            errMsg->setText("Destination file is not input");
-            return;
-        }
+    void onThreadFinished() {
+        clear();
+    }
 
-        if (pw.isEmpty()) {
-            errMsg->setText("Password is not input");
-            return;
-        }
-
-        userInput.valid = 1;
-        userInput.mode = mode;
-        userInput.src = src;
-        userInput.dst = dst;
-        userInput.pw = pw;
-
+    void onCloseRequested() {
         close();
     }
 
 private:
-    SelectMode *selectMode;
-    QLineEdit *srcLineEdit, *dstLineEdit;
-    PWLineEdit *pwLineEdit;
-    QPushButton *maskBtn, *startBtn;
-    QLabel *errMsg;
-    QHBoxLayout *keyHBox, *startHbox;
+    FILE *srcFile, *dstFile;
+    InputWidget *iWidget;
+    ProgressWidget *pWidget;
+    QStackedWidget *sWidget;
+    QThread *thread;
     QVBoxLayout *vBox;
     UserInput userInput;
+    Worker *worker;
+
+    void clear() {
+        if (thread) {
+            if (thread->isRunning()) {
+                thread->quit();
+                thread->wait();
+            }
+
+            worker = nullptr;
+            thread = nullptr;
+        }
+
+        if (srcFile) fclose(srcFile);
+        if (dstFile) fclose(dstFile);
+    }
+
+    int openFiles() {
+        QByteArray srcBytes = userInput.src.toLocal8Bit();
+        QByteArray dstBytes = userInput.dst.toLocal8Bit();
+        const char *srcPath = srcBytes.constData();
+        const char *dstPath = dstBytes.constData();
+
+        if (fopen_s(&srcFile, srcPath, "rb")) {
+            printf("ERROR: Failed to open source file\n");
+            return 1;
+        }
+
+        if (_access(dstPath, 0) != -1) {
+            printf("ERROR: Destination file already exists\n");
+            fclose(srcFile);
+            return 1;
+        }
+
+        if (fopen_s(&dstFile, dstPath, "wb+")) {
+            printf("ERROR: Failed to create destination file\n");
+            fclose(srcFile);
+            return 1;
+        }
+
+        return 0;
+    }
 };
 
-UserInput GetUserInput(int argc, char *argv[]) {
+UserInput GetUserInput(int argc, char *argv[], MainGUI **outMainGUI) {
     QApplication app(argc, argv);
-    MainWindow mainWindow;
+    MainGUI mainWindow;
 
     QFont font;
     font.setPointSizeF(font.pointSizeF() * 1.2);
@@ -216,9 +497,18 @@ UserInput GetUserInput(int argc, char *argv[]) {
 
     mainWindow.show();
 
-    app.exec();
+    while (!mainWindow.hasValidInput() && mainWindow.isVisible()) {
+        QApplication::processEvents();
+        QThread::msleep(10);
+    }
 
-    return mainWindow.getUserInput();
+    UserInput result = mainWindow.getUserInput();
+
+    if (outMainGUI) {
+        *outMainGUI = &mainWindow;
+    }
+
+    return result;
 }
 
 #include "gui.moc"

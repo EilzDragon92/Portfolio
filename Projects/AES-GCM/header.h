@@ -8,6 +8,7 @@
 #include <openssl/rand.h>
 #include <openssl/err.h>
 #include <io.h>
+#include <functional>
 #include <bcrypt.h>
 
 #define KEY_SIZE 32
@@ -23,7 +24,7 @@ struct UserInput {
 
 extern int pnum;
 
-UserInput GetUserInput(int argc, char *argv[]);
+UserInput GetUserInput(int argc, char *argv[], MainGUI **outMainGUI);
 
 int64_t GetFileSize(FILE *file);
 

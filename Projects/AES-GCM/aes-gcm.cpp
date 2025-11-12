@@ -14,8 +14,7 @@ AES_GCM::~AES_GCM() {
 }
 
 int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw) {
-	srcFile = src, dstFile = dst;
-	cur = 0;
+	this->src = src, this->dst = dst;
 
 	if (encryptInit(pw)) return 1;
 
@@ -31,8 +30,7 @@ int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw) {
 }
 
 int AES_GCM::decrypt(FILE *src, FILE *dst, const char *pw) {
-	srcFile = src, dstFile = dst;
-	cur = 0;
+	this->src = src, this->dst = dst;
 
 	if (decryptInit(pw)) return 1;
 
@@ -48,7 +46,7 @@ int AES_GCM::decrypt(FILE *src, FILE *dst, const char *pw) {
 }
 
 int AES_GCM::readBuffer(void *buff, int size) {
-	if (fread(buff, sizeof(uint8_t), size, srcFile) != size) {
+	if (fread(buff, sizeof(uint8_t), size, src) != size) {
 		printf("ERROR: Failed to read file\n");
 		return 1;
 	}
@@ -57,7 +55,7 @@ int AES_GCM::readBuffer(void *buff, int size) {
 }
 
 int AES_GCM::writeBuffer(void *buff, int size) {
-	if (fwrite(buff, sizeof(uint8_t), size, dstFile) != size) {
+	if (fwrite(buff, sizeof(uint8_t), size, dst) != size) {
 		printf("ERROR: Failed to write file\n");
 		return 1;
 	}
@@ -109,12 +107,12 @@ int AES_GCM::encryptInit(const char *pw) {
 
 	/* Write salt and IV */
 
-	if (fwrite(salt, sizeof(uint8_t), SALT_SIZE, dstFile) != SALT_SIZE) {
+	if (fwrite(salt, sizeof(uint8_t), SALT_SIZE, dst) != SALT_SIZE) {
 		printf("ERROR: Failed to write salt\n");
 		return 1;
 	}
 
-	if (fwrite(iv, sizeof(uint8_t), IV_SIZE, dstFile) != IV_SIZE) {
+	if (fwrite(iv, sizeof(uint8_t), IV_SIZE, dst) != IV_SIZE) {
 		printf("ERROR: Failed to write initial vector\n");
 		return 1;
 	}
@@ -122,9 +120,9 @@ int AES_GCM::encryptInit(const char *pw) {
 
 	/* Get source file size */
 
-	fileSize = GetFileSize(srcFile);
+	size = GetFileSize(src);
 
-	if (fileSize == -1) {
+	if (size == -1) {
 		printf("ERROR: Failed to read file size\n");
 		return 1;
 	}
@@ -149,7 +147,7 @@ int AES_GCM::encryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 }
 
 int AES_GCM::encryptBatch() {
-	while (cur + BUFF_SIZE * BLOCK_SIZE <= fileSize) {
+	while (cur + BUFF_SIZE * BLOCK_SIZE <= size) {
 		if (readBuffer(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 		for (int i = 0; i < BUFF_SIZE; i++) {
@@ -159,15 +157,17 @@ int AES_GCM::encryptBatch() {
 		if (writeBuffer(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 		cur += BUFF_SIZE * BLOCK_SIZE;
+
+		if (reportProgress()) return 1;
 	}
 
 	return 0;
 }
 
 int AES_GCM::encryptRemain() {
-	int crs = 0, rem = fileSize % BLOCK_SIZE;
+	int crs = 0, rem = size % BLOCK_SIZE;
 
-	while (cur + BLOCK_SIZE <= fileSize) {
+	while (cur + BLOCK_SIZE <= size) {
 		if (readBuffer(buff[crs], BLOCK_SIZE)) return 1;
 
 		if (encryptBlock(buff[crs], buff[crs], BLOCK_SIZE)) return 1;
@@ -175,6 +175,8 @@ int AES_GCM::encryptRemain() {
 		crs++;
 
 		cur += BLOCK_SIZE;
+
+		if (reportProgress()) return 1;
 	}
 
 	if (rem) {
@@ -183,6 +185,8 @@ int AES_GCM::encryptRemain() {
 		if (encryptBlock(buff[crs], buff[crs], rem)) return 1;
 
 		cur += rem;
+
+		if (reportProgress()) return 1;
 	}
 
 	if (writeBuffer(buff, BLOCK_SIZE * crs + rem)) return 1;
@@ -212,7 +216,7 @@ int AES_GCM::encryptTag() {
 		return 1;
 	}
 
-	if (fwrite(tag, sizeof(uint8_t), TAG_SIZE, dstFile) != TAG_SIZE) {
+	if (fwrite(tag, sizeof(uint8_t), TAG_SIZE, dst) != TAG_SIZE) {
 		printf("ERROR: Failed to write authentication tag\n");
 		return 1;
 	}
@@ -223,12 +227,12 @@ int AES_GCM::encryptTag() {
 int AES_GCM::decryptInit(const char *pw) {
 	/* Read salt, IV, and derive key */
 
-	if (fread(salt, sizeof(uint8_t), SALT_SIZE, srcFile) != SALT_SIZE) {
+	if (fread(salt, sizeof(uint8_t), SALT_SIZE, src) != SALT_SIZE) {
 		printf("ERROR: Failed to read salt\n");
 		return 1;
 	}
 
-	if (fread(iv, sizeof(uint8_t), IV_SIZE, srcFile) != IV_SIZE) {
+	if (fread(iv, sizeof(uint8_t), IV_SIZE, src) != IV_SIZE) {
 		printf("ERROR: Failed to read initial vector\n");
 		return 1;
 	}
@@ -264,14 +268,14 @@ int AES_GCM::decryptInit(const char *pw) {
 
 	/* Get source file size */
 
-	fileSize = GetFileSize(srcFile);
+	size = GetFileSize(src);
 
-	if (fileSize == -1) {
+	if (size == -1) {
 		printf("ERROR: Failed to read file size\n");
 		return 1;
 	}
 
-	fileSize -= SALT_SIZE + IV_SIZE + TAG_SIZE;
+	size -= SALT_SIZE + IV_SIZE + TAG_SIZE;
 
 	return 0;
 }
@@ -279,12 +283,12 @@ int AES_GCM::decryptInit(const char *pw) {
 int AES_GCM::decryptTag() {
 	uint8_t tag[TAG_SIZE];
 
-	if (_fseeki64(srcFile, -TAG_SIZE, SEEK_END)) {
+	if (_fseeki64(src, -TAG_SIZE, SEEK_END)) {
 		printf("ERROR: Failed to move file pointer\n");
 		return 1;
 	}
 
-	if (fread(tag, sizeof(uint8_t), TAG_SIZE, srcFile) != TAG_SIZE) {
+	if (fread(tag, sizeof(uint8_t), TAG_SIZE, src) != TAG_SIZE) {
 		printf("ERROR: Failed to read authentication tag\n");
 		return 1;
 	}
@@ -294,7 +298,7 @@ int AES_GCM::decryptTag() {
 		return 1;
 	}
 
-	if (_fseeki64(srcFile, SALT_SIZE + IV_SIZE, SEEK_SET)) {
+	if (_fseeki64(src, SALT_SIZE + IV_SIZE, SEEK_SET)) {
 		printf("ERROR: Failed to reset file pointer\n");
 		return 1;
 	}
@@ -319,7 +323,7 @@ int AES_GCM::decryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 }
 
 int AES_GCM::decryptBatch() {
-	while (cur + BUFF_SIZE * BLOCK_SIZE <= fileSize) {
+	while (cur + BUFF_SIZE * BLOCK_SIZE <= size) {
 		if (readBuffer(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 		for (int i = 0; i < BUFF_SIZE; i++) {
@@ -329,15 +333,17 @@ int AES_GCM::decryptBatch() {
 		if (writeBuffer(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 		cur += BUFF_SIZE * BLOCK_SIZE;
+
+		if (reportProgress()) return 1;
 	}
 
 	return 0;
 }
 
 int AES_GCM::decryptRemain() {
-	int crs = 0, rem = fileSize % BLOCK_SIZE;
+	int crs = 0, rem = size % BLOCK_SIZE;
 
-	while (cur + BLOCK_SIZE <= fileSize) {
+	while (cur + BLOCK_SIZE <= size) {
 		if (readBuffer(buff[crs], BLOCK_SIZE)) return 1;
 
 		if (decryptBlock(buff[crs], buff[crs], BLOCK_SIZE)) return 1;
@@ -345,6 +351,8 @@ int AES_GCM::decryptRemain() {
 		crs++;
 
 		cur += BLOCK_SIZE;
+
+		if (reportProgress()) return 1;
 	}
 
 	if (rem) {
@@ -353,6 +361,8 @@ int AES_GCM::decryptRemain() {
 		if (decryptBlock(buff[crs], buff[crs], rem)) return 1;
 
 		cur += rem;
+
+		if (reportProgress()) return 1;
 	}
 
 	if (writeBuffer(buff, BLOCK_SIZE * crs + rem)) return 1;
@@ -370,6 +380,21 @@ int AES_GCM::decryptFinal() {
 	}
 
 	if (finalLen > 0 && writeBuffer(final, finalLen)) return 1;
+
+	return 0;
+}
+
+int AES_GCM::reportProgress() {
+	if (pcb) {
+		bool cancelled = false;
+
+		pcb(cur * 100 / size, &cancelled);
+
+		if (cancelled) {
+			printf("Encryption canceled\n");
+			return 1;
+		}
+	}
 
 	return 0;
 }
