@@ -22,6 +22,8 @@ struct UserInput {
     QString pw;
 };
 
+class MainGUI;
+
 extern int pnum;
 
 UserInput GetUserInput(int argc, char *argv[], MainGUI **outMainGUI);

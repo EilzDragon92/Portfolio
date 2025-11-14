@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\GUI">
+      <UniqueIdentifier>{7afd39bf-2e29-4265-8444-5617255f71fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,7 +24,28 @@
     <ClCompile Include="library.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="aes-gcm.cpp">
+    <ClCompile Include="InputWidget.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ModeButton.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PWLineEdit.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgressWidget.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGUI.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GetUserInput.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Worker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AES_GCM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,13 +53,28 @@
     <ClInclude Include="header.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="aes-gcm.h">
+    <ClInclude Include="ModeButton.h">
+      <Filter>Source Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="AES_GCM.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="gui.cpp">
+    <QtMoc Include="InputWidget.h">
+      <Filter>Source Files\GUI</Filter>
+    </QtMoc>
+    <QtMoc Include="ProgressWidget.h">
+      <Filter>Source Files\GUI</Filter>
+    </QtMoc>
+    <QtMoc Include="MainGUI.h">
+      <Filter>Source Files\GUI</Filter>
+    </QtMoc>
+    <QtMoc Include="Worker.h">
       <Filter>Source Files</Filter>
+    </QtMoc>
+    <QtMoc Include="PWLineEdit.h">
+      <Filter>Source Files\GUI</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿#include "aes-gcm.h"
+﻿#include "AES_GCM.h"
 #include "header.h"
 
 AES_GCM::~AES_GCM() {
