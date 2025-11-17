@@ -26,8 +26,6 @@ class MainGUI;
 
 extern int pnum;
 
-UserInput GetUserInput(int argc, char *argv[], MainGUI **outMainGUI);
-
 int64_t GetFileSize(FILE *file);
 
 int Argon2id(uint8_t salt[], const char pw[], uint8_t key[]);
