@@ -31,7 +31,7 @@ bool MainGUI::hasValidInput() {
     return userInput.valid;
 }
 
-int MainGUI::startProcessing() {
+int MainGUI::startWork() {
     if (!userInput.valid) return 1;
 
     if (openFiles()) return 1;

@@ -21,7 +21,7 @@ public:
     bool hasValidInput();
 
 public slots:
-    int startProcessing();
+    int startWork();
 
 private slots:
     void onStartRequested(const UserInput &input);

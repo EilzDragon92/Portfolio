@@ -47,7 +47,6 @@ void ProgressWidget::reset() {
 void ProgressWidget::update(int value, const QString &status) {
     prgBar->setValue(value);
     prgLabel->setText(status);
-    QApplication::processEvents();
 }
 
 void ProgressWidget::showResult(bool success, const QString &message) {
