@@ -25,8 +25,8 @@ public slots:
 
 private slots:
     void onStartRequested(const UserInput &input);
-    void onProgressUpdated(int percentage, QString status);
-    void onWorkFinished(bool success, QString message);
+    void onProgressUpdated(int perc, QString status);
+    void onWorkFinished(QString msg);
     void onThreadFinished();
     void onCloseRequested();
 

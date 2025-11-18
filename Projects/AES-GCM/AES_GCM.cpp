@@ -168,6 +168,8 @@ int AES_GCM::encryptRemain() {
 	int crs = 0, rem = size % BLOCK_SIZE;
 
 	while (cur + BLOCK_SIZE <= size) {
+		Sleep(125);
+
 		if (readBuffer(buff[crs], BLOCK_SIZE)) return 1;
 
 		if (encryptBlock(buff[crs], buff[crs], BLOCK_SIZE)) return 1;

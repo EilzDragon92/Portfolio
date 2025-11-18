@@ -36,9 +36,7 @@ int MainGUI::startWork() {
 
     if (openFiles()) return 1;
 
-    pWidget->reset();
     sWidget->setCurrentWidget(pWidget);
-    resize(300, 150);
 
     thread = new QThread(this);
     worker = new Worker(srcFile, dstFile, userInput.dst.toStdString().c_str(), userInput.pw.toUtf8(), userInput.mode);
@@ -60,12 +58,12 @@ void MainGUI::onStartRequested(const UserInput &input) {
     userInput = input;
 }
 
-void MainGUI::onProgressUpdated(int percentage, QString status) {
-    pWidget->update(percentage, status);
+void MainGUI::onProgressUpdated(int perc, QString status) {
+    pWidget->update(perc, status);
 }
 
-void MainGUI::onWorkFinished(bool success, QString message) {
-    pWidget->showResult(success, message);
+void MainGUI::onWorkFinished(QString msg) {
+    pWidget->showResult(msg);
 }
 
 void MainGUI::onThreadFinished() {

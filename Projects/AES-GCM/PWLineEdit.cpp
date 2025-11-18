@@ -8,7 +8,7 @@ PWLineEdit::PWLineEdit(QWidget *parent) : QWidget(parent) {
     pwLine->setPlaceholderText("Password");
     pwLine->setEchoMode(QLineEdit::Password);
 
-    maskBtn->setFixedSize(45, 30);
+    maskBtn->setFixedSize(50, 25);
 
     hBox->addWidget(pwLine);
     hBox->addWidget(maskBtn);

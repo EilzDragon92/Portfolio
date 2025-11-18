@@ -16,6 +16,7 @@ InputWidget::InputWidget(QWidget *parent) : QWidget(parent) {
     hBox->addWidget(startBtn);
     hBox->addWidget(errMsg);
     hBox->addStretch();
+    hBox->setSpacing(10);
     hBox->setContentsMargins(0, 0, 0, 0);
 
     vBox->addWidget(modeBtn);

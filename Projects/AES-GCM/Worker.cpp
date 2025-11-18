@@ -7,19 +7,18 @@ void Worker::requestCancel() {
 void Worker::work() {
     AES_GCM aes;
     QString msg;
-    bool res = false;
 
-    aes.setProgressCb([this](int prc, bool *cancelled) {
+    aes.setProgressCb([this](int perc, bool *cancelled) {
         QString status;
 
         if (mode == 0) {
-            status = QString("Encrypting... %1%").arg(prc);
+            status = QString("Encrypting... %1%").arg(perc);
         }
         else {
-            status = QString("Decrypting... %1%").arg(prc);
+            status = QString("Decrypting... %1%").arg(perc);
         }
 
-        emit progressUpdate(prc, status);
+        emit progressUpdate(perc, status);
 
         *cancelled = shouldCancel;
         });
@@ -36,7 +35,6 @@ void Worker::work() {
             }
             else {
                 msg = "Encryption complete\n";
-                res = true;
             }
         }
     }
@@ -52,12 +50,11 @@ void Worker::work() {
             }
             else {
                 msg = "Decryption complete\n";
-                res = true;
             }
         }
     }
 
     SecureZeroMemory(pw.data(), pw.size());
 
-    emit finished(res, msg);
+    emit finished(msg);
 }

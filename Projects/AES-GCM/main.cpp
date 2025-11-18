@@ -4,7 +4,22 @@
 #include <QApplication>
 #include <QScreen>
 
-int main(int argc, char *argv[]) {
+int test(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+
+    QFont font;
+    font.setPointSizeF(font.pointSizeF() * 1.2);
+    QApplication::setFont(font);
+
+    ProgressWidget *widget = new ProgressWidget();
+    //InputWidget *widget = new InputWidget();
+    widget->resize(300, 1);
+    widget->show();
+
+    return app.exec();
+}
+
+int func(int argc, char *argv[]) {
     QApplication app(argc, argv);
     MainGUI *gui = new MainGUI;
 
@@ -42,4 +57,9 @@ int main(int argc, char *argv[]) {
     gui->startWork();
 
     return app.exec();
+}
+
+int main(int argc, char *argv[]) {
+    //return test(argc, argv);
+    return func(argc, argv);
 }

@@ -14,13 +14,11 @@ class ProgressWidget : public QWidget {
 public:
     explicit ProgressWidget(QWidget *parent = nullptr);
 
-    bool isCancelled(); 
-    
-    void reset();
+    bool isCancelled();
 
-    void update(int value, const QString &status);
+    void update(int val, const QString &status);
 
-    void showResult(bool success, const QString &message);
+    void showResult(const QString &msg);
 
 signals:
     void cancelRequested();
@@ -30,9 +28,10 @@ private slots:
     void onCancelClicked();
 
 private:
-    QLabel *prgLabel, *resLabel;
-    QPushButton *cancelBtn, *closeBtn;
+    QLabel *prgLabel;
     QProgressBar *prgBar;
+    QPushButton *cancelBtn, *closeBtn;
+    QHBoxLayout *hBox;
     QVBoxLayout *vBox;
     bool cancelled;
 };

@@ -15,8 +15,8 @@ public:
     }
 
 signals:
-    void finished(bool success, QString message);
-    void progressUpdate(int prc, QString status);
+    void finished(QString msg);
+    void progressUpdate(int perc, QString status);
 
 public slots:
     void requestCancel();
