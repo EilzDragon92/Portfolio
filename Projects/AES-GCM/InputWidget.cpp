@@ -24,6 +24,7 @@ InputWidget::InputWidget(QWidget *parent) : QWidget(parent) {
     vBox->addWidget(dstLine);
     vBox->addWidget(pwLine);
     vBox->addLayout(hBox);
+    vBox->addStretch();
     vBox->setSpacing(10);
     vBox->setContentsMargins(10, 10, 10, 10);
 
