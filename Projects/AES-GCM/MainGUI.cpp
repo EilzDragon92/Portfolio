@@ -45,7 +45,7 @@ int MainGUI::startWork() {
     connect(thread, &QThread::started, worker, &Worker::work);
     connect(worker, &Worker::progressUpdate, this, &MainGUI::onProgressUpdated);
     connect(worker, &Worker::finished, this, &MainGUI::onWorkFinished);
-    connect(pWidget, &ProgressWidget::cancelRequested, worker, &Worker::requestCancel);
+    connect(pWidget, &ProgressWidget::cancelRequested, worker, &Worker::requestCancel, Qt::DirectConnection);
     connect(worker, &Worker::finished, thread, &QThread::quit);
     connect(thread, &QThread::finished, this, &MainGUI::onThreadFinished);
 

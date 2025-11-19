@@ -26,6 +26,7 @@ private:
 	ProgressCallback pcb = nullptr;
 	uint64_t cur = 0, size;
 	uint8_t buff[BUFF_SIZE][BLOCK_SIZE], iv[IV_SIZE], key[KEY_SIZE], salt[SALT_SIZE];
+	bool cancelled;
 
 	int readBuffer(void *buff, int size);
 	int writeBuffer(void *buff, int size);

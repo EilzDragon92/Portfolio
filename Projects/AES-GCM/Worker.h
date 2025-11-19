@@ -26,6 +26,6 @@ private:
     FILE *srcFile, *dstFile;
     QByteArray pw;
     const char *dstPath;
-    bool shouldCancel = false;
+    bool shouldCancel;
     int mode;
 };

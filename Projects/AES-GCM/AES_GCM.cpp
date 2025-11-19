@@ -15,6 +15,7 @@ AES_GCM::~AES_GCM() {
 
 int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw) {
 	this->src = src, this->dst = dst;
+	cancelled = false;
 
 	if (encryptInit(pw)) return 1;
 
@@ -31,6 +32,7 @@ int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw) {
 
 int AES_GCM::decrypt(FILE *src, FILE *dst, const char *pw) {
 	this->src = src, this->dst = dst;
+	cancelled = false;
 
 	if (decryptInit(pw)) return 1;
 
@@ -168,8 +170,6 @@ int AES_GCM::encryptRemain() {
 	int crs = 0, rem = size % BLOCK_SIZE;
 
 	while (cur + BLOCK_SIZE <= size) {
-		Sleep(125);
-
 		if (readBuffer(buff[crs], BLOCK_SIZE)) return 1;
 
 		if (encryptBlock(buff[crs], buff[crs], BLOCK_SIZE)) return 1;
@@ -388,8 +388,6 @@ int AES_GCM::decryptFinal() {
 
 int AES_GCM::reportProgress() {
 	if (pcb) {
-		bool cancelled = false;
-
 		pcb(cur * 100 / size, &cancelled);
 
 		if (cancelled) {
