@@ -7,6 +7,7 @@ void Worker::requestCancel() {
 void Worker::work() {
     AES_GCM aes;
     QString msg;
+    int res;
 
     aes.setProgressCb([this](int perc, bool *cancelled) {
         QString status;
@@ -24,33 +25,33 @@ void Worker::work() {
         });
 
     if (mode == 0) {
-        if (aes.encrypt(srcFile, dstFile, pw)) {
-            msg = "Encryption failed\n";
+        res = aes.encrypt(srcFile, dstFile, pw);
+
+        if (shouldCancel) {
+            msg = "Encryption canceled";
+            _unlink(dstPath);
+        }
+        else if (res) {
+            msg = "Encryption failed";
             _unlink(dstPath);
         }
         else {
-            if (shouldCancel) {
-                msg = "Encryption canceled\n";
-                _unlink(dstPath);
-            }
-            else {
-                msg = "Encryption complete\n";
-            }
+            msg = "Encryption complete";
         }
     }
     else {
-        if (aes.decrypt(srcFile, dstFile, pw)) {
-            msg = "Decryption failed\n";
+        res = aes.decrypt(srcFile, dstFile, pw);
+
+        if (shouldCancel) {
+            msg = "Decryption canceled";
+            _unlink(dstPath);
+        }
+        else if (res) {
+            msg = "Decryption failed";
             _unlink(dstPath);
         }
         else {
-            if (shouldCancel) {
-                msg = "Decryption canceled\n";
-                _unlink(dstPath);
-            }
-            else {
-                msg = "Decryption complete\n";
-            }
+            msg = "Decryption complete";
         }
     }
 
