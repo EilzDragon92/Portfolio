@@ -68,7 +68,7 @@ int AES_GCM::writeBuffer(void *buff, int size) {
 int AES_GCM::encryptInit(const char *pw) {
 	/* Generate salt, IV, and derive key */
 
-	if (1 || Random(salt, SALT_SIZE)) {
+	if (Random(salt, SALT_SIZE)) {
 		reportError("ERROR: Failed to generate salt\n");
 		return 1;
 	}
