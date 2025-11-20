@@ -10,11 +10,13 @@
 #include <QPushButton>
 #include <QWidget>
 
-class InputWidget : public QWidget {
+class InputGUI : public QWidget {
     Q_OBJECT
 
 public:
-    explicit InputWidget(QWidget *parent = nullptr);
+    explicit InputGUI(QWidget *parent = nullptr);
+
+    void setErrMsg(const QString &msg);
 
 signals:
     void startRequested(const UserInput &input);

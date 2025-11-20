@@ -1,6 +1,6 @@
-#include <ProgressWidget.h>
+#include <ProgressGUI.h>
 
-ProgressWidget::ProgressWidget(QWidget *parent) : QWidget(parent), cancelled(false) {
+ProgressGUI::ProgressGUI(QWidget *parent) : QWidget(parent), cancelled(false) {
     prgLabel = new QLabel("Initializing...");
     prgBar = new QProgressBar;
     cancelBtn = new QPushButton("Cancel");
@@ -28,26 +28,26 @@ ProgressWidget::ProgressWidget(QWidget *parent) : QWidget(parent), cancelled(fal
 
     setLayout(vBox);
 
-    connect(cancelBtn, &QPushButton::clicked, this, &ProgressWidget::onCancelClicked);
-    connect(closeBtn, &QPushButton::clicked, this, &ProgressWidget::closeRequested);
+    connect(cancelBtn, &QPushButton::clicked, this, &ProgressGUI::onCancelClicked);
+    connect(closeBtn, &QPushButton::clicked, this, &ProgressGUI::closeRequested);
 }
 
-bool ProgressWidget::isCancelled() {
+bool ProgressGUI::isCancelled() {
     return cancelled;
 }
 
-void ProgressWidget::update(int val, const QString &status) {
+void ProgressGUI::update(int val, const QString &status) {
     prgBar->setValue(val);
     prgLabel->setText(status);
 }
 
-void ProgressWidget::showResult(const QString &msg) {
+void ProgressGUI::showResult(const QString &msg) {
     prgLabel->setText(msg);
     cancelBtn->hide();
     closeBtn->show();
 }
 
-void ProgressWidget::onCancelClicked() {
+void ProgressGUI::onCancelClicked() {
     cancelled = true;
     emit cancelRequested();
 }

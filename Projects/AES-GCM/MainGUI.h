@@ -1,7 +1,7 @@
 #pragma once
 
-#include "InputWidget.h"
-#include "ProgressWidget.h"
+#include "InputGUI.h"
+#include "ProgressGUI.h"
 #include "Worker.h"
 #include "header.h"
 
@@ -32,9 +32,9 @@ private slots:
 
 private:
     FILE *srcFile, *dstFile;
-    InputWidget *iWidget;
-    ProgressWidget *pWidget;
-    QStackedWidget *sWidget;
+    InputGUI *inputGUI;
+    ProgressGUI *prgGUI;
+    QStackedWidget *widget;
     QThread *thread;
     QVBoxLayout *vBox;
     UserInput userInput;

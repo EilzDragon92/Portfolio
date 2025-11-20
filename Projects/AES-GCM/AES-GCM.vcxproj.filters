@@ -24,7 +24,7 @@
     <ClCompile Include="library.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InputWidget.cpp">
+    <ClCompile Include="InputGUI.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="ModeButton.cpp">
@@ -33,7 +33,7 @@
     <ClCompile Include="PWLineEdit.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="ProgressWidget.cpp">
+    <ClCompile Include="ProgressGUI.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="MainGUI.cpp">
@@ -58,10 +58,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="InputWidget.h">
+    <QtMoc Include="InputGUI.h">
       <Filter>Source Files\GUI</Filter>
     </QtMoc>
-    <QtMoc Include="ProgressWidget.h">
+    <QtMoc Include="ProgressGUI.h">
       <Filter>Source Files\GUI</Filter>
     </QtMoc>
     <QtMoc Include="MainGUI.h">

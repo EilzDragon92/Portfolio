@@ -2,15 +2,16 @@
 #pragma comment(lib, "bcrypt.lib")
 
 #include <QString>
-#include <windows.h>
-#include <stdint.h>
+#include <functional>
+#include <io.h>
+#include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/rand.h>
-#include <openssl/err.h>
-#include <io.h>
-#include <functional>
+#include <stdint.h>
+#include <windows.h>
 #include <bcrypt.h>
 
+#define FONT_SCALE 1.2
 #define KEY_SIZE 32
 #define SALT_SIZE 16
 

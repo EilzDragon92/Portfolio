@@ -180,7 +180,7 @@ user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
     </ClCompile>
     <ClCompile Include="ModeButton.cpp" />
-    <ClCompile Include="ProgressWidget.cpp">
+    <ClCompile Include="ProgressGUI.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename).moc</QtMocFileName>
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
@@ -202,7 +202,7 @@ user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
     </ClCompile>
     <ClCompile Include="AES_GCM.cpp" />
-    <ClCompile Include="InputWidget.cpp">
+    <ClCompile Include="InputGUI.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename).moc</QtMocFileName>
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
@@ -221,9 +221,9 @@ user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     <QtMoc Include="MainGUI.h" />
     <ClInclude Include="ModeButton.h" />
     <QtMoc Include="Worker.h" />
-    <QtMoc Include="ProgressWidget.h" />
+    <QtMoc Include="ProgressGUI.h" />
     <QtMoc Include="PWLineEdit.h" />
-    <QtMoc Include="InputWidget.h" />
+    <QtMoc Include="InputGUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(QtMsBuild)\qt.targets" Condition="Exists('$(QtMsBuild)\qt.targets')" />

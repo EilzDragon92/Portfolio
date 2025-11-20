@@ -1,22 +1,22 @@
 #include <MainGUI.h>
 
 MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
-    iWidget = new InputWidget;
-    pWidget = new ProgressWidget;
-    sWidget = new QStackedWidget;
+    inputGUI = new InputGUI;
+    prgGUI = new ProgressGUI;
+    widget = new QStackedWidget;
     vBox = new QVBoxLayout(this);
 
-    sWidget->addWidget(iWidget);
-    sWidget->addWidget(pWidget);
+    widget->addWidget(inputGUI);
+    widget->addWidget(prgGUI);
 
-    vBox->addWidget(sWidget);
+    vBox->addWidget(widget);
     vBox->setContentsMargins(0, 0, 0, 0);
 
     setLayout(vBox);
     setWindowTitle("AES-GCM");
 
-    connect(iWidget, &InputWidget::startRequested, this, &MainGUI::onStartRequested);
-    connect(pWidget, &ProgressWidget::closeRequested, this, &QWidget::close);
+    connect(inputGUI, &InputGUI::startRequested, this, &MainGUI::onStartRequested);
+    connect(prgGUI, &ProgressGUI::closeRequested, this, &QWidget::close);
 }
 
 MainGUI::~MainGUI() {
@@ -34,9 +34,12 @@ bool MainGUI::hasValidInput() {
 int MainGUI::startWork() {
     if (!userInput.valid) return 1;
 
-    if (openFiles()) return 1;
+    if (openFiles()) {
+        widget->setCurrentWidget(inputGUI);
+        return 1;
+    }
 
-    sWidget->setCurrentWidget(pWidget);
+    widget->setCurrentWidget(prgGUI);
 
     thread = new QThread(this);
     worker = new Worker(srcFile, dstFile, userInput.dst.toStdString().c_str(), userInput.pw.toUtf8(), userInput.mode);
@@ -45,7 +48,7 @@ int MainGUI::startWork() {
     connect(thread, &QThread::started, worker, &Worker::work);
     connect(worker, &Worker::progressUpdate, this, &MainGUI::onProgressUpdated);
     connect(worker, &Worker::finished, this, &MainGUI::onWorkFinished);
-    connect(pWidget, &ProgressWidget::cancelRequested, worker, &Worker::requestCancel, Qt::DirectConnection);
+    connect(prgGUI, &ProgressGUI::cancelRequested, worker, &Worker::requestCancel, Qt::DirectConnection);
     connect(worker, &Worker::finished, thread, &QThread::quit);
     connect(thread, &QThread::finished, this, &MainGUI::onThreadFinished);
 
@@ -59,11 +62,11 @@ void MainGUI::onStartRequested(const UserInput &input) {
 }
 
 void MainGUI::onProgressUpdated(int perc, QString status) {
-    pWidget->update(perc, status);
+    prgGUI->update(perc, status);
 }
 
 void MainGUI::onWorkFinished(QString msg) {
-    pWidget->showResult(msg);
+    prgGUI->showResult(msg);
 }
 
 void MainGUI::onThreadFinished() {
@@ -81,18 +84,18 @@ int MainGUI::openFiles() {
     const char *dstPath = dstBytes.constData();
 
     if (fopen_s(&srcFile, srcPath, "rb")) {
-        printf("ERROR: Failed to open source file\n");
+        inputGUI->setErrMsg("ERROR: Failed to open source file");
         return 1;
     }
 
     if (_access(dstPath, 0) != -1) {
-        printf("ERROR: Destination file already exists\n");
+        inputGUI->setErrMsg("Destination file already exists");
         fclose(srcFile);
         return 1;
     }
 
     if (fopen_s(&dstFile, dstPath, "wb+")) {
-        printf("ERROR: Failed to create destination file\n");
+        inputGUI->setErrMsg("Failed to create destination file");
         fclose(srcFile);
         return 1;
     }

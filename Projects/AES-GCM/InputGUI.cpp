@@ -1,6 +1,6 @@
-#include "InputWidget.h"
+#include "InputGUI.h"
 
-InputWidget::InputWidget(QWidget *parent) : QWidget(parent) {
+InputGUI::InputGUI(QWidget *parent) : QWidget(parent) {
     modeBtn = new ModeButton;
     srcLine = new QLineEdit;
     dstLine = new QLineEdit;
@@ -28,12 +28,16 @@ InputWidget::InputWidget(QWidget *parent) : QWidget(parent) {
     vBox->setSpacing(10);
     vBox->setContentsMargins(10, 10, 10, 10);
 
-    connect(startBtn, &QPushButton::clicked, this, &InputWidget::onStartClicked);
+    connect(startBtn, &QPushButton::clicked, this, &InputGUI::onStartClicked);
 
     setLayout(vBox);
 }
 
-void InputWidget::onStartClicked() {
+void InputGUI::setErrMsg(const QString &msg) {
+    errMsg->setText(msg);
+}
+
+void InputGUI::onStartClicked() {
     UserInput input;
 
     input.valid = false;

@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
     MainGUI *gui = new MainGUI;
 
     QFont font;
-    font.setPointSizeF(font.pointSizeF() * 1.2);
+    font.setPointSizeF(font.pointSizeF() * FONT_SCALE);
     QApplication::setFont(font);
 
     QSize qsize(300, 150);
@@ -32,10 +32,7 @@ int main(int argc, char *argv[]) {
 
     UserInput input = gui->getUserInput();
 
-    if (!input.valid || !gui) {
-        printf("ERROR: Input is invalid or or GUI is closed\n");
-        return 1;
-    }
+    if (!input.valid || !gui) return 1;
 
     pnum = GetProcNum();
 

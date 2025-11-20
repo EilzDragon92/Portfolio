@@ -8,11 +8,11 @@
 #include <QProgressBar>
 #include <QPushButton>
 
-class ProgressWidget : public QWidget {
+class ProgressGUI : public QWidget {
     Q_OBJECT
 
 public:
-    explicit ProgressWidget(QWidget *parent = nullptr);
+    explicit ProgressGUI(QWidget *parent = nullptr);
 
     bool isCancelled();
 

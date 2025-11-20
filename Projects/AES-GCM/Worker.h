@@ -25,6 +25,7 @@ public slots:
 private:
     FILE *srcFile, *dstFile;
     QByteArray pw;
+    QString err = "";
     const char *dstPath;
     bool shouldCancel;
     int mode;

@@ -9,14 +9,19 @@ void Worker::work() {
     QString msg;
     int res;
 
+    aes.setErrorCb([this](const char *msg) {
+        err = QString(msg);
+        emit progressUpdate(0, QString("Error: %1").arg(msg));
+        });
+
     aes.setProgressCb([this](int perc, bool *cancelled) {
         QString status;
 
         if (mode == 0) {
-            status = QString("Encrypting... %1%").arg(perc);
+            status = QString("Encrypting... %1%\n").arg(perc);
         }
         else {
-            status = QString("Decrypting... %1%").arg(perc);
+            status = QString("Decrypting... %1%\n").arg(perc);
         }
 
         emit progressUpdate(perc, status);
@@ -28,22 +33,22 @@ void Worker::work() {
         res = aes.encrypt(srcFile, dstFile, pw);
 
         if (shouldCancel) {
-            msg = "Encryption canceled";
+            msg = "Encryption canceled\n";
             _unlink(dstPath);
         }
         else if (res) {
-            msg = "Encryption failed";
+            msg = err + "Encryption failed";
             _unlink(dstPath);
         }
         else {
-            msg = "Encryption complete";
+            msg = "Encryption complete\n";
         }
     }
     else {
         res = aes.decrypt(srcFile, dstFile, pw);
 
         if (shouldCancel) {
-            msg = "Decryption canceled";
+            msg = "Decryption canceled\n";
             _unlink(dstPath);
         }
         else if (res) {
@@ -51,7 +56,7 @@ void Worker::work() {
             _unlink(dstPath);
         }
         else {
-            msg = "Decryption complete";
+            msg = "Decryption complete\n";
         }
     }
 

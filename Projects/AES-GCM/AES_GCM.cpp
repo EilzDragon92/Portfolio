@@ -49,7 +49,7 @@ int AES_GCM::decrypt(FILE *src, FILE *dst, const char *pw) {
 
 int AES_GCM::readBuffer(void *buff, int size) {
 	if (fread(buff, sizeof(uint8_t), size, src) != size) {
-		printf("ERROR: Failed to read file\n");
+		reportError("ERROR: Failed to read file\n");
 		return 1;
 	}
 
@@ -58,7 +58,7 @@ int AES_GCM::readBuffer(void *buff, int size) {
 
 int AES_GCM::writeBuffer(void *buff, int size) {
 	if (fwrite(buff, sizeof(uint8_t), size, dst) != size) {
-		printf("ERROR: Failed to write file\n");
+		reportError("ERROR: Failed to write file\n");
 		return 1;
 	}
 
@@ -68,18 +68,18 @@ int AES_GCM::writeBuffer(void *buff, int size) {
 int AES_GCM::encryptInit(const char *pw) {
 	/* Generate salt, IV, and derive key */
 
-	if (Random(salt, SALT_SIZE)) {
-		printf("ERROR: Failed to generate salt\n");
+	if (1 || Random(salt, SALT_SIZE)) {
+		reportError("ERROR: Failed to generate salt\n");
 		return 1;
 	}
 
 	if (Random(iv, IV_SIZE)) {
-		printf("ERROR: Failed to generate initial vector\n");
+		reportError("ERROR: Failed to generate initial vector\n");
 		return 1;
 	}
 
 	if (Argon2id(salt, pw, key)) {
-		printf("ERROR: Failed to derive key\n");
+		reportError("ERROR: Failed to derive key\n");
 		return 1;
 	}
 
@@ -87,22 +87,22 @@ int AES_GCM::encryptInit(const char *pw) {
 	/* Set encryption context */
 
 	if (!(ctx = EVP_CIPHER_CTX_new())) {
-		printf("ERROR: Failed to create context\n");
+		reportError("ERROR: Failed to create context\n");
 		return 1;
 	}
 
 	if (EVP_EncryptInit_ex(ctx, EVP_aes_256_gcm(), NULL, NULL, NULL) != 1) {
-		printf("ERROR: Failed to set algorithm\n");
+		reportError("ERROR: Failed to set algorithm\n");
 		return 1;
 	}
 
 	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IV_SIZE, NULL) != 1) {
-		printf("ERROR: Failed to set initial vector size\n");
+		reportError("ERROR: Failed to set initial vector size\n");
 		return 1;
 	}
 
 	if (EVP_EncryptInit_ex(ctx, NULL, NULL, key, iv) != 1) {
-		printf("ERROR: Failed to set key and initial vector\n");
+		reportError("ERROR: Failed to set key and initial vector\n");
 		return 1;
 	}
 
@@ -110,12 +110,12 @@ int AES_GCM::encryptInit(const char *pw) {
 	/* Write salt and IV */
 
 	if (fwrite(salt, sizeof(uint8_t), SALT_SIZE, dst) != SALT_SIZE) {
-		printf("ERROR: Failed to write salt\n");
+		reportError("ERROR: Failed to write salt\n");
 		return 1;
 	}
 
 	if (fwrite(iv, sizeof(uint8_t), IV_SIZE, dst) != IV_SIZE) {
-		printf("ERROR: Failed to write initial vector\n");
+		reportError("ERROR: Failed to write initial vector\n");
 		return 1;
 	}
 
@@ -125,7 +125,7 @@ int AES_GCM::encryptInit(const char *pw) {
 	size = GetFileSize(src);
 
 	if (size == -1) {
-		printf("ERROR: Failed to read file size\n");
+		reportError("ERROR: Failed to read file size\n");
 		return 1;
 	}
 
@@ -136,12 +136,12 @@ int AES_GCM::encryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 	int dstLen;
 
 	if (!EVP_EncryptUpdate(ctx, dst, &dstLen, src, srcLen)) {
-		printf("ERROR: Failed to encrypt a block\n");
+		reportError("ERROR: Failed to encrypt a block\n");
 		return 1;
 	}
 
 	if (dstLen != srcLen) {
-		printf("ERROR: Failed to encrypt a block\n");
+		reportError("ERROR: Failed to encrypt a block\n");
 		return 1;
 	}
 
@@ -201,7 +201,7 @@ int AES_GCM::encryptFinal() {
 	int finalLen;
 
 	if (EVP_EncryptFinal_ex(ctx, final, &finalLen) != 1) {
-		printf("ERROR: Failed to finalize encryption\n");
+		reportError("ERROR: Failed to finalize encryption\n");
 		return 1;
 	}
 
@@ -214,12 +214,12 @@ int AES_GCM::encryptTag() {
 	uint8_t tag[TAG_SIZE];
 
 	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, TAG_SIZE, tag) != 1) {
-		printf("ERROR: Failed to get authentication tag\n");
+		reportError("ERROR: Failed to get authentication tag\n");
 		return 1;
 	}
 
 	if (fwrite(tag, sizeof(uint8_t), TAG_SIZE, dst) != TAG_SIZE) {
-		printf("ERROR: Failed to write authentication tag\n");
+		reportError("ERROR: Failed to write authentication tag\n");
 		return 1;
 	}
 
@@ -230,17 +230,17 @@ int AES_GCM::decryptInit(const char *pw) {
 	/* Read salt, IV, and derive key */
 
 	if (fread(salt, sizeof(uint8_t), SALT_SIZE, src) != SALT_SIZE) {
-		printf("ERROR: Failed to read salt\n");
+		reportError("ERROR: Failed to read salt\n");
 		return 1;
 	}
 
 	if (fread(iv, sizeof(uint8_t), IV_SIZE, src) != IV_SIZE) {
-		printf("ERROR: Failed to read initial vector\n");
+		reportError("ERROR: Failed to read initial vector\n");
 		return 1;
 	}
 
 	if (Argon2id(salt, pw, key)) {
-		printf("ERROR: Failed to derive key\n");
+		reportError("ERROR: Failed to derive key\n");
 		return 1;
 	}
 
@@ -248,22 +248,22 @@ int AES_GCM::decryptInit(const char *pw) {
 	/* Set decryption context */
 
 	if (!(ctx = EVP_CIPHER_CTX_new())) {
-		printf("ERROR: Failed to create context\n");
+		reportError("ERROR: Failed to create context\n");
 		return 1;
 	}
 
 	if (EVP_DecryptInit_ex(ctx, EVP_aes_256_gcm(), NULL, NULL, NULL) != 1) {
-		printf("ERROR: Failed to set algorithm\n");
+		reportError("ERROR: Failed to set algorithm\n");
 		return 1;
 	}
 
 	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IV_SIZE, NULL) != 1) {
-		printf("ERROR: Failed to set initial vector size\n");
+		reportError("ERROR: Failed to set initial vector size\n");
 		return 1;
 	}
 
 	if (EVP_DecryptInit_ex(ctx, NULL, NULL, key, iv) != 1) {
-		printf("ERROR: Failed to set key and initial vector\n");
+		reportError("ERROR: Failed to set key and initial vector\n");
 		return 1;
 	}
 
@@ -273,7 +273,7 @@ int AES_GCM::decryptInit(const char *pw) {
 	size = GetFileSize(src);
 
 	if (size == -1) {
-		printf("ERROR: Failed to read file size\n");
+		reportError("ERROR: Failed to read file size\n");
 		return 1;
 	}
 
@@ -286,22 +286,22 @@ int AES_GCM::decryptTag() {
 	uint8_t tag[TAG_SIZE];
 
 	if (_fseeki64(src, -TAG_SIZE, SEEK_END)) {
-		printf("ERROR: Failed to move file pointer\n");
+		reportError("ERROR: Failed to move file pointer\n");
 		return 1;
 	}
 
 	if (fread(tag, sizeof(uint8_t), TAG_SIZE, src) != TAG_SIZE) {
-		printf("ERROR: Failed to read authentication tag\n");
+		reportError("ERROR: Failed to read authentication tag\n");
 		return 1;
 	}
 
 	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, TAG_SIZE, tag) != 1) {
-		printf("ERROR: Failed to set authentication tag\n");
+		reportError("ERROR: Failed to set authentication tag\n");
 		return 1;
 	}
 
 	if (_fseeki64(src, SALT_SIZE + IV_SIZE, SEEK_SET)) {
-		printf("ERROR: Failed to reset file pointer\n");
+		reportError("ERROR: Failed to reset file pointer\n");
 		return 1;
 	}
 
@@ -312,12 +312,12 @@ int AES_GCM::decryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 	int dstLen;
 
 	if (!EVP_DecryptUpdate(ctx, dst, &dstLen, src, srcLen)) {
-		printf("ERROR: Failed to decrypt a block\n");
+		reportError("ERROR: Failed to decrypt a block\n");
 		return 1;
 	}
 
 	if (dstLen != srcLen) {
-		printf("ERROR: Failed to decrypt a block\n");
+		reportError("ERROR: Failed to decrypt a block\n");
 		return 1;
 	}
 
@@ -377,7 +377,7 @@ int AES_GCM::decryptFinal() {
 	int finalLen;
 
 	if (EVP_DecryptFinal_ex(ctx, final, &finalLen) != 1) {
-		printf("ERROR: Failed to finalize decryption\n");
+		reportError("ERROR: Failed to finalize decryption\n");
 		return 1;
 	}
 
@@ -390,11 +390,12 @@ int AES_GCM::reportProgress() {
 	if (pcb) {
 		pcb(cur * 100 / size, &cancelled);
 
-		if (cancelled) {
-			printf("Encryption canceled\n");
-			return 1;
-		}
+		if (cancelled) return 1;
 	}
 
 	return 0;
+}
+
+void AES_GCM::reportError(const char *msg) {
+	if (ecb) ecb(msg);
 }
