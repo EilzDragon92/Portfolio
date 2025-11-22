@@ -42,7 +42,7 @@ int MainGUI::startWork() {
     widget->setCurrentWidget(prgGUI);
 
     thread = new QThread(this);
-    worker = new Worker(srcFile, dstFile, userInput.dst.toStdString().c_str(), userInput.pw.toUtf8(), userInput.mode);
+    worker = new Worker(srcFile, dstFile, userInput.dst, userInput.pw.toUtf8(), userInput.mode);
     worker->moveToThread(thread);
 
     connect(thread, &QThread::started, worker, &Worker::work);

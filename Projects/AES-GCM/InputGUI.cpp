@@ -69,4 +69,6 @@ void InputGUI::onStartClicked() {
     input.valid = true;
 
     emit startRequested(input);
+
+    pwLine->clear();
 }

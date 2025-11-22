@@ -15,6 +15,8 @@ public:
 
     QString getText();
 
+    void clear();
+
 private slots:
     void toggleMask();
 

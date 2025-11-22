@@ -10,7 +10,7 @@ class Worker : public QObject {
     Q_OBJECT
 
 public:
-    Worker(FILE *srcFile, FILE *dstFile, const char *dstPath, QByteArray pw, int mode) :
+    Worker(FILE *srcFile, FILE *dstFile, QString dstPath, QByteArray pw, int mode) :
         srcFile(srcFile), dstFile(dstFile), dstPath(dstPath), pw(pw), mode(mode) {
     }
 
@@ -25,8 +25,7 @@ public slots:
 private:
     FILE *srcFile, *dstFile;
     QByteArray pw;
-    QString err = "";
+    QString err = "", dstPath;
     std::atomic<bool> shouldCancel{ false };
-    const char *dstPath;
     int mode;
 };

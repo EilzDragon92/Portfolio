@@ -25,8 +25,6 @@ struct UserInput {
 
 class MainGUI;
 
-extern int pnum;
-
 int64_t GetFileSize(FILE *file);
 
 int Argon2id(uint8_t salt[], const char pw[], uint8_t key[]);

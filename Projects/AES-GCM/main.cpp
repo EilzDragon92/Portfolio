@@ -34,8 +34,6 @@ int main(int argc, char *argv[]) {
 
     if (!input.valid || !gui) return 1;
 
-    pnum = GetProcNum();
-
     gui->startWork();
 
     return app.exec();

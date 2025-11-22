@@ -33,11 +33,11 @@ void Worker::work() {
 
         if (shouldCancel) {
             msg = "Encryption canceled\n";
-            _unlink(dstPath);
+            _unlink(dstPath.toLocal8Bit().constData());
         }
         else if (res) {
             msg = err + "Encryption failed";
-            _unlink(dstPath);
+            _unlink(dstPath.toLocal8Bit().constData());
         }
         else {
             msg = "Encryption complete\n";
@@ -48,11 +48,11 @@ void Worker::work() {
 
         if (shouldCancel) {
             msg = "Decryption canceled\n";
-            _unlink(dstPath);
+            _unlink(dstPath.toLocal8Bit().constData());
         }
         else if (res) {
             msg = "Decryption failed";
-            _unlink(dstPath);
+            _unlink(dstPath.toLocal8Bit().constData());
         }
         else {
             msg = "Decryption complete\n";

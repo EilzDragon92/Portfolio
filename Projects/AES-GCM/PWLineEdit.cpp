@@ -24,6 +24,10 @@ QString PWLineEdit::getText() {
     return pwLine->text();
 }
 
+void PWLineEdit::clear() {
+    pwLine->clear();
+}
+
 void PWLineEdit::toggleMask() {
     if (pwLine->echoMode() == QLineEdit::Password) {
         pwLine->setEchoMode(QLineEdit::Normal);
