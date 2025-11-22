@@ -135,7 +135,7 @@ int AES_GCM::encryptInit(const char *pw) {
 int AES_GCM::encryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 	int dstLen;
 
-	if (!EVP_EncryptUpdate(ctx, dst, &dstLen, src, srcLen)) {
+	if (EVP_EncryptUpdate(ctx, dst, &dstLen, src, srcLen) != 1) {
 		reportError("ERROR: Failed to encrypt a block\n");
 		return 1;
 	}
@@ -311,7 +311,7 @@ int AES_GCM::decryptTag() {
 int AES_GCM::decryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 	int dstLen;
 
-	if (!EVP_DecryptUpdate(ctx, dst, &dstLen, src, srcLen)) {
+	if (EVP_DecryptUpdate(ctx, dst, &dstLen, src, srcLen) != 1) {
 		reportError("ERROR: Failed to decrypt a block\n");
 		return 1;
 	}

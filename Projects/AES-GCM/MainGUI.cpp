@@ -88,6 +88,11 @@ int MainGUI::openFiles() {
         return 1;
     }
 
+    if (!strcmp(srcPath, dstPath)) {
+        inputGUI->setErrMsg("Source and destination cannot be the same");
+        return 1;
+    }
+
     if (_access(dstPath, 0) != -1) {
         inputGUI->setErrMsg("Destination file already exists");
         fclose(srcFile);
@@ -104,14 +109,11 @@ int MainGUI::openFiles() {
 }
 
 void MainGUI::clear() {
-    if (thread) {
-        if (thread->isRunning()) {
-            thread->quit();
-            thread->wait();
-        }
+    if (thread && thread->isRunning()) {
+        if (worker) worker->requestCancel();
 
-        worker = nullptr;
-        thread = nullptr;
+        thread->quit();
+        thread->wait();
     }
 
     if (srcFile) fclose(srcFile);
