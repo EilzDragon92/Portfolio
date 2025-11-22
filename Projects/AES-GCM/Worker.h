@@ -26,7 +26,7 @@ private:
     FILE *srcFile, *dstFile;
     QByteArray pw;
     QString err = "";
+    std::atomic<bool> shouldCancel{ false };
     const char *dstPath;
-    bool shouldCancel;
     int mode;
 };

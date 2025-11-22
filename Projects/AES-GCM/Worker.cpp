@@ -11,7 +11,6 @@ void Worker::work() {
 
     aes.setErrorCb([this](const char *msg) {
         err = QString(msg);
-        emit progressUpdate(0, QString("Error: %1").arg(msg));
         });
 
     aes.setProgressCb([this](int perc, bool *cancelled) {
