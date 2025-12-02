@@ -14,8 +14,8 @@ public:
 
 	~AES_GCM();
 
-	int encrypt(FILE *src, FILE *dst, const char *pw);
 	int decrypt(FILE *src, FILE *dst, const char *pw);
+	int encrypt(FILE *src, FILE *dst, const char *pw);
 
 	void setErrorCb(ErrorCallback ecb) {
 		this->ecb = ecb;
@@ -37,19 +37,19 @@ private:
 	int readBuffer(void *buff, int size);
 	int writeBuffer(void *buff, int size);
 
-	int encryptInit(const char *pw);
-	int encryptBlock(uint8_t *src, uint8_t *dst, int srcLen);
-	int encryptBatch();
-	int encryptRemain();
-	int encryptFinal();
-	int encryptTag();
-
 	int decryptInit(const char *pw);
 	int decryptTag();
 	int decryptBlock(uint8_t *src, uint8_t *dst, int srcLen);
 	int decryptBatch();
 	int decryptRemain();
 	int decryptFinal();
+
+	int encryptInit(const char *pw);
+	int encryptBlock(uint8_t *src, uint8_t *dst, int srcLen);
+	int encryptBatch();
+	int encryptRemain();
+	int encryptFinal();
+	int encryptTag();
 	
 	int reportProgress();
 	void reportError(const char *msg);
