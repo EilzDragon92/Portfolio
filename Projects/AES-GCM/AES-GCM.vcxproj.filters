@@ -1,95 +1,83 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Source Files\GUI">
-      <UniqueIdentifier>{7afd39bf-2e29-4265-8444-5617255f71fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{6a55aac8-6357-4e3d-8393-1e00efe324a8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Common">
+    <Filter Include="Common">
       <UniqueIdentifier>{65b45c58-13eb-458e-aab4-e84c10aacdaf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Utils">
+    <Filter Include="Core">
+      <UniqueIdentifier>{6a55aac8-6357-4e3d-8393-1e00efe324a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{7afd39bf-2e29-4265-8444-5617255f71fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
       <UniqueIdentifier>{bfe3a10c-9ea5-4c9d-ab9f-00959a2a1f1e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="InputGUI.cpp">
-      <Filter>Source Files\GUI</Filter>
+    <ClCompile Include="Core\AES_GCM.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="ModeButton.cpp">
-      <Filter>Source Files\GUI</Filter>
+    <ClCompile Include="Core\AES_GCM_decryption.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="PWLineEdit.cpp">
-      <Filter>Source Files\GUI</Filter>
+    <ClCompile Include="Core\AES_GCM_encryption.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="ProgressGUI.cpp">
-      <Filter>Source Files\GUI</Filter>
+    <ClCompile Include="Core\Worker.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="MainGUI.cpp">
-      <Filter>Source Files\GUI</Filter>
+    <ClCompile Include="Common\main.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="AES_GCM.cpp">
-      <Filter>Source Files\Core</Filter>
+    <ClCompile Include="GUI\InputGUI.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Worker.cpp">
-      <Filter>Source Files\Core</Filter>
+    <ClCompile Include="GUI\MainGUI.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="AES_GCM_encryption.cpp">
-      <Filter>Source Files\Core</Filter>
+    <ClCompile Include="GUI\ModeButton.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="AES_GCM_decryption.cpp">
-      <Filter>Source Files\Core</Filter>
+    <ClCompile Include="GUI\ProgressGUI.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files\Common</Filter>
+    <ClCompile Include="GUI\PWLineEdit.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="library.cpp">
-      <Filter>Source Files\Utils</Filter>
+    <ClCompile Include="Utils\library.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ModeButton.h">
-      <Filter>Source Files\GUI</Filter>
+    <ClInclude Include="Core\AES_GCM.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="AES_GCM.h">
-      <Filter>Source Files\Core</Filter>
+    <ClInclude Include="Common\header.h">
+      <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="header.h">
-      <Filter>Source Files\Common</Filter>
+    <ClInclude Include="GUI\ModeButton.h">
+      <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="SecureByteArray.h">
-      <Filter>Source Files\Utils</Filter>
+    <ClInclude Include="Utils\SecureByteArray.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="InputGUI.h">
-      <Filter>Source Files\GUI</Filter>
+    <QtMoc Include="Core\Worker.h">
+      <Filter>Core</Filter>
     </QtMoc>
-    <QtMoc Include="ProgressGUI.h">
-      <Filter>Source Files\GUI</Filter>
+    <QtMoc Include="GUI\InputGUI.h">
+      <Filter>GUI</Filter>
     </QtMoc>
-    <QtMoc Include="MainGUI.h">
-      <Filter>Source Files\GUI</Filter>
+    <QtMoc Include="GUI\MainGUI.h">
+      <Filter>GUI</Filter>
     </QtMoc>
-    <QtMoc Include="PWLineEdit.h">
-      <Filter>Source Files\GUI</Filter>
+    <QtMoc Include="GUI\ProgressGUI.h">
+      <Filter>GUI</Filter>
     </QtMoc>
-    <QtMoc Include="Worker.h">
-      <Filter>Source Files\Core</Filter>
+    <QtMoc Include="GUI\PWLineEdit.h">
+      <Filter>GUI</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>
