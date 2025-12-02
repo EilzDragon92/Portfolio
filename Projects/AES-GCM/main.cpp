@@ -22,19 +22,7 @@ int main(int argc, char *argv[]) {
     int y = (rect.height() - gui->height()) / 2 - 50;
 
     gui->move(x, y);
-
     gui->show();
-
-    while (!gui->hasValidInput() && gui->isVisible()) {
-        QApplication::processEvents();
-        QThread::msleep(10);
-    }
-
-    UserInput input = gui->getUserInput();
-
-    if (!input.valid || !gui) return 1;
-
-    gui->startWork();
 
     return app.exec();
 }

@@ -1,4 +1,5 @@
 #include <MainGUI.h>
+#include <QFileInfo>
 
 MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
     inputGUI = new InputGUI;
@@ -31,34 +32,27 @@ bool MainGUI::hasValidInput() {
     return userInput.valid;
 }
 
-int MainGUI::startWork() {
-    if (!userInput.valid) return 1;
-
-    if (openFiles()) {
-        widget->setCurrentWidget(inputGUI);
-        return 1;
-    }
-
-    widget->setCurrentWidget(prgGUI);
-
-    thread = new QThread(this);
-    worker = new Worker(srcFile, dstFile, userInput.dst, userInput.pw.toUtf8(), userInput.mode);
-    worker->moveToThread(thread);
-
-    connect(thread, &QThread::started, worker, &Worker::work);
-    connect(worker, &Worker::progressUpdate, this, &MainGUI::onProgressUpdated);
-    connect(worker, &Worker::finished, this, &MainGUI::onWorkFinished);
-    connect(prgGUI, &ProgressGUI::cancelRequested, worker, &Worker::requestCancel, Qt::DirectConnection);
-    connect(worker, &Worker::finished, thread, &QThread::quit);
-    connect(thread, &QThread::finished, this, &MainGUI::onThreadFinished);
-
-    thread->start();
-
-    return 0;
-}
-
 void MainGUI::onStartRequested(const UserInput &input) {
     userInput = input;
+
+    if (openFiles() == 0) {
+        widget->setCurrentWidget(prgGUI);
+
+        thread = new QThread(this);
+        worker = new Worker(srcFile, dstFile, userInput.dst, userInput.pw.toUtf8(), userInput.mode);
+        worker->moveToThread(thread);
+
+        connect(thread, &QThread::started, worker, &Worker::work);
+        connect(worker, &Worker::progressUpdate, this, &MainGUI::onProgressUpdated);
+        connect(worker, &Worker::finished, this, &MainGUI::onWorkFinished);
+        connect(prgGUI, &ProgressGUI::cancelRequested, worker, &Worker::requestCancel, Qt::DirectConnection);
+        connect(worker, &Worker::finished, thread, &QThread::quit);
+        connect(thread, &QThread::finished, this, &MainGUI::onThreadFinished);
+
+        thread->start();
+
+        emit readyToStart();
+    }
 }
 
 void MainGUI::onProgressUpdated(int perc, QString status) {
@@ -80,6 +74,8 @@ void MainGUI::onCloseRequested() {
 int MainGUI::openFiles() {
     QByteArray srcBytes = userInput.src.toLocal8Bit();
     QByteArray dstBytes = userInput.dst.toLocal8Bit();
+    QFileInfo srcInfo(userInput.src);
+    QFileInfo dstInfo(userInput.dst);
     const char *srcPath = srcBytes.constData();
     const char *dstPath = dstBytes.constData();
 
@@ -88,8 +84,9 @@ int MainGUI::openFiles() {
         return 1;
     }
 
-    if (!strcmp(srcPath, dstPath)) {
+    if (srcInfo.canonicalFilePath() == dstInfo.canonicalFilePath()) {
         inputGUI->setErrMsg("Source and destination cannot be the same");
+        fclose(srcFile);
         return 1;
     }
 
@@ -116,6 +113,23 @@ void MainGUI::clear() {
         thread->wait();
     }
 
-    if (srcFile) fclose(srcFile);
-    if (dstFile) fclose(dstFile);
+    if (worker) {
+        delete worker;
+        worker = nullptr;
+    }
+
+    if (thread) {
+        delete thread;
+        thread = nullptr;
+    }
+
+    if (srcFile) {
+        fclose(srcFile);
+        srcFile = nullptr;
+    }
+
+    if (dstFile) {
+        fclose(dstFile);
+        dstFile = nullptr;
+    }
 }

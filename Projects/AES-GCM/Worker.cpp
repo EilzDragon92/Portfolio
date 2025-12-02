@@ -59,7 +59,10 @@ void Worker::work() {
         }
     }
 
+    pw.detach();
     SecureZeroMemory(pw.data(), pw.size());
+    pw.clear();
+    pw.squeeze();
 
     emit finished(msg);
 }

@@ -1,7 +1,7 @@
 #include <ProgressGUI.h>
 
 ProgressGUI::ProgressGUI(QWidget *parent) : QWidget(parent), cancelled(false) {
-    prgLabel = new QLabel("Initializing...");
+    prgLabel = new QLabel("Initializing...\n");
     prgBar = new QProgressBar;
     cancelBtn = new QPushButton("Cancel");
     closeBtn = new QPushButton("Close");

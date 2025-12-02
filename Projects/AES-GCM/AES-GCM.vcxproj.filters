@@ -16,14 +16,11 @@
     <Filter Include="Source Files\GUI">
       <UniqueIdentifier>{7afd39bf-2e29-4265-8444-5617255f71fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{6a55aac8-6357-4e3d-8393-1e00efe324a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="library.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="InputGUI.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
@@ -39,22 +36,28 @@
     <ClCompile Include="MainGUI.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Worker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AES_GCM.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="library.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Worker.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="header.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="ModeButton.h">
       <Filter>Source Files\GUI</Filter>
     </ClInclude>
     <ClInclude Include="AES_GCM.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="header.h">
+      <Filter>Source Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -67,11 +70,11 @@
     <QtMoc Include="MainGUI.h">
       <Filter>Source Files\GUI</Filter>
     </QtMoc>
-    <QtMoc Include="Worker.h">
-      <Filter>Source Files</Filter>
-    </QtMoc>
     <QtMoc Include="PWLineEdit.h">
       <Filter>Source Files\GUI</Filter>
+    </QtMoc>
+    <QtMoc Include="Worker.h">
+      <Filter>Source Files\Core</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

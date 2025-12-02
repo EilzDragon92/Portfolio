@@ -20,8 +20,8 @@ public:
     UserInput getUserInput();
     bool hasValidInput();
 
-public slots:
-    int startWork();
+signals:
+    void readyToStart();
 
 private slots:
     void onStartRequested(const UserInput &input);

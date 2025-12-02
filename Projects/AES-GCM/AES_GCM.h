@@ -9,8 +9,8 @@
 
 class AES_GCM {
 public:
-	using ErrorCallback = std::function<void(const char *errorMsg)>;
-	using ProgressCallback = std::function<void(int percentage, bool *cancelled)>;
+	using ErrorCallback = std::function<void(const char *errMsg)>;
+	using ProgressCallback = std::function<void(int perc, bool *cancelled)>;
 
 	~AES_GCM();
 
@@ -32,7 +32,7 @@ private:
 	ProgressCallback pcb = nullptr;
 	uint64_t cur = 0, size;
 	uint8_t buff[BUFF_SIZE][BLOCK_SIZE], iv[IV_SIZE], key[KEY_SIZE], salt[SALT_SIZE];
-	bool cancelled;
+	bool cancelled = false;
 
 	int readBuffer(void *buff, int size);
 	int writeBuffer(void *buff, int size);

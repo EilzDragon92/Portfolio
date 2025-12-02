@@ -1,5 +1,4 @@
 ﻿#include "AES_GCM.h"
-#include "header.h"
 
 AES_GCM::~AES_GCM() {
 	SecureZeroMemory(buff, sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
