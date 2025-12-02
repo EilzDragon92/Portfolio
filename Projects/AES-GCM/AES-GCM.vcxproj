@@ -220,6 +220,7 @@ user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
   <ItemGroup>
     <ClInclude Include="AES_GCM.h" />
     <ClInclude Include="header.h" />
+    <ClInclude Include="SecureByteArray.h" />
     <QtMoc Include="MainGUI.h" />
     <ClInclude Include="ModeButton.h" />
     <QtMoc Include="Worker.h" />

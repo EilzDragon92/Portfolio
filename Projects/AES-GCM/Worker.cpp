@@ -29,7 +29,7 @@ void Worker::work() {
         });
 
     if (mode == 0) {
-        res = aes.encrypt(srcFile, dstFile, pw);
+        res = aes.encrypt(srcFile, dstFile, pw.constData());
 
         if (shouldCancel) {
             msg = "Encryption canceled\n";
@@ -44,7 +44,7 @@ void Worker::work() {
         }
     }
     else {
-        res = aes.decrypt(srcFile, dstFile, pw);
+        res = aes.decrypt(srcFile, dstFile, pw.constData());
 
         if (shouldCancel) {
             msg = "Decryption canceled\n";
@@ -58,11 +58,6 @@ void Worker::work() {
             msg = "Decryption complete\n";
         }
     }
-
-    pw.detach();
-    SecureZeroMemory(pw.data(), pw.size());
-    pw.clear();
-    pw.squeeze();
 
     emit finished(msg);
 }

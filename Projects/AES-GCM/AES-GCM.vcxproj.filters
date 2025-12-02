@@ -19,6 +19,12 @@
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{6a55aac8-6357-4e3d-8393-1e00efe324a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{65b45c58-13eb-458e-aab4-e84c10aacdaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{bfe3a10c-9ea5-4c9d-ab9f-00959a2a1f1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputGUI.cpp">
@@ -39,12 +45,6 @@
     <ClCompile Include="AES_GCM.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="library.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Worker.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -53,6 +53,12 @@
     </ClCompile>
     <ClCompile Include="AES_GCM_decryption.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="library.cpp">
+      <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -63,7 +69,10 @@
       <Filter>Source Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="header.h">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="SecureByteArray.h">
+      <Filter>Source Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
