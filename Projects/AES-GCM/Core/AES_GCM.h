@@ -7,6 +7,8 @@
 #define IV_SIZE 12
 #define TAG_SIZE 16
 
+#define MAX_SIZE 16 * 0xffffffff
+
 class AES_GCM {
 public:
 	using ErrorCallback = std::function<void(const char *errMsg)>;

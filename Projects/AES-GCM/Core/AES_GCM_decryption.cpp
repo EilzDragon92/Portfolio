@@ -76,6 +76,11 @@ int AES_GCM::decryptInit(const char *pw, int plen) {
 		return 1;
 	}
 
+	if (size < SALT_SIZE + IV_SIZE + TAG_SIZE) {
+		reportError("ERROR: File is too small\n");
+		return 1;
+	}
+
 	size -= SALT_SIZE + IV_SIZE + TAG_SIZE;
 
 	return 0;

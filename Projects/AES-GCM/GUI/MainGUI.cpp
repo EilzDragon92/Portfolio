@@ -84,7 +84,7 @@ int MainGUI::openFiles() {
         return 1;
     }
 
-    if (_access(dstPath, 0) != -1) {
+    if (std::filesystem::exists(dstPath)) {
         inputGUI->setErrMsg("Destination file already exists");
         return 1;
     }
@@ -94,7 +94,7 @@ int MainGUI::openFiles() {
         return 1;
     }
 
-    if (!(dstFile = FileHandle(dstPath, "rb"))) {
+    if (!(dstFile = FileHandle(dstPath, "wb+"))) {
         inputGUI->setErrMsg("Failed to create destination file");
         return 1;
     }

@@ -89,6 +89,11 @@ int AES_GCM::encryptInit(const char *pw, int plen) {
 		return 1;
 	}
 
+	if (size > MAX_SIZE) {
+		reportError("ERROR: File is too large\n");
+		return 1;
+	}
+
 	return 0;
 }
 
