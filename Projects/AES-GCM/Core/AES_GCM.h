@@ -7,7 +7,7 @@
 #define IV_SIZE 12
 #define TAG_SIZE 16
 
-#define MAX_SIZE 16 * 0xffffffff
+#define MAX_SIZE 16ULL * 0xffffffffULL
 
 class AES_GCM {
 public:

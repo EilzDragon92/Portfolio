@@ -5,6 +5,7 @@
 
 #include <QByteArray>
 #include <QObject>
+#include <filesystem>
 
 class Worker : public QObject {
     Q_OBJECT
