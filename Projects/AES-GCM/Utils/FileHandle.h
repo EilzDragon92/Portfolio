@@ -30,6 +30,7 @@ public:
             file = other.file;
             other.file = nullptr;
         }
+
         return *this;
     }
 
@@ -37,18 +38,14 @@ public:
         return file;
     }
 
-    bool isOpen() const {
+    explicit operator bool() const {
         return file != nullptr;
     }
 
-    explicit operator bool() const {
-        return isOpen();
-    }
-
     FILE *release() {
-        FILE *temp = file;
+        FILE *tmp = file;
         file = nullptr;
-        return temp;
+        return tmp;
     }
 
 private:
