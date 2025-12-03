@@ -47,8 +47,6 @@ void InputGUI::onStartClicked() {
     input.dst = dstLine->text();
     input.pw = pwLine->getText();
 
-    SecureByteArray spw(pwLine->getText().toUtf8());
-
     if (input.mode == -1) {
         errMsg->setText("Mode is not selected");
         return;
