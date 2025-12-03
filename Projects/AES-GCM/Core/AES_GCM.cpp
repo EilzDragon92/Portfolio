@@ -32,11 +32,13 @@ int AES_GCM::writeBuffer(void *buff, int size) {
 
 int AES_GCM::reportProgress() {
 	if (pcb) {
-		pcb(cur * 100 / size, &cancelled);
+		bool tmp = cancelled.load();
+
+		pcb(cur * 100 / size, &tmp);
+		cancelled.store(tmp);
 
 		if (cancelled) return 1;
 	}
-
 	return 0;
 }
 
