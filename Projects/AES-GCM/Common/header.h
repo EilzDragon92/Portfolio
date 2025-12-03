@@ -27,7 +27,7 @@ class MainGUI;
 
 int64_t GetFileSize(FILE *file);
 
-int Argon2id(uint8_t salt[], const char pw[], uint8_t key[]);
+int Argon2id(uint8_t salt[], const char pw[], size_t plen, uint8_t key[]);
 
 int GetProcNum();
 

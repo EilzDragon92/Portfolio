@@ -1,10 +1,10 @@
 #include "AES_GCM.h"
 
-int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw) {
+int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw, int plen) {
 	this->src = src, this->dst = dst;
 	cancelled = false;
 
-	if (encryptInit(pw)) return 1;
+	if (encryptInit(pw, plen)) return 1;
 
 	if (encryptBatch()) return 1;
 
@@ -17,7 +17,7 @@ int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw) {
 	return 0;
 }
 
-int AES_GCM::encryptInit(const char *pw) {
+int AES_GCM::encryptInit(const char *pw, int plen) {
 	/* Clear existing context */
 
 	if (ctx) {
@@ -38,7 +38,7 @@ int AES_GCM::encryptInit(const char *pw) {
 		return 1;
 	}
 
-	if (Argon2id(salt, pw, key)) {
+	if (Argon2id(salt, pw, plen, key)) {
 		reportError("ERROR: Failed to derive key\n");
 		return 1;
 	}

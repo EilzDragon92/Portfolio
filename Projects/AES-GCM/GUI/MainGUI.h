@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FileHandle.h"
 #include "InputGUI.h"
 #include "ProgressGUI.h"
 #include "Worker.h"
@@ -31,7 +32,7 @@ private slots:
     void onCloseRequested();
 
 private:
-    FILE *srcFile = nullptr, *dstFile = nullptr;
+    FileHandle srcFile, dstFile;
     InputGUI *inputGUI;
     ProgressGUI *prgGUI;
     QStackedWidget *widget;

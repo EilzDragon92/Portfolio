@@ -21,9 +21,13 @@ public:
         return data.constData();
     }
 
+    const int size() const {
+        return data.size();
+    }
+
     SecureByteArray(const SecureByteArray &) = delete;
-    SecureByteArray &operator=(const SecureByteArray &) = delete;
     SecureByteArray(SecureByteArray &&) = delete;
+    SecureByteArray &operator=(const SecureByteArray &) = delete;
     SecureByteArray &operator=(SecureByteArray &&) = delete;
 
 private:

@@ -39,7 +39,7 @@ void MainGUI::onStartRequested(const UserInput &input) {
         widget->setCurrentWidget(prgGUI);
 
         thread = new QThread(this);
-        worker = new Worker(srcFile, dstFile, userInput.dst, userInput.pw.toUtf8(), userInput.mode);
+        worker = new Worker(srcFile.release(), dstFile.release(), userInput.dst, userInput.pw.toUtf8(), userInput.mode);
         worker->moveToThread(thread);
 
         connect(thread, &QThread::started, worker, &Worker::work);
@@ -79,26 +79,23 @@ int MainGUI::openFiles() {
     const char *srcPath = srcBytes.constData();
     const char *dstPath = dstBytes.constData();
 
-    if (fopen_s(&srcFile, srcPath, "rb")) {
-        inputGUI->setErrMsg("ERROR: Failed to open source file");
-        return 1;
-    }
-
     if (srcInfo.canonicalFilePath() == dstInfo.canonicalFilePath()) {
         inputGUI->setErrMsg("Source and destination cannot be the same");
-        fclose(srcFile);
         return 1;
     }
 
     if (_access(dstPath, 0) != -1) {
         inputGUI->setErrMsg("Destination file already exists");
-        fclose(srcFile);
         return 1;
     }
 
-    if (fopen_s(&dstFile, dstPath, "wb+")) {
+    if (!(srcFile = FileHandle(srcPath, "rb"))) {
+        inputGUI->setErrMsg("ERROR: Failed to open source file");
+        return 1;
+    }
+
+    if (!(dstFile = FileHandle(dstPath, "rb"))) {
         inputGUI->setErrMsg("Failed to create destination file");
-        fclose(srcFile);
         return 1;
     }
 
@@ -121,15 +118,5 @@ void MainGUI::clear() {
     if (thread) {
         delete thread;
         thread = nullptr;
-    }
-
-    if (srcFile) {
-        fclose(srcFile);
-        srcFile = nullptr;
-    }
-
-    if (dstFile) {
-        fclose(dstFile);
-        dstFile = nullptr;
     }
 }

@@ -1,83 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Common">
-      <UniqueIdentifier>{65b45c58-13eb-458e-aab4-e84c10aacdaf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{6a55aac8-6357-4e3d-8393-1e00efe324a8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI">
-      <UniqueIdentifier>{7afd39bf-2e29-4265-8444-5617255f71fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils">
-      <UniqueIdentifier>{bfe3a10c-9ea5-4c9d-ab9f-00959a2a1f1e}</UniqueIdentifier>
-    </Filter>
+    <ClInclude Include="Common\header.h" />
+    <ClInclude Include="Core\AES_GCM.h" />
+    <ClInclude Include="GUI\ModeButton.h" />
+    <ClInclude Include="Utils\FileHandle.h" />
+    <ClInclude Include="Utils\SecureByteArray.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\AES_GCM.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\AES_GCM_decryption.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\AES_GCM_encryption.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Worker.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\main.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\InputGUI.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\MainGUI.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\ModeButton.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\ProgressGUI.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\PWLineEdit.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\library.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
+    <ClCompile Include="Common\main.cpp" />
+    <ClCompile Include="Core\AES_GCM.cpp" />
+    <ClCompile Include="Core\AES_GCM_decryption.cpp" />
+    <ClCompile Include="Core\AES_GCM_encryption.cpp" />
+    <ClCompile Include="Core\Worker.cpp" />
+    <ClCompile Include="GUI\InputGUI.cpp" />
+    <ClCompile Include="GUI\MainGUI.cpp" />
+    <ClCompile Include="GUI\ModeButton.cpp" />
+    <ClCompile Include="GUI\ProgressGUI.cpp" />
+    <ClCompile Include="GUI\PWLineEdit.cpp" />
+    <ClCompile Include="Utils\library.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\AES_GCM.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\header.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\ModeButton.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\SecureByteArray.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="Core\Worker.h">
-      <Filter>Core</Filter>
-    </QtMoc>
-    <QtMoc Include="GUI\InputGUI.h">
-      <Filter>GUI</Filter>
-    </QtMoc>
-    <QtMoc Include="GUI\MainGUI.h">
-      <Filter>GUI</Filter>
-    </QtMoc>
-    <QtMoc Include="GUI\ProgressGUI.h">
-      <Filter>GUI</Filter>
-    </QtMoc>
-    <QtMoc Include="GUI\PWLineEdit.h">
-      <Filter>GUI</Filter>
-    </QtMoc>
+    <QtMoc Include="Core\Worker.h" />
+    <QtMoc Include="GUI\InputGUI.h" />
+    <QtMoc Include="GUI\MainGUI.h" />
+    <QtMoc Include="GUI\ProgressGUI.h" />
+    <QtMoc Include="GUI\PWLineEdit.h" />
   </ItemGroup>
 </Project>

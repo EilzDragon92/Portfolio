@@ -18,6 +18,31 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Common\header.h" />
+    <ClInclude Include="Core\AES_GCM.h" />
+    <ClInclude Include="GUI\ModeButton.h" />
+    <ClInclude Include="Utils\FileHandle.h" />
+    <ClInclude Include="Utils\SecureByteArray.h" />
+    <QtMoc Include="GUI\PWLineEdit.h" />
+    <QtMoc Include="GUI\ProgressGUI.h" />
+    <QtMoc Include="GUI\MainGUI.h" />
+    <QtMoc Include="GUI\InputGUI.h" />
+    <QtMoc Include="Core\Worker.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Common\main.cpp" />
+    <ClCompile Include="Core\AES_GCM.cpp" />
+    <ClCompile Include="Core\AES_GCM_decryption.cpp" />
+    <ClCompile Include="Core\AES_GCM_encryption.cpp" />
+    <ClCompile Include="Core\Worker.cpp" />
+    <ClCompile Include="GUI\InputGUI.cpp" />
+    <ClCompile Include="GUI\MainGUI.cpp" />
+    <ClCompile Include="GUI\ModeButton.cpp" />
+    <ClCompile Include="GUI\ProgressGUI.cpp" />
+    <ClCompile Include="GUI\PWLineEdit.cpp" />
+    <ClCompile Include="Utils\library.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -168,30 +193,6 @@ user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\vcpkg\installed\x64-windows-static\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Common\main.cpp" />
-    <ClCompile Include="Core\AES_GCM.cpp" />
-    <ClCompile Include="Core\AES_GCM_decryption.cpp" />
-    <ClCompile Include="Core\AES_GCM_encryption.cpp" />
-    <ClCompile Include="Core\Worker.cpp" />
-    <ClCompile Include="GUI\InputGUI.cpp" />
-    <ClCompile Include="GUI\MainGUI.cpp" />
-    <ClCompile Include="GUI\ModeButton.cpp" />
-    <ClCompile Include="GUI\ProgressGUI.cpp" />
-    <ClCompile Include="GUI\PWLineEdit.cpp" />
-    <ClCompile Include="Utils\library.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Common\header.h" />
-    <ClInclude Include="Core\AES_GCM.h" />
-    <ClInclude Include="GUI\ModeButton.h" />
-    <ClInclude Include="Utils\SecureByteArray.h" />
-    <QtMoc Include="GUI\PWLineEdit.h" />
-    <QtMoc Include="GUI\ProgressGUI.h" />
-    <QtMoc Include="GUI\MainGUI.h" />
-    <QtMoc Include="GUI\InputGUI.h" />
-    <QtMoc Include="Core\Worker.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(QtMsBuild)\qt.targets" Condition="Exists('$(QtMsBuild)\qt.targets')" />
   <ImportGroup Label="ExtensionTargets">
