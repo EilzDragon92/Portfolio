@@ -1,4 +1,5 @@
 #include "InputGUI.h"
+#include "SecureByteArray.h"
 
 InputGUI::InputGUI(QWidget *parent) : QWidget(parent) {
     modeBtn = new ModeButton;
@@ -45,6 +46,8 @@ void InputGUI::onStartClicked() {
     input.src = srcLine->text();
     input.dst = dstLine->text();
     input.pw = pwLine->getText();
+
+    SecureByteArray spw(pwLine->getText().toUtf8());
 
     if (input.mode == -1) {
         errMsg->setText("Mode is not selected");

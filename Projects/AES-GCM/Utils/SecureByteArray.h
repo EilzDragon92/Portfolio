@@ -21,6 +21,11 @@ public:
         return data.constData();
     }
 
+    SecureByteArray(const SecureByteArray &) = delete;
+    SecureByteArray &operator=(const SecureByteArray &) = delete;
+    SecureByteArray(SecureByteArray &&) = delete;
+    SecureByteArray &operator=(SecureByteArray &&) = delete;
+
 private:
     QByteArray data;
 };
