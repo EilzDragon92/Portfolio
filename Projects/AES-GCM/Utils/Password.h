@@ -33,9 +33,9 @@ public:
         size = tmp.size();
         data = new char[size];
 
-        for (int i = 0; i < size; i++) data[i] = tmp[i];
+        for (size_t i = 0; i < size; i++) data[i] = tmp[i];
 
-        SecureWipeMemory(&tmp, size);
+        SecureWipeMemory(&tmp[0], size);
     }
 
     void setData(Password &pw) {
@@ -48,7 +48,7 @@ public:
         size = inputSize;
         data = new char[size];
 
-        for (int i = 0; i < size; i++) data[i] = str[i];
+        for (size_t i = 0; i < size; i++) data[i] = str[i];
     }
 
     Password(const Password &) = delete;
