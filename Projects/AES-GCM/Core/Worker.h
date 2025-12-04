@@ -18,6 +18,17 @@ public:
         this->mode = mode;
     }
 
+    ~Worker() {
+        if (srcFile) {
+            fclose(srcFile);
+            srcFile = nullptr;
+        }
+        if (dstFile) {
+            fclose(dstFile);
+            dstFile = nullptr;
+        }
+    }
+
 signals:
     void finished(QString msg);
     void progressUpdate(int perc, QString status);
