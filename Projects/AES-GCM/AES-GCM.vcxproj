@@ -23,7 +23,8 @@
     <ClInclude Include="Core\AES_GCM.h" />
     <ClInclude Include="GUI\ModeButton.h" />
     <ClInclude Include="Utils\FileHandle.h" />
-    <ClInclude Include="Utils\SecureByteArray.h" />
+    <ClInclude Include="Utils\Password.h" />
+    <ClInclude Include="Utils\UserInput.h" />
     <QtMoc Include="GUI\PWLineEdit.h" />
     <QtMoc Include="GUI\ProgressGUI.h" />
     <QtMoc Include="GUI\MainGUI.h" />

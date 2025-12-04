@@ -1,4 +1,5 @@
-#include <MainGUI.h>
+#include "MainGUI.h"
+
 #include <QFileInfo>
 #include <filesystem>
 
@@ -25,22 +26,22 @@ MainGUI::~MainGUI() {
     clear();
 }
 
-UserInput MainGUI::getUserInput() {
-    return userInput;
-}
-
 bool MainGUI::hasValidInput() {
     return userInput.valid;
 }
 
-void MainGUI::onStartRequested(const UserInput &input) {
-    userInput = input;
+void MainGUI::onStartRequested(UserInput &input) {
+    userInput.valid = input.valid;
+    userInput.mode = input.mode;
+    userInput.src = input.src;
+    userInput.dst = input.dst;
+    userInput.pw.setData(input.pw);
 
     if (openFiles() == 0) {
         widget->setCurrentWidget(prgGUI);
 
         thread = new QThread(this);
-        worker = new Worker(srcFile.release(), dstFile.release(), userInput.dst, userInput.pw.toUtf8(), userInput.mode);
+        worker = new Worker(srcFile.release(), dstFile.release(), userInput.dst, userInput.pw, userInput.mode);
         worker->moveToThread(thread);
 
         connect(thread, &QThread::started, worker, &Worker::work);

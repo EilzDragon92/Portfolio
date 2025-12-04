@@ -3,6 +3,7 @@
 #include "FileHandle.h"
 #include "InputGUI.h"
 #include "ProgressGUI.h"
+#include "UserInput.h"
 #include "Worker.h"
 #include "header.h"
 
@@ -18,14 +19,13 @@ public:
 
     ~MainGUI();
 
-    UserInput getUserInput();
     bool hasValidInput();
 
 signals:
     void readyToStart();
 
 private slots:
-    void onStartRequested(const UserInput &input);
+    void onStartRequested(UserInput &input);
     void onProgressUpdated(int perc, QString status);
     void onWorkFinished(QString msg);
     void onThreadFinished();

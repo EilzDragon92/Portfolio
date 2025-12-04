@@ -2,6 +2,7 @@
 
 #include "ModeButton.h"
 #include "PWLineEdit.h"
+#include "UserInput.h"
 #include "header.h"
 
 #include <QBoxLayout>
@@ -19,7 +20,7 @@ public:
     void setErrMsg(const QString &msg);
 
 signals:
-    void startRequested(const UserInput &input);
+    void startRequested(UserInput &input);
 
 private slots:
     void onStartClicked();

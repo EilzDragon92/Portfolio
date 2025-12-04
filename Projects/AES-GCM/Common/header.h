@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QString>
+
 #include <atomic>
 #include <functional>
 #include <openssl/evp.h>
@@ -17,13 +18,13 @@
 #define KEY_SIZE 32
 #define SALT_SIZE 16
 
-struct UserInput {
+/*struct UserInput {
     bool valid;
     int mode;
     QString src;
     QString dst;
     QString pw;
-};
+};*/
 
 int64_t GetFileSize(FILE *file);
 
