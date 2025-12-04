@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AES_GCM.h"
-#include "Password.h"
+#include "SecureByteArray.h"
 
 #include <QByteArray>
 #include <QObject>
@@ -10,23 +10,8 @@ class Worker : public QObject {
     Q_OBJECT
 
 public:
-    Worker(FILE *srcFile, FILE *dstFile, QString &dstPath, Password &pw, int mode) {
-        this->srcFile = srcFile;
-        this->dstFile = dstFile;
-        this->dstPath = dstPath;
-        this->pw.setData(pw);
-        this->mode = mode;
-    }
-
-    ~Worker() {
-        if (srcFile) {
-            fclose(srcFile);
-            srcFile = nullptr;
-        }
-        if (dstFile) {
-            fclose(dstFile);
-            dstFile = nullptr;
-        }
+    Worker(FILE *srcFile, FILE *dstFile, QString dstPath, QByteArray pw, int mode) :
+        srcFile(srcFile), dstFile(dstFile), dstPath(dstPath), pw(std::move(pw)), mode(mode) {
     }
 
 signals:
@@ -40,7 +25,7 @@ public slots:
 private:
     FILE *srcFile, *dstFile;
     QString err = "", dstPath;
-    Password pw;
+    SecureByteArray pw;
     std::atomic<bool> shouldCancel{ false };
     int mode;
 };

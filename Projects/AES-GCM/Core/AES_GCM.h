@@ -16,8 +16,8 @@ public:
 
 	~AES_GCM();
 
-	int decrypt(FILE *src, FILE *dst, const char *pw, size_t plen);
-	int encrypt(FILE *src, FILE *dst, const char *pw, size_t plen);
+	int decrypt(FILE *src, FILE *dst, const char *pw, int plen);
+	int encrypt(FILE *src, FILE *dst, const char *pw, int plen);
 
 	void setErrorCb(ErrorCallback ecb) {
 		this->ecb = ecb;

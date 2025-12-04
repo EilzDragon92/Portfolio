@@ -1,6 +1,6 @@
 #include "AES_GCM.h"
 
-int AES_GCM::decrypt(FILE *src, FILE *dst, const char *pw, size_t plen) {
+int AES_GCM::decrypt(FILE *src, FILE *dst, const char *pw, int plen) {
 	this->src = src, this->dst = dst;
 	cancelled = false;
 

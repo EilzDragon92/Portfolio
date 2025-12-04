@@ -1,5 +1,4 @@
 #include "InputGUI.h"
-#include "UserInput.h"
 
 InputGUI::InputGUI(QWidget *parent) : QWidget(parent) {
     modeBtn = new ModeButton;
@@ -45,7 +44,7 @@ void InputGUI::onStartClicked() {
     input.mode = modeBtn->getMode();
     input.src = srcLine->text();
     input.dst = dstLine->text();
-    input.pw.setData(*pwLine);
+    input.pw = pwLine->getText();
 
     if (input.mode == -1) {
         errMsg->setText("Mode is not selected");
