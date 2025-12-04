@@ -1,5 +1,4 @@
 #include "InputGUI.h"
-#include "SecureByteArray.h"
 
 InputGUI::InputGUI(QWidget *parent) : QWidget(parent) {
     modeBtn = new ModeButton;

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "header.h"
-
 #include <QBoxLayout>
 #include <QButtonGroup>
 #include <QRadioButton>

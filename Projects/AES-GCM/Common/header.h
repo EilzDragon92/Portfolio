@@ -2,12 +2,11 @@
 #pragma comment(lib, "bcrypt.lib")
 
 #include <QString>
+#include <atomic>
 #include <functional>
-#include <io.h>
-#include <openssl/err.h>
 #include <openssl/evp.h>
-#include <openssl/rand.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <windows.h>
 #include <bcrypt.h>
 

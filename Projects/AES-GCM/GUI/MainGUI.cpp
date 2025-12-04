@@ -1,5 +1,6 @@
 #include <MainGUI.h>
 #include <QFileInfo>
+#include <filesystem>
 
 MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
     inputGUI = new InputGUI;
