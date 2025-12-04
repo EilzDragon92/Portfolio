@@ -26,12 +26,12 @@ public:
     }
 
     void setData(PWLineEdit &pwLine) {
-        std::string tmp = pwLine.getText().toStdString();
+        std::string tmp = pwLine.getText().toStdString(); // ERROR
 
         wipe();
 
         size = tmp.size();
-        data = new char[size];
+        data = new char[size] {};
 
         for (size_t i = 0; i < size; i++) data[i] = tmp[i];
 
