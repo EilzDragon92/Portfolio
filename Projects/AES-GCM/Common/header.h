@@ -1,5 +1,4 @@
 #pragma once
-#pragma comment(lib, "bcrypt.lib")
 
 #include <QString>
 #include <atomic>
@@ -7,8 +6,12 @@
 #include <openssl/evp.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <windows.h>
-#include <bcrypt.h>
+
+#ifdef _WIN32
+    #pragma comment(lib, "bcrypt.lib")
+    #include <windows.h>
+    #include <bcrypt.h>
+#endif
 
 #define FONT_SCALE 1.2
 #define KEY_SIZE 32

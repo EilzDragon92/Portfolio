@@ -21,7 +21,7 @@ public:
         return data.constData();
     }
 
-    const size_t size() const {
+    size_t size() const {
         return data.size();
     }
 
