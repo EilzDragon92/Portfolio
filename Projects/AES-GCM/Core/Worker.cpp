@@ -33,11 +33,11 @@ void Worker::work() {
 
         if (shouldCancel) {
             msg = "Encryption canceled\n";
-            std::filesystem::remove(dstPath.toStdString());
+            RemoveFile(dstPath.toUtf8().constData());
         }
         else if (res) {
             msg = err + "Encryption failed";
-            std::filesystem::remove(dstPath.toStdString());
+            RemoveFile(dstPath.toUtf8().constData());
         }
         else {
             msg = "Encryption complete\n";
@@ -48,11 +48,11 @@ void Worker::work() {
 
         if (shouldCancel) {
             msg = "Decryption canceled\n";
-            std::filesystem::remove(dstPath.toStdString());
+            RemoveFile(dstPath.toUtf8().constData());
         }
         else if (res) {
             msg = "Decryption failed";
-            std::filesystem::remove(dstPath.toStdString());
+            RemoveFile(dstPath.toUtf8().constData());
         }
         else {
             msg = "Decryption complete\n";

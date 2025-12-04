@@ -23,12 +23,14 @@ struct UserInput {
     QString pw;
 };
 
-class MainGUI;
-
 int64_t GetFileSize(FILE *file);
 
 int Argon2id(uint8_t salt[], const char pw[], size_t plen, uint8_t key[]);
 
 int GetProcNum();
 
-int Random(uint8_t *dst, int size);
+int Random(uint8_t *dst, size_t size);
+
+int RemoveFile(const char *path);
+
+void SecureWipeMemory(void *ptr, size_t size);

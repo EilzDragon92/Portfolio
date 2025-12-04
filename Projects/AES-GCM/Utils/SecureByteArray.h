@@ -11,7 +11,7 @@ public:
     ~SecureByteArray() {
         data.detach();
 
-        SecureZeroMemory(data.data(), data.size());
+        SecureWipeMemory(data.data(), data.size());
 
         data.clear();
         data.squeeze();

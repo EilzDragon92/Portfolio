@@ -72,8 +72,8 @@ void MainGUI::onCloseRequested() {
 }
 
 int MainGUI::openFiles() {
-    QByteArray srcBytes = userInput.src.toLocal8Bit();
-    QByteArray dstBytes = userInput.dst.toLocal8Bit();
+    QByteArray srcBytes = userInput.src.toUtf8();
+    QByteArray dstBytes = userInput.dst.toUtf8();
     QFileInfo srcInfo(userInput.src);
     QFileInfo dstInfo(userInput.dst);
     const char *srcPath = srcBytes.constData();

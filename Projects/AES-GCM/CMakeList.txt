@@ -1,0 +1,72 @@
+
+cmake_minimum_required(VERSION 3.16)
+project(AES-GCM VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Qt Settings
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+find_package(OpenSSL REQUIRED)
+
+find_library(ARGON2_LIBRARY NAMES argon2 REQUIRED)
+find_path(ARGON2_INCLUDE_DIR NAMES argon2.h REQUIRED)
+
+set(SOURCES
+    Projects/AES-GCM/Common/main.cpp
+    Projects/AES-GCM/Core/AES_GCM.cpp
+    Projects/AES-GCM/Core/AES_GCM_encryption.cpp
+    Projects/AES-GCM/Core/AES_GCM_decryption.cpp
+    Projects/AES-GCM/Core/Worker.cpp
+    Projects/AES-GCM/GUI/InputGUI.cpp
+    Projects/AES-GCM/GUI/MainGUI.cpp
+    Projects/AES-GCM/GUI/ModeButton.cpp
+    Projects/AES-GCM/GUI/ProgressGUI.cpp
+    Projects/AES-GCM/GUI/PWLineEdit.cpp
+    Projects/AES-GCM/Utils/library.cpp
+)
+
+set(HEADERS
+    Projects/AES-GCM/Common/header.h
+    Projects/AES-GCM/Core/AES_GCM.h
+    Projects/AES-GCM/Core/Worker.h
+    Projects/AES-GCM/GUI/InputGUI.h
+    Projects/AES-GCM/GUI/MainGUI.h
+    Projects/AES-GCM/GUI/ModeButton.h
+    Projects/AES-GCM/GUI/ProgressGUI.h
+    Projects/AES-GCM/GUI/PWLineEdit.h
+    Projects/AES-GCM/Utils/FileHandle.h
+    Projects/AES-GCM/Utils/SecureByteArray.h
+)
+
+add_executable(AES-GCM ${SOURCES} ${HEADERS})
+
+target_include_directories(AES-GCM PRIVATE
+    Projects/AES-GCM/Common
+    Projects/AES-GCM/Core
+    Projects/AES-GCM/GUI
+    Projects/AES-GCM/Utils
+    ${ARGON2_INCLUDE_DIR}
+)
+
+target_link_libraries(AES-GCM PRIVATE
+    Qt6::Core
+    Qt6::Widgets
+    OpenSSL::SSL
+    OpenSSL::Crypto
+    ${ARGON2_LIBRARY}
+)
+
+if(WIN32)
+    target_link_libraries(AES-GCM PRIVATE bcrypt)
+endif()
+
+if(MSVC)
+    target_compile_options(AES-GCM PRIVATE /W4)
+else()
+    target_compile_options(AES-GCM PRIVATE -Wall -Wextra -Wpedantic)
+endif()
