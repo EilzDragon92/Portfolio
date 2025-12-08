@@ -29,7 +29,7 @@ void Worker::work() {
         });
 
     if (mode == 0) {
-        res = aes.encrypt(srcFile, dstFile, pw.constData(), pw.size());
+        res = aes.encrypt(srcFile, dstFile, pw.getData(), pw.getSize());
 
         if (shouldCancel) {
             msg = "Encryption canceled\n";
@@ -44,7 +44,7 @@ void Worker::work() {
         }
     }
     else {
-        res = aes.decrypt(srcFile, dstFile, pw.constData(), pw.size());
+        res = aes.decrypt(srcFile, dstFile, pw.getData(), pw.getSize());
 
         if (shouldCancel) {
             msg = "Decryption canceled\n";

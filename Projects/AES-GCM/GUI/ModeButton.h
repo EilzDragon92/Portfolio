@@ -1,9 +1,6 @@
 #pragma once
 
-#include <QBoxLayout>
-#include <QButtonGroup>
-#include <QRadioButton>
-#include <QWidget>
+#include "Common/header.h"
 
 class ModeButton : public QWidget {
 public:

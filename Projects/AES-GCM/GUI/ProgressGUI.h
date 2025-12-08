@@ -1,12 +1,6 @@
 #pragma once
 
-#include "header.h"
-
-#include <QApplication>
-#include <QBoxLayout>
-#include <QLabel>
-#include <QProgressBar>
-#include <QPushButton>
+#include "Common/header.h"
 
 class ProgressGUI : public QWidget {
     Q_OBJECT

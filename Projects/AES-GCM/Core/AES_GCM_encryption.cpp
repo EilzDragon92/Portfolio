@@ -1,4 +1,4 @@
-#include "AES_GCM.h"
+#include "Core/AES_GCM.h"
 
 int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw, int plen) {
 	this->src = src, this->dst = dst;

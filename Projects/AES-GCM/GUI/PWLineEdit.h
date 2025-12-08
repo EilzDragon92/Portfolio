@@ -1,11 +1,6 @@
 #pragma once
 
-#include "header.h"
-
-#include <QBoxLayout>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QWidget>
+#include "Common/header.h"
 
 class PWLineEdit : public QWidget {
     Q_OBJECT

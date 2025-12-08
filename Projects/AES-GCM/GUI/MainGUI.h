@@ -1,14 +1,9 @@
 #pragma once
 
-#include "FileHandle.h"
-#include "InputGUI.h"
-#include "ProgressGUI.h"
-#include "Worker.h"
-#include "header.h"
-
-#include <QStackedWidget>
-#include <QThread>
-#include <QWidget>
+#include "Core/Worker.h"
+#include "GUI/InputGUI.h"
+#include "GUI/ProgressGUI.h"
+#include "Utils/File.h"
 
 class MainGUI : public QWidget {
     Q_OBJECT
@@ -32,7 +27,7 @@ private slots:
     void onCloseRequested();
 
 private:
-    FileHandle srcFile, dstFile;
+    FILE *srcFile, *dstFile;
     InputGUI *inputGUI;
     ProgressGUI *prgGUI;
     QStackedWidget *widget;
@@ -40,7 +35,7 @@ private:
     QVBoxLayout *vBox;
     UserInput userInput;
     Worker *worker;
-    
+
     int openFiles();
     void clear();
 };

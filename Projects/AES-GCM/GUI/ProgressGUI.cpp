@@ -1,4 +1,4 @@
-#include <ProgressGUI.h>
+#include "GUI/ProgressGUI.h"
 
 ProgressGUI::ProgressGUI(QWidget *parent) : QWidget(parent), cancelled(false) {
     prgLabel = new QLabel("Initializing...\n");

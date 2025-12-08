@@ -1,13 +1,6 @@
 #pragma once
 
-#include "header.h"
-
-#define BLOCK_SIZE 16
-#define BUFF_SIZE 4096
-#define IV_SIZE 12
-#define TAG_SIZE 16
-
-#define MAX_SIZE 16ULL * 0xffffffffULL
+#include "Common/header.h"
 
 class AES_GCM {
 public:

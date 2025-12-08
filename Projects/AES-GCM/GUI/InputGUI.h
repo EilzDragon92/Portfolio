@@ -1,14 +1,17 @@
 #pragma once
 
-#include "ModeButton.h"
-#include "PWLineEdit.h"
-#include "header.h"
+#include "Common/header.h"
+#include "GUI/ModeButton.h"
+#include "GUI/PWLineEdit.h"
+#include "Utils/Password.h"
 
-#include <QBoxLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QWidget>
+struct UserInput {
+    bool valid;
+    int mode;
+    QString src;
+    QString dst;
+    Password pw;
+};
 
 class InputGUI : public QWidget {
     Q_OBJECT

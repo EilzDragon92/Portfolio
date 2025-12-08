@@ -1,6 +1,4 @@
-#include <MainGUI.h>
-#include <QFileInfo>
-#include <filesystem>
+#include "GUI/MainGUI.h"
 
 MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
     inputGUI = new InputGUI;
@@ -34,13 +32,17 @@ bool MainGUI::hasValidInput() {
 }
 
 void MainGUI::onStartRequested(const UserInput &input) {
-    userInput = input;
+    userInput.valid = input.valid;
+    userInput.mode = input.mode;
+    userInput.src = input.src;
+    userInput.dst = input.dst;
+    userInput.pw.setData(input.pw);
 
     if (openFiles() == 0) {
         widget->setCurrentWidget(prgGUI);
 
         thread = new QThread(this);
-        worker = new Worker(srcFile.release(), dstFile.release(), userInput.dst, userInput.pw.toUtf8(), userInput.mode);
+        worker = new Worker(srcFile, dstFile, userInput.dst, userInput.pw, userInput.mode);
         worker->moveToThread(thread);
 
         connect(thread, &QThread::started, worker, &Worker::work);
@@ -90,12 +92,16 @@ int MainGUI::openFiles() {
         return 1;
     }
 
-    if (!(srcFile = FileHandle(srcPath, "rb"))) {
+    fopen_s(&srcFile, srcPath, "rb");
+
+    if (srcFile == nullptr) {
         inputGUI->setErrMsg("ERROR: Failed to open source file");
         return 1;
     }
 
-    if (!(dstFile = FileHandle(dstPath, "wb+"))) {
+    fopen_s(&dstFile, dstPath, "wb+");
+
+    if (dstFile == nullptr) {
         inputGUI->setErrMsg("Failed to create destination file");
         return 1;
     }
@@ -119,5 +125,15 @@ void MainGUI::clear() {
     if (thread) {
         delete thread;
         thread = nullptr;
+    }
+
+    if (srcFile) {
+        fclose(srcFile);
+        srcFile = nullptr;
+    }
+
+    if (dstFile) {
+        fclose(dstFile);
+        dstFile = nullptr;
     }
 }

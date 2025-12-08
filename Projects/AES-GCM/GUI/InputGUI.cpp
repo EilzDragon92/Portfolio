@@ -41,34 +41,32 @@ void InputGUI::onStartClicked() {
     UserInput input;
 
     input.valid = false;
-    input.mode = modeBtn->getMode();
-    input.src = srcLine->text();
-    input.dst = dstLine->text();
-    input.pw = pwLine->getText();
 
-    if (input.mode == -1) {
+    if ((input.mode = modeBtn->getMode()) == -1) {
         errMsg->setText("Mode is not selected");
         return;
     }
 
-    if (input.src.isEmpty()) {
+    if ((input.src = srcLine->text()).isEmpty()) {
         errMsg->setText("Source file is not input");
         return;
     }
 
-    if (input.dst.isEmpty()) {
+    if ((input.dst = dstLine->text()).isEmpty()) {
         errMsg->setText("Destination file is not input");
         return;
     }
+
+    input.pw.setData(pwLine->getText());
 
     if (input.pw.isEmpty()) {
         errMsg->setText("Password is not input");
         return;
     }
 
+    pwLine->clear();
+
     input.valid = true;
 
     emit startRequested(input);
-
-    pwLine->clear();
 }

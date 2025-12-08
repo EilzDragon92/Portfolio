@@ -1,17 +1,19 @@
 #pragma once
 
-#include "AES_GCM.h"
-#include "SecureByteArray.h"
-
-#include <QByteArray>
-#include <QObject>
+#include "Core/AES_GCM.h"
+#include "Utils/File.h"
+#include "Utils/Password.h"
 
 class Worker : public QObject {
     Q_OBJECT
 
 public:
-    Worker(FILE *srcFile, FILE *dstFile, QString dstPath, QByteArray pw, int mode) :
-        srcFile(srcFile), dstFile(dstFile), dstPath(dstPath), pw(std::move(pw)), mode(mode) {
+    Worker(FILE *srcFile, FILE *dstFile, QString dstPath, Password pw, int mode) {
+        this->srcFile = srcFile;
+        this->dstFile = dstFile;
+        this->dstPath = dstPath;
+        this->pw.setData(pw);
+        this->mode = mode;
     }
 
 signals:
@@ -23,9 +25,9 @@ public slots:
     void work();
 
 private:
-    FILE *srcFile, *dstFile;
+    FILE *srcFile = nullptr, *dstFile = nullptr;
     QString err = "", dstPath;
-    SecureByteArray pw;
+    Password pw;
     std::atomic<bool> shouldCancel{ false };
     int mode;
 };

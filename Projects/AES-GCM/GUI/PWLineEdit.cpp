@@ -1,4 +1,4 @@
-#include "PWLineEdit.h"
+#include "GUI/PWLineEdit.h"
 
 PWLineEdit::PWLineEdit(QWidget *parent) : QWidget(parent) {
     hBox = new QHBoxLayout;

@@ -1,20 +1,4 @@
-#include "header.h"
-#include <argon2.h>
-
-#define MEM_COST (512 * 1024)
-#define TIME_COST 4
-
-#ifdef _WIN32
-    #include <windows.h>
-    #include <bcrypt.h>
-    #include <io.h>
-
-#else
-    #include <unistd.h>
-    #include <sys/random.h>
-    #include <thread>
-
-#endif
+#include "Common/header.h"
 
 int64_t GetFileSize(FILE *file) {
     int64_t size;
@@ -71,7 +55,7 @@ int RemoveFile(const char *path) {
 #endif
 }
 
-void SecureWipeMemory(void *ptr, size_t size) {
+void WipeMemory(void *ptr, size_t size) {
 #ifdef _WIN32
     SecureZeroMemory(ptr, size);
 

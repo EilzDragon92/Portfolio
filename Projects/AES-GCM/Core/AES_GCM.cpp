@@ -1,10 +1,10 @@
-﻿#include "AES_GCM.h"
+﻿#include "Core/AES_GCM.h"
 
 AES_GCM::~AES_GCM() {
-	SecureWipeMemory(buff, sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
-	SecureWipeMemory(iv, sizeof(uint8_t) * IV_SIZE);
-	SecureWipeMemory(key, sizeof(uint8_t) * KEY_SIZE);
-	SecureWipeMemory(salt, sizeof(uint8_t) * SALT_SIZE);
+	WipeMemory(buff, sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
+	WipeMemory(iv, sizeof(uint8_t) * IV_SIZE);
+	WipeMemory(key, sizeof(uint8_t) * KEY_SIZE);
+	WipeMemory(salt, sizeof(uint8_t) * SALT_SIZE);
 
 	if (ctx) {
 		EVP_CIPHER_CTX_free(ctx);

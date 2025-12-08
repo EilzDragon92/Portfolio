@@ -1,10 +1,6 @@
-#include "MainGUI.h"
-#include "header.h"
+#include "GUI/MainGUI.h"
 
-#include <QApplication>
-#include <QScreen>
-
-int main(int argc, char *argv[]) {
+int ShowGUI(int argc, char *argv[]) {
     QApplication app(argc, argv);
     MainGUI *gui = new MainGUI;
 
@@ -25,4 +21,12 @@ int main(int argc, char *argv[]) {
     gui->show();
 
     return app.exec();
+
+    return 0;
+}
+
+int main(int argc, char *argv[]) {
+    ShowGUI(argc, argv);
+
+    return 0;
 }

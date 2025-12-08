@@ -1,1 +1,0 @@
-This is a GUI file encryption-decryption program using AES-GCM.
