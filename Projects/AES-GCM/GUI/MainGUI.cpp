@@ -62,8 +62,9 @@ void MainGUI::onProgressUpdated(int perc, QString status) {
     prgGUI->update(perc, status);
 }
 
-void MainGUI::onWorkFinished(QString msg) {
+void MainGUI::onWorkFinished(QString msg, bool shouldDelete) {
     prgGUI->showResult(msg);
+    this->shouldDelete = shouldDelete;
 }
 
 void MainGUI::onThreadFinished() {
@@ -135,5 +136,10 @@ void MainGUI::clear() {
     if (dstFile) {
         fclose(dstFile);
         dstFile = nullptr;
+    }
+
+    if (shouldDelete) {
+        Unlink(userInput.dst.toUtf8().constData());
+        shouldDelete = false;
     }
 }

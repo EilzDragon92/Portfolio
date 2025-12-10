@@ -22,7 +22,7 @@ signals:
 private slots:
     void onStartRequested(const UserInput &input);
     void onProgressUpdated(int perc, QString status);
-    void onWorkFinished(QString msg);
+    void onWorkFinished(QString msg, bool shouldDelete);
     void onThreadFinished();
     void onCloseRequested();
 
@@ -35,6 +35,7 @@ private:
     QVBoxLayout *vBox;
     UserInput userInput;
     Worker *worker;
+    bool shouldDelete = false;
 
     int openFiles();
     void clear();

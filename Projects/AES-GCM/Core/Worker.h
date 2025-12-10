@@ -17,7 +17,7 @@ public:
     }
 
 signals:
-    void finished(QString msg);
+    void finished(QString msg, bool shouldDelete);
     void progressUpdate(int perc, QString status);
 
 public slots:

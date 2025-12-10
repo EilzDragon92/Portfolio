@@ -7,6 +7,7 @@ void Worker::requestCancel() {
 void Worker::work() {
     AES_GCM aes;
     QString msg;
+    bool shouldDelete = false;
     int res;
 
     aes.setErrorCb([this](const char *msg) {
@@ -33,11 +34,11 @@ void Worker::work() {
 
         if (shouldCancel) {
             msg = "Encryption canceled\n";
-            Unlink(dstPath.toUtf8().constData());
+            shouldDelete = true;
         }
         else if (res) {
             msg = err + "Encryption failed\n";
-            Unlink(dstPath.toUtf8().constData());
+            shouldDelete = true;
         }
         else {
             msg = "Encryption complete\n";
@@ -46,18 +47,19 @@ void Worker::work() {
     else {
         res = aes.decrypt(srcFile, dstFile, pw.getData(), pw.getSize());
 
-        if (shouldCancel || 1) {
+        if (shouldCancel) {
             msg = "Decryption canceled\n";
-            Unlink(dstPath.toUtf8().constData());
+            shouldDelete = true;
         }
         else if (res) {
             msg = "Decryption failed\n";
             Unlink(dstPath.toUtf8().constData());
+            shouldDelete = true;
         }
         else {
             msg = "Decryption complete\n";
         }
     }
 
-    emit finished(msg);
+    emit finished(msg, shouldDelete);
 }
