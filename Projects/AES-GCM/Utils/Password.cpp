@@ -52,7 +52,7 @@ void Password::setData(const char *str, size_t len) {
 
 void Password::clean() {
 	if (data != nullptr) {
-		SecureZeroMemory(data, size + 1);
+		Wipe(data, size + 1);
 		delete[] data;
 	}
 

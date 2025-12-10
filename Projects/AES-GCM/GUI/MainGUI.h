@@ -27,7 +27,7 @@ private slots:
     void onCloseRequested();
 
 private:
-    FILE *srcFile, *dstFile;
+    FILE *srcFile = nullptr, *dstFile = nullptr;
     InputGUI *inputGUI;
     ProgressGUI *prgGUI;
     QStackedWidget *widget;

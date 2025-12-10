@@ -33,11 +33,11 @@ void Worker::work() {
 
         if (shouldCancel) {
             msg = "Encryption canceled\n";
-            RemoveFile(dstPath.toUtf8().constData());
+            Unlink(dstPath.toUtf8().constData());
         }
         else if (res) {
-            msg = err + "Encryption failed";
-            RemoveFile(dstPath.toUtf8().constData());
+            msg = err + "Encryption failed\n";
+            Unlink(dstPath.toUtf8().constData());
         }
         else {
             msg = "Encryption complete\n";
@@ -46,13 +46,13 @@ void Worker::work() {
     else {
         res = aes.decrypt(srcFile, dstFile, pw.getData(), pw.getSize());
 
-        if (shouldCancel) {
+        if (shouldCancel || 1) {
             msg = "Decryption canceled\n";
-            RemoveFile(dstPath.toUtf8().constData());
+            Unlink(dstPath.toUtf8().constData());
         }
         else if (res) {
-            msg = "Decryption failed";
-            RemoveFile(dstPath.toUtf8().constData());
+            msg = "Decryption failed\n";
+            Unlink(dstPath.toUtf8().constData());
         }
         else {
             msg = "Decryption complete\n";

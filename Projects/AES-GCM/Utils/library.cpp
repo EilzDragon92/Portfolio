@@ -45,7 +45,17 @@ int Random(uint8_t *dst, size_t size) {
 #endif
 }
 
-int RemoveFile(const char *path) {
+int Seek(FILE *file, int64_t offset, int origin) {
+#ifdef _WIN32
+    return _fseeki64(file, offset, origin);
+
+#else
+    return fseeko(file, offset, origin);
+
+#endif
+}
+
+int Unlink(const char *path) {
 #ifdef _WIN32
     return _unlink(path);
 
@@ -55,7 +65,7 @@ int RemoveFile(const char *path) {
 #endif
 }
 
-void WipeMemory(void *ptr, size_t size) {
+void Wipe(void *ptr, size_t size) {
 #ifdef _WIN32
     SecureZeroMemory(ptr, size);
 

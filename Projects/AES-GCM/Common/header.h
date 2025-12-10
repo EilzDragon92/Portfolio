@@ -46,6 +46,8 @@ int GetProcNum();
 
 int Random(uint8_t *dst, size_t size);
 
-int RemoveFile(const char *path);
+int Seek(FILE *file, int64_t offset, int origin);
 
-void WipeMemory(void *ptr, size_t size);
+int Unlink(const char *path);
+
+void Wipe(void *ptr, size_t size);

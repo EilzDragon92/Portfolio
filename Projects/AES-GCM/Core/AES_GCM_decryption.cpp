@@ -89,7 +89,7 @@ int AES_GCM::decryptInit(const char *pw, int plen) {
 int AES_GCM::decryptTag() {
 	uint8_t tag[TAG_SIZE];
 
-	if (_fseeki64(src, -TAG_SIZE, SEEK_END)) {
+	if (Seek(src, -TAG_SIZE, SEEK_END)) {
 		reportError("ERROR: Failed to move file pointer\n");
 		return 1;
 	}
@@ -104,7 +104,7 @@ int AES_GCM::decryptTag() {
 		return 1;
 	}
 
-	if (_fseeki64(src, SALT_SIZE + IV_SIZE, SEEK_SET)) {
+	if (Seek(src, SALT_SIZE + IV_SIZE, SEEK_SET)) {
 		reportError("ERROR: Failed to reset file pointer\n");
 		return 1;
 	}
