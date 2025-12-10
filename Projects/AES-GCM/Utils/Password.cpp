@@ -21,7 +21,7 @@ void Password::setData(const QString &str) {
 
 	setData(tmp);
 
-	SecureZeroMemory(const_cast<char *>(tmp.data()), tmp.size());
+	Wipe(const_cast<char *>(tmp.data()), tmp.size());
 
 	tmp.clear();
 }
