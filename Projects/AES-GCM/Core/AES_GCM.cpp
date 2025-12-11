@@ -1,4 +1,13 @@
-﻿#include "Core/AES_GCM.h"
+﻿/**
+ * @file	AES_GCM.cpp
+ * @brief	Core implementation of AES_GCM class
+ * @author	EilzDragon92
+ *
+ * Contents:
+ *	- Implementation of destructor and helper functions of AES_GCM class
+ */
+
+#include "Core/AES_GCM.h"
 
 AES_GCM::~AES_GCM() {
 	Wipe(buff, sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
@@ -39,6 +48,7 @@ int AES_GCM::reportProgress() {
 
 		if (cancelled) return 1;
 	}
+
 	return 0;
 }
 

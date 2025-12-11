@@ -2,9 +2,11 @@
  * @file	header.h
  * @brief	Common header file for AES-GCM file encryption/decryption application
  * @author	EilzDragon92
- *
- * This file contains libraries, macros, and utility function declarations
- * This file is included in all the other files
+ * 
+ * Contents:
+ *	- Libraries
+ *	- Macros
+ *	- Utility function declarations
  */
 
 #pragma once
@@ -61,16 +63,55 @@
 
 using std::string;
 
+/**
+ * @brief	Get the size of a file in bytes
+ * @param	file	File pointer in read binary mode
+ * @return	file size in bytes on success, -1 on failure
+ */
 int64_t GetFileSize(FILE *file);
 
+/**
+ * @brief	Derive a key using Argon2id
+ * @param	salt	Input buffer for salt
+ * @param	pw		Input buffer for password
+ * @param	plen	Password length in bytes
+ * @param	key		Output buffer for key
+ * @return	0 on success, non-zero on failure
+ */
 int Argon2id(uint8_t salt[], const char pw[], size_t plen, uint8_t key[]);
 
+/**
+ * @brief	Get the number of processors available
+ * @return	Number of logical processors available
+ */
 int GetProcNum();
 
+/**
+ * @brief	Generates cryptographically secure random bytes
+ * @param	dst		Output buffer for random bytes
+ * @param	size	Output buffer size
+ */
 int Random(uint8_t *dst, size_t size);
 
+/**
+ * @brief	Move file pointer to specific position
+ * @param	file	File pointer
+ * @param	dist	Distance from reference point
+ * @param	ref		Reference point
+ * @return	0 on success, non-zero on failure
+ */
 int Seek(FILE *file, int64_t dist, int ref);
 
+/**
+ * @brief	Delete a file
+ * @param	path	Path of the file
+ * @return	0 on success, non-zero on failure
+ */
 int Unlink(const char *path);
 
+/**
+ * @brief	Securely wipe data in memory
+ * @param	buff	Buffer to wipe
+ * @param	size	Buffer size in bytes
+ */
 void Wipe(void *buff, size_t size);
