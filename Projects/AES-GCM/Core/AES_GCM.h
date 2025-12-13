@@ -31,16 +31,43 @@ public:
 	 */
 	using ProgressCallback = std::function<void(int perc, bool *cancelled)>;
 
-	/// Destructor of AES_GCM class
+	/**
+	 * @brief	Destructor of AES_GCM class
+	 */
 	~AES_GCM();
 
+	/**
+	  * @brief		Decrypt a file
+	  * @param		src		Source file
+	  * @param		dst		Destination file
+	  * @param		pw		Password
+	  * @param		plen	Password Length
+	  * @return		0 on success, 1 on failure
+	  */
 	int decrypt(FILE *src, FILE *dst, const char *pw, int plen);
+
+	/**
+	  * @brief		Encrypt a file
+	  * @param		src		Source file
+	  * @param		dst		Destination file
+	  * @param		pw		Password
+	  * @param		plen	Password Length
+	  * @return		0 on success, 1 on failure
+	  */
 	int encrypt(FILE *src, FILE *dst, const char *pw, int plen);
 
+	/**
+	 * @brief	Set error callback function
+	 * @param	ecb		Error callback function
+	 */
 	void setErrorCb(ErrorCallback ecb) {
 		this->ecb = ecb;
 	}
 
+	/**
+	 * @brief	Set progress callback function
+	 * @param	pcb		Progress callback function
+	 */
 	void setProgressCb(ProgressCallback pcb) {
 		this->pcb = pcb;
 	}
@@ -65,9 +92,9 @@ private:
 	std::atomic<bool> cancelled{ false };	// Cancellation flag
 
 
-	/* ====================
+	/* ==================================================
 	 * I/O helper functions
-	 * ==================== */
+	 * ================================================== */
 
 	/**
 	  * @brief	Read data from source file into buffer
@@ -86,33 +113,101 @@ private:
 	int writeBuffer(void *buff, int size);
 
 
-	/* ====================
+	/* ==================================================
 	 * Decryption functions
-	 * ==================== */
+	 * ================================================== */
 
+	/**
+	 * @brief	Intialize decryption context
+	 * @param	pw		Password
+	 * @param	plen	Password length
+	 * @return	0 on success, 1 on failure
+	 */
 	int decryptInit(const char *pw, int plen);
+
+	/**
+	 * @brief	Read and verify authentication tag
+	 * @return	0 on success, 1 on failure
+	 */
 	int decryptTag();
+
+	/**
+	 * @brief	Decrypt a block
+	 * @param	src		Source buffer
+	 * @param	dst		Destination buffer
+	 * @param	srcLen	Source buffer length
+	 * @return	0 on success, 1 on failure
+	 */
 	int decryptBlock(uint8_t *src, uint8_t *dst, int srcLen);
+
+	/**
+	 * @brief	Decrypt multiple blocks in a batch
+	 * @return	0 on success, 1 on failure
+	 */
 	int decryptBatch();
+
+	/**
+	 * @brief	Decrypt remaining data smaller than buffer
+	 * @return	0 on success, 1 on failure
+	 */
 	int decryptRemain();
+
+	/**
+	 * @brief	Finialize decryption
+	 * @return	0 on success, 1 on failure
+	 */
 	int decryptFinal();
 
 
-	/* ====================
+	/* ==================================================
 	 * Encryption functions
-	 * ==================== */
+	 * ================================================== */
 
+	/**
+	 * @brief	Intialize encryption context 
+	 * @param	pw		Password
+	 * @param	plen	Password length
+	 * @return	0 on success, 1 on failure
+	 */
 	int encryptInit(const char *pw, int plen);
+
+	/**
+	 * @brief	Encrypt a block
+	 * @param	src		Source buffer
+	 * @param	dst		Destination buffer
+	 * @param	srcLen	Source buffer length
+	 * @return	0 on success, 1 on failure
+	 */
 	int encryptBlock(uint8_t *src, uint8_t *dst, int srcLen);
+
+	/**
+	 * @brief	Encrypt multiple blocks in a batch
+	 * @return	0 on success, 1 on failure
+	 */
 	int encryptBatch();
+
+	/**
+	 * @brief	Encrypt remaining data smaller than buffer
+	 * @return	0 on success, 1 on failure
+	 */
 	int encryptRemain();
+
+	/**
+	 * @brief	Finialize encryption
+	 * @return	0 on success, 1 on failure
+	 */
 	int encryptFinal();
+
+	/**
+	 * @brief	Generate and write authentication tag
+	 * @return	0 on success, 1 on failure
+	 */
 	int encryptTag();
 
 
-	/* =========================
+	/* ==================================================
 	 * Callback helper functions
-	 * ========================= */
+	 * ================================================== */
 
 	 /**
 	   * @brief		Report current progress via callback

@@ -26,7 +26,7 @@ int AES_GCM::encryptInit(const char *pw, int plen) {
 	}
 
 
-	/* Generate salt, IV, and derive key */
+	/* Generate salt and IV */
 
 	if (Random(salt, SALT_SIZE)) {
 		reportError("ERROR: Failed to generate salt\n");
@@ -37,6 +37,9 @@ int AES_GCM::encryptInit(const char *pw, int plen) {
 		reportError("ERROR: Failed to generate initial vector\n");
 		return 1;
 	}
+
+
+	/* Derive key from password */
 
 	if (Argon2id(salt, pw, plen, key)) {
 		reportError("ERROR: Failed to derive key\n");

@@ -26,7 +26,7 @@ int AES_GCM::decryptInit(const char *pw, int plen) {
 	}
 
 
-	/* Read salt, IV, and derive key */
+	/* Read salt and IV */
 
 	if (fread(salt, sizeof(uint8_t), SALT_SIZE, src) != SALT_SIZE) {
 		reportError("ERROR: Failed to read salt\n");
@@ -37,6 +37,9 @@ int AES_GCM::decryptInit(const char *pw, int plen) {
 		reportError("ERROR: Failed to read initial vector\n");
 		return 1;
 	}
+
+
+	/* Derive key from password */
 
 	if (Argon2id(salt, pw, plen, key)) {
 		reportError("ERROR: Failed to derive key\n");
