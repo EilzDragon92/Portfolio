@@ -1,6 +1,6 @@
 ﻿/**
  * @file	AES_GCM.cpp
- * @brief	Core implementation of AES_GCM class
+ * @brief	Implementation of basic functions of AES_GCM class
  * @author	EilzDragon92
  *
  * Contents:

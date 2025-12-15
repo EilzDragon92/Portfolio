@@ -1,3 +1,9 @@
+/**
+ * @file	AES_GCM_encryption.cpp
+ * @brief	Implementation of encryption function of AES_GCM class
+ * @author	EilzDragon92
+ */
+
 #include "Core/AES_GCM.h"
 
 int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw, int plen) {
@@ -160,6 +166,7 @@ int AES_GCM::encryptRemain() {
 
 		cur += rem;
 	}
+
 
 	if (writeBuffer(buff, BLOCK_SIZE * crs + rem)) return 1;
 

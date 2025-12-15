@@ -1,6 +1,14 @@
+/**
+ * @file	InputGUI.cpp
+ * @brief	Implementation of PWLineEdit class
+ * @author	EilzDragon92
+ */
+
 #include "InputGUI.h"
 
 InputGUI::InputGUI(QWidget *parent) : QWidget(parent) {
+    /* Create layouts and components */
+
     modeBtn = new ModeButton;
     srcLine = new QLineEdit;
     dstLine = new QLineEdit;
@@ -10,8 +18,14 @@ InputGUI::InputGUI(QWidget *parent) : QWidget(parent) {
     hBox = new QHBoxLayout;
     vBox = new QVBoxLayout;
 
+
+    /* Set placeholder text that indicates each field */
+
     srcLine->setPlaceholderText("Source File");
     dstLine->setPlaceholderText("Destination File");
+
+
+    /* Configure layouts */
 
     hBox->addWidget(startBtn);
     hBox->addWidget(errMsg);
@@ -28,7 +42,11 @@ InputGUI::InputGUI(QWidget *parent) : QWidget(parent) {
     vBox->setSpacing(10);
     vBox->setContentsMargins(10, 10, 10, 10);
 
+
+    /* Connect encryption/decryption start function to button */
+
     connect(startBtn, &QPushButton::clicked, this, &InputGUI::onStartClicked);
+
 
     setLayout(vBox);
 }

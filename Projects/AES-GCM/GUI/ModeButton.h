@@ -1,16 +1,34 @@
+/**
+ * @file	ModeButton.h
+ * @brief	Encrypt/decrypt mode selection widget
+ * @author	EilzDragon92
+ */
+
 #pragma once
 
 #include "Common/header.h"
 
+/**
+ * @class   ModeButton
+ * @brief   Encryption/decryption mode selection widget
+ */
 class ModeButton : public QWidget {
 public:
+    /**
+     * @brief   Constructor of ModeButton class
+     * @param   parent  Parent widget
+     */
     explicit ModeButton(QWidget *parent = nullptr);
 
+    /**
+     * @brief   Get the currently selected mode
+     * @return  0 for encrypt, 1 for decrypt, -1 if neither is selected
+     */
     int getMode();
 
 private:
-    QButtonGroup *btnGroup;
+    QButtonGroup *btnGrp;
     QHBoxLayout *hBox;
-    QRadioButton *radioBtn0;
-    QRadioButton *radioBtn1;
+    QRadioButton *encBtn;
+    QRadioButton *decBtn;
 };

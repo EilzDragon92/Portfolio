@@ -41,7 +41,7 @@ public:
 	  * @param		src		Source file
 	  * @param		dst		Destination file
 	  * @param		pw		Password
-	  * @param		plen	Password Length
+	  * @param		plen	Password length
 	  * @return		0 on success, 1 on failure
 	  */
 	int decrypt(FILE *src, FILE *dst, const char *pw, int plen);
@@ -51,7 +51,7 @@ public:
 	  * @param		src		Source file
 	  * @param		dst		Destination file
 	  * @param		pw		Password
-	  * @param		plen	Password Length
+	  * @param		plen	Password length
 	  * @return		0 on success, 1 on failure
 	  */
 	int encrypt(FILE *src, FILE *dst, const char *pw, int plen);
