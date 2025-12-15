@@ -142,39 +142,43 @@ int AES_GCM::decryptBatch() {
 		if (writeBuffer(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 		cur += BUFF_SIZE * BLOCK_SIZE;
-
-		if (reportProgress()) return 1;
 	}
+
+	if (reportProgress()) return 1;
 
 	return 0;
 }
 
 int AES_GCM::decryptRemain() {
-	int crs = 0, rem = size % BLOCK_SIZE;
+	int crs = 0, rem = size % (BUFF_SIZE * BLOCK_SIZE);
+
+	if (readBuffer(buff, rem)) return 1;
+
+
+	/* Decrypt remaining full blocks */
 
 	while (cur + BLOCK_SIZE <= size) {
-		if (readBuffer(buff[crs], BLOCK_SIZE)) return 1;
-
 		if (decryptBlock(buff[crs], buff[crs], BLOCK_SIZE)) return 1;
 
 		crs++;
 
 		cur += BLOCK_SIZE;
-
-		if (reportProgress()) return 1;
 	}
 
-	if (rem) {
-		if (readBuffer(buff[crs], rem)) return 1;
 
+	/* Decrypt remaining partial block */
+
+	rem = size % BLOCK_SIZE;
+
+	if (rem) {
 		if (decryptBlock(buff[crs], buff[crs], rem)) return 1;
 
 		cur += rem;
-
-		if (reportProgress()) return 1;
 	}
 
 	if (writeBuffer(buff, BLOCK_SIZE * crs + rem)) return 1;
+
+	if (reportProgress()) return 1;
 
 	return 0;
 }
