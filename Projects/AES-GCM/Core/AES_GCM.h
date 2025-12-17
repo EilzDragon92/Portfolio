@@ -12,10 +12,10 @@
 
 #include "Common/header.h"
 
- /**
-  * @class	AES_GCM
-  * @brief	AES-256-GCM file encryption/decryption engine
-  */
+/**
+ * @class	AES_GCM
+ * @brief	AES-256-GCM file encryption/decryption engine
+ */
 class AES_GCM {
 public:
 	/**

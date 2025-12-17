@@ -4,12 +4,21 @@ int ShowGUI(int argc, char *argv[]) {
     QApplication app(argc, argv);
     MainGUI *gui = new MainGUI;
 
+
+    /* Configure font size */
+
     QFont font;
     font.setPointSizeF(font.pointSizeF() * FONT_SCALE);
     QApplication::setFont(font);
 
+
+    /* Configure window size */
+
     QSize qsize(300, 150);
     gui->resize(qsize);
+
+
+    /* Configure window position */
 
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect rect = screen->availableGeometry();
@@ -18,11 +27,11 @@ int ShowGUI(int argc, char *argv[]) {
     int y = (rect.height() - gui->height()) / 2 - 50;
 
     gui->move(x, y);
+
+
     gui->show();
 
     return app.exec();
-
-    return 0;
 }
 
 int main(int argc, char *argv[]) {

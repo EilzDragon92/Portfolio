@@ -1,13 +1,31 @@
+/**
+ * @file	Worker.h
+ * @brief	Worker class for asynchronous encryption/decryption
+ * @author	EilzDragon92
+ */
+
 #pragma once
 
 #include "Core/AES_GCM.h"
 #include "Utils/File.h"
 #include "Utils/Password.h"
 
+/**
+ * @class	Worker
+ * @brief	Worker class for asynchronous encryption/decryption
+ */
 class Worker : public QObject {
     Q_OBJECT
 
 public:
+    /**
+     * @brief	Constructor for Worker class
+     * @param   srcFile     Source file
+     * @param   dstFile     Destination file
+     * @param   dstPath     Destination file path
+     * @param   pw          Password
+     * @param   mode        Encryption/decryption mode
+     */
     Worker(FILE *srcFile, FILE *dstFile, QString dstPath, Password pw, int mode) {
         this->srcFile = srcFile;
         this->dstFile = dstFile;
@@ -17,11 +35,29 @@ public:
     }
 
 signals:
+    /**
+     * @brief	Signal when encryption/decryption is completed
+     * @param   msg             Result message
+     * @param   shouldDelete    Destination file deletion flag value
+     */
     void finished(QString msg, bool shouldDelete);
+
+    /**
+     * @brief   Update progress bar and status message
+     * @param   perc     Progress percentage
+     * @param   status  Status message
+     */
     void progressUpdate(int perc, QString status);
 
 public slots:
+    /**
+     * @brief   Cancel the process
+     */
     void requestCancel();
+
+    /**
+     * @brief   Perform encryption/decryption
+     */
     void work();
 
 private:

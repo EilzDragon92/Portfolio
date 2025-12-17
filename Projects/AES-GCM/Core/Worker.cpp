@@ -1,3 +1,9 @@
+/**
+ * @file	Worker.cpp
+ * @brief	Implementation of Worker class
+ * @author	EilzDragon92
+ */
+
 #include "Worker.h"
 
 void Worker::requestCancel() {

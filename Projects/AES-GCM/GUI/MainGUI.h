@@ -59,7 +59,7 @@ private slots:
     /**
      * @brief	Show result and set deletion flag
      * @param   msg             Result message
-     * @param   shouldDelete    Deletion flag value
+     * @param   shouldDelete    Destination file deletion flag value
      */
     void onWorkFinished(QString msg, bool shouldDelete);
 
@@ -82,7 +82,7 @@ private:
     QVBoxLayout *vBox;
     UserInput userInput;
     Worker *worker;
-    bool shouldDelete = false;  // Flag to delete destination file when cancelled or failure
+    bool shouldDelete = false;  // Destination file deletion flag for cancellation or failure
 
     /**
      * @brief   Open file pointers
