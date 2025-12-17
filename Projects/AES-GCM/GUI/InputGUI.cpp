@@ -25,13 +25,16 @@ InputGUI::InputGUI(QWidget *parent) : QWidget(parent) {
     dstLine->setPlaceholderText("Destination File");
 
 
-    /* Configure layouts */
+    /* Put start button and error message in the same line */
 
     hBox->addWidget(startBtn);
     hBox->addWidget(errMsg);
     hBox->addStretch();
     hBox->setSpacing(10);
     hBox->setContentsMargins(0, 0, 0, 0);
+
+
+    /* Configure main layout */
 
     vBox->addWidget(modeBtn);
     vBox->addWidget(srcLine);
@@ -42,13 +45,12 @@ InputGUI::InputGUI(QWidget *parent) : QWidget(parent) {
     vBox->setSpacing(10);
     vBox->setContentsMargins(10, 10, 10, 10);
 
+    setLayout(vBox);
+
 
     /* Connect encryption/decryption start function to button */
 
     connect(startBtn, &QPushButton::clicked, this, &InputGUI::onStartClicked);
-
-
-    setLayout(vBox);
 }
 
 void InputGUI::setErrMsg(const QString &msg) {

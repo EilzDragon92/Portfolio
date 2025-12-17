@@ -1,6 +1,6 @@
 /**
  * @file	InputGUI.h
- * @brief	Input widget for user-provided parameters
+ * @brief	User input window with start button
  * @author	EilzDragon92
  */
 
@@ -13,7 +13,7 @@
 
 /**
   * @struct     UserInput
-  * @brief      Container for user-provided parameters
+  * @brief      Container for user input parameters
   */
 struct UserInput {
     bool valid;
@@ -25,7 +25,7 @@ struct UserInput {
 
 /**
  * @class   InputGUI
- * @brief   Input widget for user-provided parameters
+ * @brief   User input window with start button
  */
 class InputGUI : public QWidget {
     Q_OBJECT
@@ -46,13 +46,13 @@ public:
 signals:
     /**
      * @brief   Signal when start button clicked
-     * @param   input   User-provided parameters
+     * @param   input   User inputs
      */
     void startRequested(const UserInput &input);
 
 private slots:
     /**
-     * @brief   Check the user-provided parameters are valid and start encryption/decryption
+     * @brief   Check the user input parameters are valid and start process
      */
     void onStartClicked();
 

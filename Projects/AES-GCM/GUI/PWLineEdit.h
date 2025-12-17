@@ -1,6 +1,6 @@
 /**
  * @file	PWLineEdit.h
- * @brief	Password input widget with show/hide toggle
+ * @brief	Password input window with show/hide toggle
  * @author	EilzDragon92
  */
 
@@ -10,7 +10,7 @@
 
  /**
   * @class   PWLineEdit
-  * @brief   Password input widget with show/hide toggle
+  * @brief   Password input window with show/hide toggle
   */
 class PWLineEdit : public QWidget {
     Q_OBJECT
@@ -23,8 +23,8 @@ public:
     explicit PWLineEdit(QWidget *parent = nullptr);
 
     /**
-     * @brief   Get the current text
-     * @return  Current text
+     * @brief   Get the current text in the input field
+     * @return  Current text in the input field
      */
     QString getText();
 
@@ -35,7 +35,7 @@ public:
 
 private slots:
     /**
-     * @brief   Toggle password masking
+     * @brief   Signal when toggle masking button clicked
      */
     void toggleMask();
 

@@ -1,13 +1,21 @@
 #include "GUI/MainGUI.h"
 
 MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
+    /* Create layouts and components */
+
     inputGUI = new InputGUI;
     prgGUI = new ProgressGUI;
     widget = new QStackedWidget;
     vBox = new QVBoxLayout(this);
 
+
+    /* Add GUIs to stacked widget for switching */
+
     widget->addWidget(inputGUI);
     widget->addWidget(prgGUI);
+
+
+    /* Configure layout */
 
     vBox->addWidget(widget);
     vBox->setContentsMargins(0, 0, 0, 0);
@@ -15,23 +23,28 @@ MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
     setLayout(vBox);
     setWindowTitle("AES-GCM");
 
+
+    /* Connect functions to buttons */
+
     connect(inputGUI, &InputGUI::startRequested, this, &MainGUI::onStartRequested);
     connect(prgGUI, &ProgressGUI::closeRequested, this, &QWidget::close);
 }
 
 MainGUI::~MainGUI() {
-    clear();
+    clean();
 }
 
 UserInput MainGUI::getUserInput() {
     return userInput;
 }
 
-bool MainGUI::hasValidInput() {
+bool MainGUI::isInputValid() {
     return userInput.valid;
 }
 
 void MainGUI::onStartRequested(const UserInput &input) {
+    /* Copy user input parameters */
+
     userInput.valid = input.valid;
     userInput.mode = input.mode;
     userInput.src = input.src;
@@ -39,11 +52,19 @@ void MainGUI::onStartRequested(const UserInput &input) {
     userInput.pw.setData(input.pw);
 
     if (openFiles() == 0) {
+        /* Switch to progress window */
+
         widget->setCurrentWidget(prgGUI);
+
+
+        /* Create worker thread */
 
         thread = new QThread(this);
         worker = new Worker(srcFile, dstFile, userInput.dst, userInput.pw, userInput.mode);
         worker->moveToThread(thread);
+
+
+        /* Connect signals */
 
         connect(thread, &QThread::started, worker, &Worker::work);
         connect(worker, &Worker::progressUpdate, this, &MainGUI::onProgressUpdated);
@@ -52,9 +73,10 @@ void MainGUI::onStartRequested(const UserInput &input) {
         connect(worker, &Worker::finished, thread, &QThread::quit);
         connect(thread, &QThread::finished, this, &MainGUI::onThreadFinished);
 
-        thread->start();
 
-        emit readyToStart();
+        /* Start worker thread */
+
+        thread->start();
     }
 }
 
@@ -68,7 +90,7 @@ void MainGUI::onWorkFinished(QString msg, bool shouldDelete) {
 }
 
 void MainGUI::onThreadFinished() {
-    clear();
+    clean();
 }
 
 void MainGUI::onCloseRequested() {
@@ -110,7 +132,7 @@ int MainGUI::openFiles() {
     return 0;
 }
 
-void MainGUI::clear() {
+void MainGUI::clean() {
     if (thread && thread->isRunning()) {
         if (worker) worker->requestCancel();
 

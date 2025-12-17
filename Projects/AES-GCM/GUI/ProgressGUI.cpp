@@ -1,6 +1,14 @@
+/**
+ * @file	ProgressGUI.cpp
+ * @brief	Implementation of ProgressGUI class
+ * @author	EilzDragon92
+ */
+
 #include "GUI/ProgressGUI.h"
 
 ProgressGUI::ProgressGUI(QWidget *parent) : QWidget(parent), cancelled(false) {
+    /* Create layouts and components */
+
     prgLabel = new QLabel("Initializing...\n");
     prgBar = new QProgressBar;
     cancelBtn = new QPushButton("Cancel");
@@ -8,10 +16,19 @@ ProgressGUI::ProgressGUI(QWidget *parent) : QWidget(parent), cancelled(false) {
     hBox = new QHBoxLayout;
     vBox = new QVBoxLayout;
 
+
+    /* Configure progress bar */
+
     prgBar->setRange(0, 100);
     prgBar->setValue(0);
 
+
+    /* Hide close button during the process */
+
     closeBtn->hide();
+
+
+    /* Configure layouts */
 
     hBox->addWidget(cancelBtn);
     hBox->addWidget(closeBtn);
@@ -27,6 +44,9 @@ ProgressGUI::ProgressGUI(QWidget *parent) : QWidget(parent), cancelled(false) {
     vBox->setContentsMargins(10, 10, 10, 10);
 
     setLayout(vBox);
+
+
+    /* Connect cancel/close functions to each button */
 
     connect(cancelBtn, &QPushButton::clicked, this, &ProgressGUI::onCancelClicked);
     connect(closeBtn, &QPushButton::clicked, this, &ProgressGUI::closeRequested);

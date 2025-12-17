@@ -1,3 +1,9 @@
+/**
+ * @file	MainGUI.h
+ * @brief	Main GUI class that orchestrates entire workflow
+ * @author	EilzDragon92
+ */
+
 #pragma once
 
 #include "Core/Worker.h"
@@ -5,25 +11,66 @@
 #include "GUI/ProgressGUI.h"
 #include "Utils/File.h"
 
+/**
+ * @class   MainGUI
+ * @brief   Main GUI class that orchestrates entire workflow
+ */
 class MainGUI : public QWidget {
     Q_OBJECT
 
 public:
+    /**
+     * @brief   Constructor of MainGUI class
+     * @param   parent  Parent widget
+     */
     explicit MainGUI(QWidget *parent = nullptr);
 
+    /**
+     * @brief	Destructor of MainGUI class
+     */
     ~MainGUI();
 
+    /**
+     * @brief   Get the current user input
+     * @return  Current user input
+     */
     UserInput getUserInput();
-    bool hasValidInput();
 
-signals:
-    void readyToStart();
+    /**
+     * @brief   Check the current user input is valid
+     * @return  true if valid
+     */
+    bool isInputValid();
 
 private slots:
+    /**
+     * @brief	Start encryption/decryption process
+     * @param   input   User input parameters
+     */
     void onStartRequested(const UserInput &input);
+
+    /**
+     * @brief	Update progress bar and status message
+     * @param   perc    Progress percentage
+     * @param   status  Status messgae
+     */
     void onProgressUpdated(int perc, QString status);
+
+    /**
+     * @brief	Show result and set deletion flag
+     * @param   msg             Result message
+     * @param   shouldDelete    Deletion flag value
+     */
     void onWorkFinished(QString msg, bool shouldDelete);
+
+    /**
+     * @brief	Clean resources on worker thread finished
+     */
     void onThreadFinished();
+
+    /**
+     * @brief	Clean resources on close button clicked
+     */
     void onCloseRequested();
 
 private:
@@ -35,8 +82,16 @@ private:
     QVBoxLayout *vBox;
     UserInput userInput;
     Worker *worker;
-    bool shouldDelete = false;
+    bool shouldDelete = false;  // Flag to delete destination file when cancelled or failure
 
+    /**
+     * @brief   Open file pointers
+     * @return  0 on success, 1 on error
+     */
     int openFiles();
-    void clear();
+
+    /**
+     * @brief   Clean resources
+     */
+    void clean();
 };
