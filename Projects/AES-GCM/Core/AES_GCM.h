@@ -32,9 +32,21 @@ public:
 	using ProgressCallback = std::function<void(int perc, bool *cancelled)>;
 
 	/**
+	 * @brief	Default constructor of AES_GCM class
+	 */
+	AES_GCM() {
+		;
+	}
+
+	/**
 	 * @brief	Destructor of AES_GCM class
 	 */
 	~AES_GCM();
+
+	AES_GCM(const AES_GCM &) = delete;				// Delete copy constructor
+	AES_GCM &operator=(const AES_GCM &) = delete;	// Delete copy assignment operator
+	AES_GCM(AES_GCM &&) = delete;					// Delete move constructor
+	AES_GCM &operator=(AES_GCM &&) = delete;		// Delete move assignment operator
 
 	/**
 	  * @brief		Decrypt a file
@@ -44,7 +56,7 @@ public:
 	  * @param		plen	Password length
 	  * @return		0 on success, 1 on failure
 	  */
-	int decrypt(FILE *src, FILE *dst, const char *pw, int plen);
+	int decrypt(FILE *src, FILE *dst, const char *pw, size_t plen);
 
 	/**
 	  * @brief		Encrypt a file
@@ -54,7 +66,7 @@ public:
 	  * @param		plen	Password length
 	  * @return		0 on success, 1 on failure
 	  */
-	int encrypt(FILE *src, FILE *dst, const char *pw, int plen);
+	int encrypt(FILE *src, FILE *dst, const char *pw, size_t plen);
 
 	/**
 	 * @brief	Set error callback function
@@ -123,7 +135,7 @@ private:
 	 * @param	plen	Password length
 	 * @return	0 on success, 1 on failure
 	 */
-	int decryptInit(const char *pw, int plen);
+	int decryptInit(const char *pw, size_t plen);
 
 	/**
 	 * @brief	Read and verify authentication tag
@@ -169,7 +181,7 @@ private:
 	 * @param	plen	Password length
 	 * @return	0 on success, 1 on failure
 	 */
-	int encryptInit(const char *pw, int plen);
+	int encryptInit(const char *pw, size_t plen);
 
 	/**
 	 * @brief	Encrypt a block

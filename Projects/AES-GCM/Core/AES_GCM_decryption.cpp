@@ -6,7 +6,7 @@
 
 #include "Core/AES_GCM.h"
 
-int AES_GCM::decrypt(FILE *src, FILE *dst, const char *pw, int plen) {
+int AES_GCM::decrypt(FILE *src, FILE *dst, const char *pw, size_t plen) {
 	this->src = src;
 	this->dst = dst;
 	cancelled = false;
@@ -25,7 +25,7 @@ int AES_GCM::decrypt(FILE *src, FILE *dst, const char *pw, int plen) {
 	return 0;
 }
 
-int AES_GCM::decryptInit(const char *pw, int plen) {
+int AES_GCM::decryptInit(const char *pw, size_t plen) {
 	/* Clear existing context */
 
 	if (ctx) {
