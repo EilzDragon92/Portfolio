@@ -78,7 +78,7 @@ AES-GCM/
 | Memory Cost | 1 GB | High memory requirement makes GPU/ASIC attacks impractical |
 | Time Cost | 8 iterations | Increases computational cost |
 | Parallelism | Auto-detected | Uses all available CPU cores |
-| Salt Size | 128 bits | Randomly generated per encryption |
+| Salt Size | 16 bytes | Randomly generated per encryption |
 
 
 ### Memory Security
@@ -120,7 +120,7 @@ AES-GCM/
 
 ## Important Notes
 
-* Must use a strong password
+* Must use strong password
 * Keep the encrypted file and password separate
 * The original file is not modified or deleted
 
