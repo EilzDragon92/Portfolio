@@ -121,14 +121,14 @@ int MainGUI::openFiles() {
         return 1;
     }
 
-    fopen_s(&srcFile, srcPath, "rb");
+    OpenFile(&srcFile, srcPath, "rb");
 
     if (srcFile == nullptr) {
         inputGUI->setErrMsg("ERROR: Failed to open source file");
         return 1;
     }
 
-    fopen_s(&dstFile, dstPath, "wb+");
+    OpenFile(&dstFile, dstPath, "wb+");
 
     if (dstFile == nullptr) {
         inputGUI->setErrMsg("Failed to create destination file");
@@ -167,7 +167,7 @@ void MainGUI::clean() {
     }
 
     if (shouldDelete) {
-        Unlink(userInput.dst.toUtf8().constData());
+        RemoveFile(userInput.dst.toUtf8().constData());
         shouldDelete = false;
     }
 }

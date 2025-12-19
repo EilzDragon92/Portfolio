@@ -94,6 +94,13 @@ int GetProcNum();
 int Random(uint8_t *dst, size_t size);
 
 /**
+ * @brief	Delete a file
+ * @param	path	File path
+ * @return	0 on success, non-zero on failure
+ */
+int RemoveFile(const char *path);
+
+/**
  * @brief	Move file pointer to specific position
  * @param	file	File pointer
  * @param	dist	Distance from reference point
@@ -103,11 +110,12 @@ int Random(uint8_t *dst, size_t size);
 int Seek(FILE *file, int64_t dist, int ref);
 
 /**
- * @brief	Delete a file
- * @param	path	Path of the file
- * @return	0 on success, non-zero on failure
+ * @brief	Open a file
+ * @param	file	File pointer
+ * @param	path	File path
+ * @param	mode	Mode
  */
-int Unlink(const char *path);
+void OpenFile(FILE **file, const char *path, const char *mode);
 
 /**
  * @brief	Securely wipe data in memory

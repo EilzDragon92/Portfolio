@@ -51,6 +51,16 @@ int Random(uint8_t *dst, size_t size) {
 #endif
 }
 
+int RemoveFile(const char *path) {
+#ifdef _WIN32
+    return _unlink(path);
+
+#else
+    return unlink(path);
+
+#endif
+}
+
 int Seek(FILE *file, int64_t offset, int origin) {
 #ifdef _WIN32
     return _fseeki64(file, offset, origin);
@@ -61,12 +71,12 @@ int Seek(FILE *file, int64_t offset, int origin) {
 #endif
 }
 
-int Unlink(const char *path) {
+void OpenFile(FILE **file, const char *path, const char *mode) {
 #ifdef _WIN32
-    return _unlink(path);
+    fopen_s(file, path, mode);
 
 #else
-    return unlink(path);
+    srcFile = fopen(path, mode);
 
 #endif
 }
