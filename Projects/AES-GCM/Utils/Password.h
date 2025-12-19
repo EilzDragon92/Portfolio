@@ -15,10 +15,65 @@
 class Password {
 public:
 	/**
-	 * @brief   Destructor of Password class
+	 * @brief   Default constructor of Password class
+	 */
+	Password() {
+		;
+	}
+
+	/**
+	 * @brief   Destructor, securely wipes password data
 	 */
 	~Password() {
 		clean();
+	}
+
+	/**
+	 * @brief   Copy constructor, performs deep copy
+	 * @param	other	Source password to copy
+	 */
+	Password(const Password &other) {
+		if (other.data && other.size > 0) setData(other.data, other.size);
+	}
+
+	/**
+	 * @brief   Copy assignment operator, performs deep copy
+	 * @param	other	Source password to copy
+	 */
+	Password &operator=(const Password &other) {
+		if (this != &other) {
+			clean();
+
+			if (other.data && other.size > 0) setData(other.data, other.size);
+		}
+		return *this;
+	}
+
+	/**
+	 * @brief   Move constructor
+	 * @param	other	Source password to copy
+	 */
+	Password(Password &&other) noexcept : data(other.data), size(other.size) {
+		other.data = nullptr;
+		other.size = 0;
+	}
+
+	/**
+	 * @brief   Move assignment constructor
+	 * @param	other	Source password to copy
+	 */
+	Password &operator=(Password &&other) noexcept {
+		if (this != &other) {
+			clean();
+
+			data = other.data;
+			size = other.size;
+
+			other.data = nullptr;
+			other.size = 0;
+		}
+
+		return *this;
 	}
 
 	/**
@@ -37,7 +92,7 @@ public:
 	 * @brief   Get password size
 	 * @return	Password size
 	 */
-	int getSize();
+	size_t getSize();
 
 	/**
 	 * @brief   Set password data

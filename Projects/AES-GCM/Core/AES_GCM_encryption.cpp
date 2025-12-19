@@ -7,8 +7,10 @@
 #include "Core/AES_GCM.h"
 
 int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw, int plen) {
-	this->src = src, this->dst = dst;
+	this->src = src;
+	this->dst = dst;
 	cancelled = false;
+	cur = 0;
 
 	if (encryptInit(pw, plen)) return 1;
 

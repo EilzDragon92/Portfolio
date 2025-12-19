@@ -4,7 +4,6 @@
  * @author	EilzDragon92
  */
 
-
 #include "Utils/Password.h"
 
 bool Password::isEmpty() {
@@ -15,7 +14,7 @@ const char *Password::getData() {
 	return data;
 }
 
-int Password::getSize() {
+size_t Password::getSize() {
 	return size;
 }
 
