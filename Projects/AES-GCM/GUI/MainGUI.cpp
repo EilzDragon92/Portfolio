@@ -9,9 +9,9 @@
 MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
     /* Create layouts and components */
 
-    inputGUI = new InputGUI;
-    prgGUI = new ProgressGUI;
-    widget = new QStackedWidget;
+    inputGUI = new InputGUI(this);
+    prgGUI = new ProgressGUI(this);
+    widget = new QStackedWidget(this);
     vBox = new QVBoxLayout(this);
 
 
