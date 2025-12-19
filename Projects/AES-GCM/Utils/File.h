@@ -1,8 +1,15 @@
+/**
+ * @file	Password.h
+ * @brief	RAII class that securely handles file pointer
+ * @author	EilzDragon92
+ * 
+ * This file is not used in current version.
+ */
+
 #pragma once
 
 #include "Common/header.h"
 
-/* RAII class that handles file pointer */
 class File {
 public:
     File() {

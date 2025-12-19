@@ -1,3 +1,10 @@
+/**
+ * @file	Password.cpp
+ * @brief	Implementation of Password class
+ * @author	EilzDragon92
+ */
+
+
 #include "Utils/Password.h"
 
 bool Password::isEmpty() {

@@ -1,3 +1,9 @@
+/**
+ * @file	MainGUI.h
+ * @brief	Implementation of MainGUI class
+ * @author	EilzDragon92
+ */
+
 #include "GUI/MainGUI.h"
 
 MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {

@@ -1,3 +1,9 @@
+/**
+ * @file	main.cpp
+ * @brief	Start point of the application
+ * @author	EilzDragon92
+ */
+
 #include "GUI/MainGUI.h"
 
 int ShowGUI(int argc, char *argv[]) {

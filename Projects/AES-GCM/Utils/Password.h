@@ -69,7 +69,7 @@ private:
 	size_t size = 0;
 
 	/**
-	 * @brief   Clean password data
+	 * @brief   Securely wipe password data
 	 */
 	void clean();
 };

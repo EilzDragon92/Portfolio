@@ -1,6 +1,6 @@
 /**
  * @file	MainGUI.h
- * @brief	Main GUI class that orchestrates entire workflow
+ * @brief	Main GUI class that controls entire workflow
  * @author	EilzDragon92
  */
 
