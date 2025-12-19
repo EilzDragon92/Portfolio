@@ -1,7 +1,0 @@
-<Solution>
-  <Configurations>
-    <Platform Name="x64" />
-    <Platform Name="x86" />
-  </Configurations>
-  <Project Path="AES-GCM.vcxproj" Id="84b80d8c-340e-4cea-b304-c53c4268839a" />
-</Solution>
