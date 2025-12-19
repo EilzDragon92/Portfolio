@@ -120,7 +120,7 @@ AES-GCM/
 
 ## Important Notes
 
-* Use a strong password
+* Must use a strong password
 * Keep the encrypted file and password separate
 * The original file is not modified or deleted
 
