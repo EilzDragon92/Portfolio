@@ -150,9 +150,9 @@ int AES_GCM::decryptBatch() {
 		if (writeBuffer(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 		cur += BUFF_SIZE * BLOCK_SIZE;
-	}
 
-	if (reportProgress()) return 1;
+		if (reportProgress()) return 1;
+	}
 
 	return 0;
 }
