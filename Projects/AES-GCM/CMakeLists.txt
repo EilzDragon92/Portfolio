@@ -14,6 +14,11 @@ find_package(OpenSSL REQUIRED)
 # Argon2
 find_library(ARGON2_LIBRARY NAMES argon2)
 find_path(ARGON2_INCLUDE_DIR argon2.h)
+
+if(NOT ARGON2_LIBRARY OR NOT ARGON2_INCLUDE_DIR)
+    message(FATAL_ERROR "Argon2 library not found")
+endif()
+
 set(SOURCES
     Common/main.cpp
     Core/AES_GCM.cpp
