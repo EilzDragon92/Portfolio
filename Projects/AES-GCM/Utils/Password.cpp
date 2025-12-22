@@ -10,16 +10,16 @@ bool Password::isEmpty() {
 	return size == 0;
 }
 
-const char *Password::getData() {
+const char *Password::getData() const {
 	return data;
 }
 
-size_t Password::getSize() {
+size_t Password::getSize() const {
 	return size;
 }
 
 void Password::setData(const Password &pw) {
-	setData(pw.data, pw.size);
+	setData(pw.getData(), pw.getSize());
 }
 
 void Password::setData(const QString &str) {

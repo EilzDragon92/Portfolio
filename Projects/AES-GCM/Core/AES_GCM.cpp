@@ -17,7 +17,7 @@ AES_GCM::~AES_GCM() {
 
 	if (ctx) {
 		EVP_CIPHER_CTX_free(ctx);
-		ctx = NULL;
+		ctx = nullptr;
 	}
 }
 

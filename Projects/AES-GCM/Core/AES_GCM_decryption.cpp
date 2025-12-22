@@ -34,6 +34,23 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 	}
 
 
+	/* Get source file size */
+
+	size = GetFileSize(src);
+
+	if (size == -1) {
+		reportError("ERROR: Failed to read file size\n");
+		return 1;
+	}
+
+	if (size < SALT_SIZE + IV_SIZE + TAG_SIZE) {
+		reportError("ERROR: File is too small\n");
+		return 1;
+	}
+
+	size -= SALT_SIZE + IV_SIZE + TAG_SIZE;
+
+
 	/* Read salt and IV */
 
 	if (fread(salt, sizeof(uint8_t), SALT_SIZE, src) != SALT_SIZE) {
@@ -76,23 +93,6 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 		reportError("ERROR: Failed to set key and initial vector\n");
 		return 1;
 	}
-
-
-	/* Get source file size */
-
-	size = GetFileSize(src);
-
-	if (size == -1) {
-		reportError("ERROR: Failed to read file size\n");
-		return 1;
-	}
-
-	if (size < SALT_SIZE + IV_SIZE + TAG_SIZE) {
-		reportError("ERROR: File is too small\n");
-		return 1;
-	}
-
-	size -= SALT_SIZE + IV_SIZE + TAG_SIZE;
 
 	return 0;
 }

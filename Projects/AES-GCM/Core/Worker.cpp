@@ -59,7 +59,6 @@ void Worker::work() {
         }
         else if (res) {
             msg = "Decryption failed\n";
-            RemoveFile(dstPath.toUtf8().constData());
             shouldDelete = true;
         }
         else {

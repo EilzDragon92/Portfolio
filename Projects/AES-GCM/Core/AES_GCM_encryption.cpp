@@ -34,6 +34,21 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 	}
 
 
+	/* Get source file size */
+
+	size = GetFileSize(src);
+
+	if (size == -1) {
+		reportError("ERROR: Failed to read file size\n");
+		return 1;
+	}
+
+	if (size > MAX_SIZE) {
+		reportError("ERROR: File is too large\n");
+		return 1;
+	}
+
+
 	/* Generate salt and IV */
 
 	if (Random(salt, SALT_SIZE)) {
@@ -87,21 +102,6 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 
 	if (fwrite(iv, sizeof(uint8_t), IV_SIZE, dst) != IV_SIZE) {
 		reportError("ERROR: Failed to write initial vector\n");
-		return 1;
-	}
-
-
-	/* Get source file size */
-
-	size = GetFileSize(src);
-
-	if (size == -1) {
-		reportError("ERROR: Failed to read file size\n");
-		return 1;
-	}
-
-	if (size > MAX_SIZE) {
-		reportError("ERROR: File is too large\n");
 		return 1;
 	}
 

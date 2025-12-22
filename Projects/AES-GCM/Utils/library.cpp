@@ -76,7 +76,7 @@ void OpenFile(FILE **file, const char *path, const char *mode) {
     fopen_s(file, path, mode);
 
 #else
-    file = fopen(path, mode);
+    *file = fopen(path, mode);
 
 #endif
 }

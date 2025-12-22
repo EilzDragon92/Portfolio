@@ -86,13 +86,13 @@ public:
 	 * @brief   Get password data
 	 * @return	Password data
 	 */
-	const char *getData();
+	const char *getData() const;
 
 	/**
 	 * @brief   Get password size
 	 * @return	Password size
 	 */
-	size_t getSize();
+	size_t getSize() const;
 
 	/**
 	 * @brief   Set password data
