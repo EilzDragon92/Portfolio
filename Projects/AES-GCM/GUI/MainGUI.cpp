@@ -111,6 +111,13 @@ int MainGUI::openFiles() {
     const char *srcPath = srcBytes.constData();
     const char *dstPath = dstBytes.constData();
 
+    OpenFile(&srcFile, srcPath, "rb");
+
+    if (srcFile == nullptr) {
+        inputGUI->setErrMsg("ERROR: Failed to open source file");
+        return 1;
+    }
+
     if (srcInfo.canonicalFilePath() == dstInfo.canonicalFilePath()) {
         inputGUI->setErrMsg("Source and destination cannot be the same");
         return 1;
@@ -121,17 +128,10 @@ int MainGUI::openFiles() {
         return 1;
     }
 
-    OpenFile(&srcFile, srcPath, "rb");
-
-    if (srcFile == nullptr) {
-        inputGUI->setErrMsg("ERROR: Failed to open source file");
-        return 1;
-    }
-
     OpenFile(&dstFile, dstPath, "wb+");
 
     if (dstFile == nullptr) {
-        inputGUI->setErrMsg("Failed to create destination file");
+        inputGUI->setErrMsg("ERROR: Failed to create destination file");
         return 1;
     }
 

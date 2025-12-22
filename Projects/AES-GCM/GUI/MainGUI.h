@@ -91,7 +91,7 @@ private:
     int openFiles();
 
     /**
-     * @brief   Clean resources
+     * @brief   Clean all resources
      */
     void clean();
 };
