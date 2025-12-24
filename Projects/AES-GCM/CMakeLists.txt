@@ -11,6 +11,9 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 # OpenSSL
 find_package(OpenSSL REQUIRED)
 
+# GoogleTest
+find_package(GTest CONFIG REQUIRED)
+
 # Argon2
 find_library(ARGON2_LIBRARY NAMES argon2)
 find_path(ARGON2_INCLUDE_DIR argon2.h)
@@ -19,8 +22,7 @@ if(NOT ARGON2_LIBRARY OR NOT ARGON2_INCLUDE_DIR)
     message(FATAL_ERROR "Argon2 library not found")
 endif()
 
-set(SOURCES
-    Common/main.cpp
+set(LIB_SOURCES
     Core/AES_GCM.cpp
     Core/AES_GCM_decryption.cpp
     Core/AES_GCM_encryption.cpp
@@ -47,14 +49,14 @@ set(HEADERS
     Utils/Password.h
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+add_library(AES-GCM-lib STATIC ${LIB_SOURCES} ${HEADERS})
 
-target_include_directories(${PROJECT_NAME} PRIVATE
+target_include_directories(AES-GCM-lib PUBLIC
     ${CMAKE_SOURCE_DIR}
     ${ARGON2_INCLUDE_DIR}
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(AES-GCM-lib PUBLIC
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets
@@ -63,5 +65,27 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 if(WIN32)
-    target_link_libraries(${PROJECT_NAME} PRIVATE bcrypt)
+    target_link_libraries(AES-GCM-lib PUBLIC bcrypt)
 endif()
+
+add_executable(${PROJECT_NAME} Common/main.cpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE AES-GCM-lib)
+
+enable_testing()
+
+set(TEST_SOURCES
+    Tests/AES_GCM_Test.cpp
+    Tests/PasswordTest.cpp
+    Tests/UtilsTest.cpp
+)
+
+add_executable(AES-GCM-tests ${TEST_SOURCES})
+
+target_link_libraries(AES-GCM-tests PRIVATE
+    AES-GCM-lib
+    GTest::gtest
+    GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(AES-GCM-tests)
