@@ -51,8 +51,8 @@
 
 #define KEY_SIZE 32				/// AES-GCM key size in bytes
 #define SALT_SIZE 16			/// Argon2id salt size in bytes
-#define MEM_COST (1024 * 1024)	/// Argon2id memory cost in KiB
-#define TIME_COST 8				/// Argon2id time cost 
+#define MEM_COST (512 * 1024)	/// Argon2id memory cost in KiB
+#define TIME_COST 4				/// Argon2id time cost 
 
 #define BLOCK_SIZE 16	/// AES-GCM block size in bytes
 #define BUFF_SIZE 4096	/// Buffer size in blocks (64 KiB)

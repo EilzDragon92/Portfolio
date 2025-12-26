@@ -46,6 +46,7 @@ public:
 
 			if (other.data && other.size > 0) setData(other.data, other.size);
 		}
+
 		return *this;
 	}
 
