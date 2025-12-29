@@ -8,11 +8,6 @@
 #include "common/header.h"
 
 
-// Test OpenFile
-
-// Test RemoveFile
-
-
 /* ==================================================
  * GetFileSize Test
  * ================================================== */
