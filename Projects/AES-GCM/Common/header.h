@@ -90,6 +90,7 @@ int GetProcNum();
  * @brief	Generates cryptographically secure random bytes
  * @param	dst		Output buffer for random bytes
  * @param	size	Output buffer size
+ * @return	0 on success, non-zero on failure
  */
 int Random(uint8_t *dst, size_t size);
 
