@@ -60,6 +60,8 @@ protected:
 
         size = GetFileSize(file);
 
+        vec.resize(size);
+
         fread(vec.data(), sizeof(uint8_t), size, file);
 
         fclose(file);
@@ -450,6 +452,7 @@ TEST_F(AES_GCM_Test, Cancellation) {
     if (dst) fclose(dst);
 
     EXPECT_NE(res, 0);
+
     EXPECT_GE(cnt, 2);
     EXPECT_LE(cnt, 3);
 }
