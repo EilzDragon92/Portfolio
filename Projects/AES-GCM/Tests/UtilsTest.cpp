@@ -40,7 +40,7 @@ protected:
     void create(size_t size) {
         OpenFile(&file, path, "wb+");
 
-        if (file && size > 0) {
+        if (file) {
             std::vector<char> vec(size, 'a');
 
             fwrite(vec.data(), 1, size, file);
@@ -89,7 +89,7 @@ TEST_F(GetFileSizeTest, BuffSizeFile) {
 /**
  * @brief   Verify Argon2id derives same key for same input
  */
-TEST(Argon2idTest, DerivesSameKeyForSameInput) {
+TEST(Argon2idTest, SameInput) {
     uint8_t salt[SALT_SIZE], key0[KEY_SIZE], key1[KEY_SIZE];
     const char *pw = "password";
     int size = strlen(pw);
@@ -105,7 +105,7 @@ TEST(Argon2idTest, DerivesSameKeyForSameInput) {
 /**
  * @brief   Verify different passwords produce different keys
  */
-TEST(Argon2idTest, DifferentPasswordDifferentKey) {
+TEST(Argon2idTest, DifferentPW) {
     uint8_t salt[SALT_SIZE], key0[KEY_SIZE], key1[KEY_SIZE];
     const char *pw0 = "password";
     const char *pw1 = "asdf1234";
@@ -123,9 +123,9 @@ TEST(Argon2idTest, DifferentPasswordDifferentKey) {
 /**
  * @brief   Verify different salts produce different keys
  */
-TEST(Argon2idTest, DifferentSaltDifferentKey) {
+TEST(Argon2idTest, DifferentSalt) {
     uint8_t salt0[SALT_SIZE], salt1[SALT_SIZE];
-    uint8_t key0[SALT_SIZE], key1[SALT_SIZE];
+    uint8_t key0[KEY_SIZE], key1[KEY_SIZE];
     const char *pw = "password";
     int size = strlen(pw);
 

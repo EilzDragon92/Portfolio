@@ -283,7 +283,7 @@ TEST_F(AES_GCM_Test, ExactBuffSizeFile) {
     FILE *src = nullptr, *dst = nullptr;
     std::vector<uint8_t> orig, copy;
     const char *pw = "password";
-    int dsize = BUFF_SIZE;
+    int dsize = BLOCK_SIZE * BUFF_SIZE;
     int psize = strlen(pw);
     int res;
 
@@ -337,7 +337,7 @@ TEST_F(AES_GCM_Test, ProgressCallback) {
     FILE *src = nullptr, *dst = nullptr;
     std::vector<uint8_t> orig;
     const char *pw = "password";
-    int dsize = BUFF_SIZE * 10;
+    int dsize = BLOCK_SIZE * BUFF_SIZE * 10;
     int psize = strlen(pw);
     int cnt = 0, last = -1;
 
@@ -426,7 +426,7 @@ TEST_F(AES_GCM_Test, Cancellation) {
     FILE *src = nullptr, *dst = nullptr;
     std::vector<uint8_t> orig;
     const char *pw = "password";
-    int dsize = BUFF_SIZE * 10;
+    int dsize = BLOCK_SIZE * BUFF_SIZE * 10;
     int psize = strlen(pw);
     int cnt = 0, res;
 
@@ -452,7 +452,6 @@ TEST_F(AES_GCM_Test, Cancellation) {
     if (dst) fclose(dst);
 
     EXPECT_NE(res, 0);
-
     EXPECT_GE(cnt, 2);
     EXPECT_LE(cnt, 3);
 }
