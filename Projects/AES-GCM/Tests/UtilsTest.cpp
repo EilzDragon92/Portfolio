@@ -15,8 +15,6 @@
 /**
  * @class   GetFileSizeTest
  * @brief   Test class for GetFileSize function
- *
- * Creates temporary files for testing and cleans up after each test
  */
 class GetFileSizeTest : public::testing::Test {
 protected:
@@ -36,7 +34,7 @@ protected:
     }
 
     /**
-     * @brief   Create a file with specified size
+     * @brief   Create file with specified size
      * @param   size    File size in bytes
      */
     void create(size_t size) {
@@ -77,7 +75,7 @@ TEST_F(GetFileSizeTest, ArbitSizeFile) {
 /**
  * @brief   Verify GetFileSize works with exactly buffer sized file
  */
-TEST_F(GetFileSizeTest, ExactBuffSizeFile) {
+TEST_F(GetFileSizeTest, BuffSizeFile) {
     create(BLOCK_SIZE * BUFF_SIZE);
 
     EXPECT_EQ(GetFileSize(file), BLOCK_SIZE * BUFF_SIZE);
