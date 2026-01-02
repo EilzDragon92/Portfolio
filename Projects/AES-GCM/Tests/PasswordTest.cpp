@@ -45,35 +45,6 @@ TEST(PasswordTest, SetDataCString) {
 }
 
 /**
- * @brief   Verify setData works with std::string
- */
-TEST(PasswordTest, SetDataStdString) {
-    Password pw;
-    string str = "password";
-
-    pw.setData(str);
-    
-    EXPECT_FALSE(pw.isEmpty());
-    EXPECT_STREQ(pw.getData(), "password");
-    EXPECT_EQ(pw.getSize(), str.size());
-}
-
-/**
- * @brief   Verify setData works with QString
- */
-TEST(PasswordTest, SetDataQString) {
-    Password pw;
-    QString str = "password";
-    int size = str.size();
-
-    pw.setData(str);
-    
-    EXPECT_FALSE(pw.isEmpty());
-    EXPECT_STREQ(pw.getData(), "password");
-    EXPECT_EQ(pw.getSize(), size);
-}
-
-/**
  * @brief   Verify setData works with another Password
  */
 TEST(PasswordTest, SetDataPassword) {

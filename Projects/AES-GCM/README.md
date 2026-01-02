@@ -75,8 +75,8 @@ AES-GCM/
 | Parameter | Value | Rationale |
 |-----------|-------|-----------|
 | Algorithm | Argon2id | Provides both side-channel resistance and GPU attack resistance |
-| Memory Cost | 1 GB | High memory requirement makes GPU/ASIC attacks impractical |
-| Time Cost | 8 iterations | Increases computational cost |
+| Memory Cost | 512 MB | High memory requirement makes GPU/ASIC attacks impractical |
+| Time Cost | 4 iterations | Increases computational cost |
 | Parallelism | Auto-detected | Uses all available CPU cores |
 | Salt Size | 16 bytes | Randomly generated per encryption |
 

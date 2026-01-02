@@ -77,7 +77,7 @@ void InputGUI::onStartClicked() {
         return;
     }
 
-    input.pw.setData(pwLine->getText());
+    pwLine->extract(input.pw);
 
     if (input.pw.isEmpty()) {
         errMsg->setText("Password is not input");

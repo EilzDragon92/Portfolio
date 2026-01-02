@@ -7,6 +7,7 @@
 #pragma once
 
 #include "Common/header.h"
+#include "Utils/Password.h"
 
  /**
   * @class   PWLineEdit
@@ -23,15 +24,15 @@ public:
     explicit PWLineEdit(QWidget *parent = nullptr);
 
     /**
-     * @brief   Get the current text in the input field
-     * @return  Current text in the input field
-     */
-    QString getText();
-
-    /**
      * @brief   Clear the input field
      */
     void clear();
+
+    /**
+     * @brief   Extract data from the input line to Password class
+     * @param   pw  Destination
+     */
+    void extract(Password &pw);
 
 private slots:
     /**

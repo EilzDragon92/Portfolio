@@ -103,18 +103,6 @@ public:
 
 	/**
 	 * @brief   Set password data
-	 * @param	pw	Source
-	 */
-	void setData(const QString &str);
-
-	/**
-	 * @brief   Set password data
-	 * @param	pw	Source
-	 */
-	void setData(const string &str);
-
-	/**
-	 * @brief   Set password data
 	 * @param	str		Source
 	 * @param	len		Password length
 	 */

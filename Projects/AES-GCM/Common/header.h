@@ -61,8 +61,6 @@
 
 #define MAX_SIZE 16ULL * 0xffffffffULL	/// Maximum source file size that can be processed (64 GB)
 
-using std::string;
-
 /**
  * @brief	Get the size of a file in bytes
  * @param	file	File pointer in read binary mode

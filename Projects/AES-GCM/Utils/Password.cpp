@@ -22,27 +22,6 @@ void Password::setData(const Password &pw) {
 	setData(pw.getData(), pw.getSize());
 }
 
-void Password::setData(const QString &str) {
-	std::string tmp = str.toStdString();
-
-	setData(tmp);
-
-	Wipe(const_cast<char *>(tmp.data()), tmp.size());
-
-	tmp.clear();
-}
-
-void Password::setData(const string &str) {
-	clean();
-
-	size = str.size();
-	data = new char[size + 1];
-
-	for (int i = 0; i < size; i++) data[i] = str[i];
-
-	data[size] = '\0';
-}
-
 void Password::setData(const char *str, size_t len) {
 	clean();
 
