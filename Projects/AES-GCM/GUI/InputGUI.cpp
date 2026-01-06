@@ -1,6 +1,6 @@
 /**
  * @file	InputGUI.cpp
- * @brief	Implementation of PWLineEdit class
+ * @brief	Implementation of InputGUI class
  * @author	EilzDragon92
  */
 

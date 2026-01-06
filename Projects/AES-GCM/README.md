@@ -44,7 +44,7 @@ AES-GCM/
 │   ├── AES_GCM.h/cpp           # Core implementation
 │   ├── AES_GCM_encryption.cpp  # Encryption implementation
 │   ├── AES_GCM_decryption.cpp  # Decryption implementation
-│   └── Worker.h/cpp            # Asyncjronous worker thread
+│   └── Worker.h/cpp            # Asynchronous worker thread
 ├── GUI/
 │   ├── MainGUI.h/cpp           # Main workflow controller
 │   ├── InputGUI.h/cpp          # User input GUI

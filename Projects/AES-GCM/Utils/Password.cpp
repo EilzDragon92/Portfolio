@@ -6,7 +6,7 @@
 
 #include "Utils/Password.h"
 
-bool Password::isEmpty() {
+bool Password::isEmpty() const {
 	return size == 0;
 }
 

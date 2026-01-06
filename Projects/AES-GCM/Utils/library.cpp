@@ -45,8 +45,23 @@ int Random(uint8_t *dst, size_t size) {
     return BCryptGenRandom(NULL, dst, size, BCRYPT_USE_SYSTEM_PREFERRED_RNG);
 
 #else
-    ssize_t result = getrandom(dst, size, 0);
-    return (result == static_cast<ssize_t>(size)) ? 0 : -1;
+    size_t rem = size;
+    ssize_t res;
+
+    while (rem > 0) {
+        res = getrandom(ptr, rem, 0);
+
+        if (res == -1) {
+            if (errno == EINTR) continue;
+
+            return -1;
+        }
+
+        dst += res;
+        rem -= res;
+    }
+
+    return 0;
 
 #endif
 }
@@ -85,9 +100,12 @@ void Wipe(void *ptr, size_t size) {
 #ifdef _WIN32
     SecureZeroMemory(ptr, size);
 
+#elif defined(__GLIBC__) && __GLIBC__ >= 2 && __GLIBC_MINOR__ >= 25
+    explicit_bzero(ptr, size);
+
 #else
     volatile uint8_t *p = static_cast<volatile uint8_t *>(ptr);
     while (size--) *p++ = 0;
-
+    __asm__ __volatile__("" : : "r"(ptr) : "memory");
 #endif
 }

@@ -81,7 +81,7 @@ public:
 	 * @brief   Check the password data is empty
 	 * @return	true if empty
 	 */
-	bool isEmpty();
+	bool isEmpty() const;
 
 	/**
 	 * @brief   Get password data

@@ -45,7 +45,6 @@ set(HEADERS
     GUI/ProgressGUI.h
     GUI/ModeButton.h
     GUI/PWLineEdit.h
-    Utils/File.h
     Utils/Password.h
 )
 

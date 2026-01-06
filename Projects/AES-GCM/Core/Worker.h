@@ -7,7 +7,6 @@
 #pragma once
 
 #include "Core/AES_GCM.h"
-#include "Utils/File.h"
 #include "Utils/Password.h"
 
 /**

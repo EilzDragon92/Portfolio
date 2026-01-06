@@ -9,7 +9,6 @@
 #include "Core/Worker.h"
 #include "GUI/InputGUI.h"
 #include "GUI/ProgressGUI.h"
-#include "Utils/File.h"
 
 /**
  * @class   MainGUI
