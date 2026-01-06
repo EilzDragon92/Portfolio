@@ -51,7 +51,6 @@ AES-GCM/
 │   ├── ModeButton.h/cpp        # Encrypt/Decrypt mode selection component
 │   └── PWLineEdit.h/cpp        # Password input component
 └── Utils/
-    ├── File.h                  # RAII file handle wrapper, unused in current version
     ├── Password.h/cpp          # Secure password container
     └── library.cpp             # Utility functions
 ```
