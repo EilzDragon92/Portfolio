@@ -2,9 +2,8 @@
 
 This is a GUI file encryption/decryption program using AES-256-GCM algorithm.
 
-Language: C++
-OS: Windows, Linux
-IDE: Visual Studio 2022
+* Language: C++
+* OS: Windows, Linux
 
 
 ## Features

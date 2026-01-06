@@ -41,10 +41,13 @@
 	#pragma comment(lib, "bcrypt.lib")
 	#include <windows.h>
 	#include <bcrypt.h>
+
 #else
+	#include <cerrno>
 	#include <sys/random.h>
-	#include <unistd.h>
 	#include <thread>
+	#include <unistd.h>
+
 #endif
 
 #define FONT_SCALE 1.2	/// GUI font scale

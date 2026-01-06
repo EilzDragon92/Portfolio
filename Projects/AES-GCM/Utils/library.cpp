@@ -49,7 +49,7 @@ int Random(uint8_t *dst, size_t size) {
     ssize_t res;
 
     while (rem > 0) {
-        res = getrandom(ptr, rem, 0);
+        res = getrandom(dst, rem, 0);
 
         if (res == -1) {
             if (errno == EINTR) continue;
