@@ -20,7 +20,7 @@ int ShowGUI(int argc, char *argv[]) {
 
     /* Configure window size */
 
-    QSize qsize(450, 150);
+    QSize qsize(300, 150);
     gui->resize(qsize);
 
 

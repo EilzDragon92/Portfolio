@@ -58,7 +58,7 @@ void Worker::work() {
             shouldDelete = true;
         }
         else if (res) {
-            msg = "Decryption failed\n";
+            msg = err + "Decryption failed\n";
             shouldDelete = true;
         }
         else {
