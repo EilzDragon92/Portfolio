@@ -1,5 +1,5 @@
 /**
- * @file	AES_GCM_encryption.cpp
+ * @file	AES_GCM_enc.cpp
  * @brief	Implementation of encryption function of AES_GCM class
  * @author	EilzDragon92
  */
@@ -39,12 +39,12 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 	size = GetFileSize(src);
 
 	if (size == -1) {
-		reportError("ERROR: Failed to read file size\n");
+		reportError("[File] Size check failed - Cannot read source file size\n");
 		return 1;
 	}
 
 	if (size > MAX_SIZE) {
-		reportError("ERROR: File is too large\n");
+		reportError("[File] Validation failed - File should be at most 64 GB\n");
 		return 1;
 	}
 
@@ -52,12 +52,12 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 	/* Generate salt and IV */
 
 	if (Random(salt, SALT_SIZE)) {
-		reportError("ERROR: Failed to generate salt\n");
+		reportError("[Crypto] Random failed - Cannot generate salt\n");
 		return 1;
 	}
 
 	if (Random(iv, IV_SIZE)) {
-		reportError("ERROR: Failed to generate initial vector\n");
+		reportError("[Crypto] Random failed - Cannot generate initial vector\n");
 		return 1;
 	}
 
@@ -65,7 +65,7 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 	/* Derive key from password */
 
 	if (Argon2id(salt, pw, plen, key)) {
-		reportError("ERROR: Failed to derive key\n");
+		reportError("[Crypto] Key derivation failed - Argon2id error\n");
 		return 1;
 	}
 
@@ -73,22 +73,22 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 	/* Set encryption context */
 
 	if (!(ctx = EVP_CIPHER_CTX_new())) {
-		reportError("ERROR: Failed to create context\n");
+		reportError("[Crypto] Initialization failed - Cannot create context\n");
 		return 1;
 	}
 
 	if (EVP_EncryptInit_ex(ctx, EVP_aes_256_gcm(), NULL, NULL, NULL) != 1) {
-		reportError("ERROR: Failed to set algorithm\n");
+		reportError("[Crypto] Initialization failed - Cannot set AES-256-GCM algorithm\n");
 		return 1;
 	}
 
 	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IV_SIZE, NULL) != 1) {
-		reportError("ERROR: Failed to set initial vector size\n");
+		reportError("[Crypto] Initialization failed - Cannot set initial vector size\n");
 		return 1;
 	}
 
 	if (EVP_EncryptInit_ex(ctx, NULL, NULL, key, iv) != 1) {
-		reportError("ERROR: Failed to set key and initial vector\n");
+		reportError("[Crypto] Initialization failed - Cannot set key and initial vector\n");
 		return 1;
 	}
 
@@ -96,12 +96,12 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 	/* Write salt and IV */
 
 	if (fwrite(salt, sizeof(uint8_t), SALT_SIZE, dst) != SALT_SIZE) {
-		reportError("ERROR: Failed to write salt\n");
+		reportError("[File] Write failed - Cannot write salt to destination file header\n");
 		return 1;
 	}
 
 	if (fwrite(iv, sizeof(uint8_t), IV_SIZE, dst) != IV_SIZE) {
-		reportError("ERROR: Failed to write initial vector\n");
+		reportError("ERROR: Cannot write initial vector to destination file header\n");
 		return 1;
 	}
 
@@ -112,12 +112,12 @@ int AES_GCM::encryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 	int dstLen;
 
 	if (EVP_EncryptUpdate(ctx, dst, &dstLen, src, srcLen) != 1) {
-		reportError("ERROR: Failed to encrypt a block\n");
+		reportError("[Crypto] Encryption failed - Cannot encrypt block\n");
 		return 1;
 	}
 
 	if (dstLen != srcLen) {
-		reportError("ERROR: Failed to encrypt a block\n");
+		reportError("[Crypto] Encryption failed - Cannot encrypt block\n");
 		return 1;
 	}
 
@@ -182,7 +182,7 @@ int AES_GCM::encryptFinal() {
 	int finalLen;
 
 	if (EVP_EncryptFinal_ex(ctx, final, &finalLen) != 1) {
-		reportError("ERROR: Failed to finalize encryption\n");
+		reportError("[Crypto] Finalization failed - Cannot finalize encryption\n");
 		return 1;
 	}
 
@@ -195,12 +195,12 @@ int AES_GCM::encryptTag() {
 	uint8_t tag[TAG_SIZE];
 
 	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, TAG_SIZE, tag) != 1) {
-		reportError("ERROR: Failed to get authentication tag\n");
+		reportError("[Crypto] Tag Error - Cannot get authentication tag\n");
 		return 1;
 	}
 
 	if (fwrite(tag, sizeof(uint8_t), TAG_SIZE, dst) != TAG_SIZE) {
-		reportError("ERROR: Failed to write authentication tag\n");
+		reportError("[File] Write failed - Cannot write authentication tag on destination file\n");
 		return 1;
 	}
 

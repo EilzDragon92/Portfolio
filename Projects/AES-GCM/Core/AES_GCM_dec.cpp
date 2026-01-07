@@ -1,5 +1,5 @@
 /**
- * @file	AES_GCM_decryption.cpp
+ * @file	AES_GCM_dec.cpp
  * @brief	Implementation of decryption function of AES_GCM class
  * @author	EilzDragon92
  */
@@ -39,12 +39,12 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 	size = GetFileSize(src);
 
 	if (size == -1) {
-		reportError("ERROR: Failed to read file size\n");
+		reportError("[File] Size check failed - Cannot read source file size\n");
 		return 1;
 	}
 
 	if (size < SALT_SIZE + IV_SIZE + TAG_SIZE) {
-		reportError("ERROR: File is too small\n");
+		reportError("[File] Validation failed - File should be at least 44 bytes\n");
 		return 1;
 	}
 
@@ -54,12 +54,12 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 	/* Read salt and IV */
 
 	if (fread(salt, sizeof(uint8_t), SALT_SIZE, src) != SALT_SIZE) {
-		reportError("ERROR: Failed to read salt\n");
+		reportError("[File] Read failed - Cannot read salt from source file header\n");
 		return 1;
 	}
 
 	if (fread(iv, sizeof(uint8_t), IV_SIZE, src) != IV_SIZE) {
-		reportError("ERROR: Failed to read initial vector\n");
+		reportError("[File] Read failed - Cannot read initial vector from source file header\n");
 		return 1;
 	}
 
@@ -67,7 +67,7 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 	/* Derive key from password */
 
 	if (Argon2id(salt, pw, plen, key)) {
-		reportError("ERROR: Failed to derive key\n");
+		reportError("[Crypto] Key derivation failed - Argon2id error\n");
 		return 1;
 	}
 
@@ -75,22 +75,22 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 	/* Set decryption context */
 
 	if (!(ctx = EVP_CIPHER_CTX_new())) {
-		reportError("ERROR: Failed to create context\n");
+		reportError("[Crypto] Initialization failed - Cannot create context\n");
 		return 1;
 	}
 
 	if (EVP_DecryptInit_ex(ctx, EVP_aes_256_gcm(), NULL, NULL, NULL) != 1) {
-		reportError("ERROR: Failed to set algorithm\n");
+		reportError("[Crypto] Initialization failed - Cannot set AES-256-GCM algorithm\n");
 		return 1;
 	}
 
 	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IV_SIZE, NULL) != 1) {
-		reportError("ERROR: Failed to set initial vector size\n");
+		reportError("[Crypto] Initialization failed - Cannot set initial vector size\n");
 		return 1;
 	}
 
 	if (EVP_DecryptInit_ex(ctx, NULL, NULL, key, iv) != 1) {
-		reportError("ERROR: Failed to set key and initial vector\n");
+		reportError("[Crypto] Initialization failed - Cannot set key and initial vector\n");
 		return 1;
 	}
 
@@ -101,22 +101,22 @@ int AES_GCM::decryptTag() {
 	uint8_t tag[TAG_SIZE];
 
 	if (Seek(src, -TAG_SIZE, SEEK_END)) {
-		reportError("ERROR: Failed to move file pointer\n");
+		reportError("[File] Seek failed - Cannot move file pointer to authentication tag\n");
 		return 1;
 	}
 
 	if (fread(tag, sizeof(uint8_t), TAG_SIZE, src) != TAG_SIZE) {
-		reportError("ERROR: Failed to read authentication tag\n");
+		reportError("[File] Read failed - Cannot read authentication tag\n");
 		return 1;
 	}
 
 	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, TAG_SIZE, tag) != 1) {
-		reportError("ERROR: Failed to set authentication tag\n");
+		reportError("[Crypto] Tag failed - Cannot set authentication tag\n");
 		return 1;
 	}
 
 	if (Seek(src, SALT_SIZE + IV_SIZE, SEEK_SET)) {
-		reportError("ERROR: Failed to reset file pointer\n");
+		reportError("[File] Seek failed - Cannot move file pointer to data\n");
 		return 1;
 	}
 
@@ -127,12 +127,12 @@ int AES_GCM::decryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 	int dstLen;
 
 	if (EVP_DecryptUpdate(ctx, dst, &dstLen, src, srcLen) != 1) {
-		reportError("ERROR: Failed to decrypt a block\n");
+		reportError("[Crypto] Decryption failed - Cannot decrypt block\n");
 		return 1;
 	}
 
 	if (dstLen != srcLen) {
-		reportError("ERROR: Failed to decrypt a block\n");
+		reportError("[Crypto] Decryption failed - Cannot decrypt block\n");
 		return 1;
 	}
 
@@ -197,7 +197,7 @@ int AES_GCM::decryptFinal() {
 	int finalLen;
 
 	if (EVP_DecryptFinal_ex(ctx, final, &finalLen) != 1) {
-		reportError("ERROR: Failed to finalize decryption\n");
+		reportError("[Auth] Verification failed - Invalid password or corrupted file\n");
 		return 1;
 	}
 

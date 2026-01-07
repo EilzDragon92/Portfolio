@@ -34,23 +34,23 @@ This is a GUI file encryption/decryption program using AES-256-GCM algorithm.
 ## Source File Architecture
 
 ```
-AES-GCM/
-├── Common/
+AES-GCM
+├── Common
 │   ├── header.h                # Common includes, macros, function definitions
 │   └── main.cpp                # Application entry point
-├── Core/
+├── Core
 │   ├── AES_GCM.h               # Encryption/decryption engine
 │   ├── AES_GCM.h/cpp           # Core implementation
-│   ├── AES_GCM_encryption.cpp  # Encryption implementation
-│   ├── AES_GCM_decryption.cpp  # Decryption implementation
+│   ├── AES_GCM_enc.cpp  		# Encryption implementation
+│   ├── AES_GCM_dec.cpp  		# Decryption implementation
 │   └── Worker.h/cpp            # Asynchronous worker thread
-├── GUI/
+├── GUI
 │   ├── MainGUI.h/cpp           # Main workflow controller
 │   ├── InputGUI.h/cpp          # User input GUI
 │   ├── ProgressGUI.h/cpp       # Progress tracking GUI
 │   ├── ModeButton.h/cpp        # Encrypt/Decrypt mode selection component
 │   └── PWLineEdit.h/cpp        # Password input component
-└── Utils/
+└── Utils
     ├── Password.h/cpp          # Secure password container
     └── library.cpp             # Utility functions
 ```
