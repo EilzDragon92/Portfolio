@@ -87,7 +87,9 @@ int RemoveFile(const QString &path) {
     return _wunlink(wpath.c_str());
 
 #else
-    return unlink(path);
+    QByteArray qpath = path.toUtf8();
+
+    return unlink(qpath.constData());
 
 #endif
 }
