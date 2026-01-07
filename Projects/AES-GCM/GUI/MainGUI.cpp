@@ -104,14 +104,10 @@ void MainGUI::onCloseRequested() {
 }
 
 int MainGUI::openFiles() {
-    QByteArray srcBytes = userInput.src.toUtf8();
-    QByteArray dstBytes = userInput.dst.toUtf8();
     QFileInfo srcInfo(userInput.src);
     QFileInfo dstInfo(userInput.dst);
-    const char *srcPath = srcBytes.constData();
-    const char *dstPath = dstBytes.constData();
 
-    OpenFile(&srcFile, srcPath, "rb");
+    OpenFile(&srcFile, userInput.src, "rb");
 
     if (srcFile == nullptr) {
         inputGUI->setErrMsg("ERROR: Failed to open source file");
@@ -123,12 +119,12 @@ int MainGUI::openFiles() {
         return 1;
     }
 
-    if (std::filesystem::exists(dstPath)) {
+    if (FileExists(userInput.dst)) {
         inputGUI->setErrMsg("Destination file already exists");
         return 1;
     }
 
-    OpenFile(&dstFile, dstPath, "wb+");
+    OpenFile(&dstFile, userInput.dst, "wb+");
 
     if (dstFile == nullptr) {
         inputGUI->setErrMsg("ERROR: Failed to create destination file");
@@ -167,7 +163,7 @@ void MainGUI::clean() {
     }
 
     if (shouldDelete) {
-        RemoveFile(userInput.dst.toUtf8().constData());
+        RemoveFile(userInput.dst);
         shouldDelete = false;
     }
 }

@@ -15,9 +15,9 @@
  */
 class AES_GCM_Test : public ::testing::Test {
 protected:
-    const char *srcPath = "test_src.tmp";
-    const char *encPath = "test_enc.tmp";
-    const char *decPath = "test_dec.tmp";
+    QString srcPath = "test_src.tmp";
+    QString encPath = "test_enc.tmp";
+    QString decPath = "test_dec.tmp";
 
     /**
      * @brief   Clean up temporary files after each test
@@ -34,7 +34,7 @@ protected:
      * @param   data    File content
      * @param   size    File size
      */
-    void create(const char *path, std::vector<uint8_t> &data, int size) {
+    void create(QString &path, std::vector<uint8_t> &data, int size) {
         FILE *file = nullptr;
 
         OpenFile(&file, path, "wb");
@@ -50,7 +50,7 @@ protected:
      * @param   path    Source file path
      * @param   vec     Destination buffer
      */
-    void read(const char *path, std::vector<uint8_t> &vec) {
+    void read(QString &path, std::vector<uint8_t> &vec) {
         FILE *file = nullptr;
         uint64_t size;
 

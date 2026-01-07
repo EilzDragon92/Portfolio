@@ -73,6 +73,13 @@
 int64_t GetFileSize(FILE *file);
 
 /**
+ * @brief	Check a file exists
+ * @param	path	File path
+ * @return	1 if file exists, 0 if file not exists
+ */
+bool FileExists(const QString &path);
+
+/**
  * @brief	Derive a key using Argon2id
  * @param	salt	Input buffer for salt
  * @param	pw		Input buffer for password
@@ -101,7 +108,7 @@ int Random(uint8_t *dst, size_t size);
  * @param	path	File path
  * @return	0 on success, non-zero on failure
  */
-int RemoveFile(const char *path);
+int RemoveFile(const QString &path);
 
 /**
  * @brief	Move file pointer to specific position
@@ -118,7 +125,7 @@ int Seek(FILE *file, int64_t dist, int ref);
  * @param	path	File path
  * @param	mode	Mode
  */
-void OpenFile(FILE **file, const char *path, const char *mode);
+void OpenFile(FILE **file, const QString &path, const char *mode);
 
 /**
  * @brief	Securely wipe data in memory

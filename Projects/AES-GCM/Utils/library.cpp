@@ -22,6 +22,20 @@ int64_t GetFileSize(FILE *file) {
     return size;
 }
 
+bool FileExists(const QString &path) {
+#ifdef _WIN32
+    std::wstring wpath = path.toStdWString();
+
+    return std::filesystem::exists(wpath);
+
+#else
+    QByteArray qpath = path.toUtf8();
+
+    return std::filesystem::exists(qpath.constData());
+
+#endif
+}
+
 int Argon2id(uint8_t salt[], const char pw[], size_t plen, uint8_t key[]) {
     return argon2id_hash_raw(TIME_COST, MEM_COST, GetProcNum(), pw, plen, salt, SALT_SIZE, key, KEY_SIZE);
 }
@@ -66,9 +80,11 @@ int Random(uint8_t *dst, size_t size) {
 #endif
 }
 
-int RemoveFile(const char *path) {
+int RemoveFile(const QString &path) {
 #ifdef _WIN32
-    return _unlink(path);
+    std::wstring wpath = path.toStdWString();
+
+    return _wunlink(wpath.c_str());
 
 #else
     return unlink(path);
@@ -86,12 +102,19 @@ int Seek(FILE *file, int64_t offset, int origin) {
 #endif
 }
 
-void OpenFile(FILE **file, const char *path, const char *mode) {
+void OpenFile(FILE **file, const QString &path, const char *mode) {
 #ifdef _WIN32
-    fopen_s(file, path, mode);
+    std::wstring wpath = path.toStdWString();
+    std::wstring wmode;
+    
+    for (const char *p = mode; *p; ++p) wmode += static_cast<wchar_t>(*p);
+
+    *file = _wfopen(wpath.c_str(), wmode.c_str());
 
 #else
-    *file = fopen(path, mode);
+    QByteArray qpath = path.toUtf8();
+
+    *file = fopen(qpath.constData(), mode);
 
 #endif
 }

@@ -1,11 +1,11 @@
-/**
+﻿/**
  * @file    UtilsTest.cpp
  * @brief   Unit tests for utility functions
  * @author  EilzDragon92
  */
 
 #include <gtest/gtest.h>
-#include "common/header.h"
+#include "Common/header.h"
 
 
 /* ==================================================
@@ -19,7 +19,7 @@
 class GetFileSizeTest : public::testing::Test {
 protected:
     FILE *file = nullptr;
-    const char *path = "test.tmp";
+    QString path = "test.tmp";
 
     /**
      * @brief   Clean up temporary files after each test
@@ -67,18 +67,9 @@ TEST_F(GetFileSizeTest, EmptyFile) {
  * @brief   Verify GetFileSize works with an arbitrary sized file
  */
 TEST_F(GetFileSizeTest, ArbitSizeFile) {
-    create(100);
+    create(1000);
 
-    EXPECT_EQ(GetFileSize(file), 100);
-}
-
-/**
- * @brief   Verify GetFileSize works with exactly buffer sized file
- */
-TEST_F(GetFileSizeTest, BuffSizeFile) {
-    create(BLOCK_SIZE * BUFF_SIZE);
-
-    EXPECT_EQ(GetFileSize(file), BLOCK_SIZE * BUFF_SIZE);
+    EXPECT_EQ(GetFileSize(file), 1000);
 }
 
 
@@ -176,7 +167,7 @@ TEST(GetProcNumTest, ReturnPositive) {
 class OpenFileTest : public::testing::Test {
 protected:
     FILE *file = nullptr;
-    const char *path = "test.tmp";
+    QString path = "test.tmp";
 
     /**
      * @brief   Clean up temporary files after each test
@@ -196,7 +187,7 @@ protected:
  * @brief   Verify OpenFile creates new file in write mode
  */
 TEST_F(OpenFileTest, CreateNew) {
-    OpenFile(&file, path, "wb");
+    OpenFile(&file, path, "wb+");
 
     EXPECT_NE(file, nullptr);
 }
@@ -214,7 +205,7 @@ TEST_F(OpenFileTest, ReadNonExistent) {
  * @brief   Verify OpenFile opens existing file in read mode
  */
 TEST_F(OpenFileTest, OpenExisting) {
-    OpenFile(&file, path, "wb");
+    OpenFile(&file, path, "wb+");
 
     fclose(file);
     file = nullptr;

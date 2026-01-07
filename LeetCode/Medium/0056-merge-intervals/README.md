@@ -7,7 +7,7 @@
 **Topics:** Array, Sorting
 
 
-## Apporach
+## Approach
 
 1\. Sort the array by increasing order.
 

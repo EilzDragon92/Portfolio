@@ -1,4 +1,4 @@
-# 200. Number of Islands
+# 200\. Number of Islands
 
 **Link:** https://leetcode.com/problems/number-of-islands/description/
 
@@ -7,9 +7,11 @@
 **Topics:** Array, Depth-First Search, Breadth-First Search, Union Find, Matrix
 
 
-## Apporach
+
+## Approach
 
 1\. Iterate over the map. If there is an unexplored land, explore it using DFS. Mark all explored land.
+
 
 
 ## Result
@@ -22,6 +24,7 @@
 
 **Memory Usage:** 15.81 MB (Beats 100.00%)
 
-**Time Complexity:** O(m * n)
+**Time Complexity:** O(m \* n)
 
-**Space Complexity:** O(m * n)
+**Space Complexity:** O(m \* n)
+

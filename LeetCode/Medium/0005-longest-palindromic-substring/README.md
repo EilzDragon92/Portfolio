@@ -7,7 +7,7 @@
 **Topics:** Two Pointers, String, Dynamic Programming
 
 
-## Apporach
+## Approach
 
 1\. For each index `i` on the input string `s`, expand two pointers `l` and `r` each to left and to right, while `s[l] == s[r]` to search odd-lengthed palindroms.
 
