@@ -107,6 +107,8 @@ int MainGUI::openFiles() {
     QFileInfo srcInfo(userInput.src);
     QFileInfo dstInfo(userInput.dst);
 
+    closeFiles();
+
     OpenFile(&srcFile, userInput.src, "rb");
 
     if (srcFile == nullptr) {
@@ -139,7 +141,11 @@ void MainGUI::clean() {
         if (worker) worker->requestCancel();
 
         thread->quit();
-        thread->wait();
+
+        if (!thread->wait(5000)) {
+            thread->terminate();
+            thread->wait();
+        }
     }
 
     if (worker) {
@@ -152,6 +158,15 @@ void MainGUI::clean() {
         thread = nullptr;
     }
 
+    closeFiles();
+
+    if (shouldDelete) {
+        RemoveFile(userInput.dst);
+        shouldDelete = false;
+    }
+}
+
+void MainGUI::closeFiles() {
     if (srcFile) {
         fclose(srcFile);
         srcFile = nullptr;
@@ -160,10 +175,5 @@ void MainGUI::clean() {
     if (dstFile) {
         fclose(dstFile);
         dstFile = nullptr;
-    }
-
-    if (shouldDelete) {
-        RemoveFile(userInput.dst);
-        shouldDelete = false;
     }
 }

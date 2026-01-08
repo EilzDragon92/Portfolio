@@ -32,7 +32,7 @@ void Worker::work() {
 
         emit progressUpdate(perc, status);
 
-        *cancelled = shouldCancel;
+        *cancelled = shouldCancel.load(std::memory_order_relaxed);
         });
 
     if (mode == 0) {

@@ -93,4 +93,9 @@ private:
      * @brief   Clean all resources
      */
     void clean();
+
+    /**
+     * @brief   Clean file pointers
+     */
+    void closeFiles();
 };

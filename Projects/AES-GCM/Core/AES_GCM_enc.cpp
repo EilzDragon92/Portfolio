@@ -44,7 +44,7 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 	}
 
 	if (size > MAX_SIZE) {
-		reportError("[File] Validation failed - File should be at most 64 GB\n");
+		reportError("[File] Validation failed - File should be at most 64 GiB\n");
 		return 1;
 	}
 
