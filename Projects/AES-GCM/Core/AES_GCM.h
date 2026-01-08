@@ -87,14 +87,14 @@ public:
 private:
 	EVP_CIPHER_CTX *ctx = nullptr;	// OpenSSL encryption/decryption context
 
-	FILE *src;	// Source file
-	FILE *dst;	// Destination file
+	FILE *src = nullptr;	// Source file
+	FILE *dst = nullptr;	// Destination file
 
 	ErrorCallback ecb = nullptr;		// Error reporting callback function
 	ProgressCallback pcb = nullptr;		// Progress reporting callback function
 
 	uint64_t cur = 0;	// Current bytes processed
-	uint64_t size;		// Source file size
+	uint64_t size = 0;	// Source file size
 
 	uint8_t buff[BUFF_SIZE][BLOCK_SIZE];	// Buffer
 	uint8_t iv[IV_SIZE];					// Initial vector

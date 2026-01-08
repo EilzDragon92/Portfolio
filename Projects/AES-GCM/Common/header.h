@@ -63,7 +63,7 @@
 #define IV_SIZE 12		/// Initial vector size in bytes
 #define TAG_SIZE 16		/// Authentication tag size in bytes
 
-#define MAX_SIZE 16ULL * (1024 * 1024 * 1024)	/// Maximum source file size that can be processed (64 GiB)
+#define MAX_SIZE 64ULL * (1024 * 1024 * 1024)	/// Maximum source file size that can be processed (64 GiB)
 
 /**
  * @brief	Get the size of a file in bytes

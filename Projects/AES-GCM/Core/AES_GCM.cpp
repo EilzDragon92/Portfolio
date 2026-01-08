@@ -41,15 +41,18 @@ int AES_GCM::writeBuffer(void *buff, int size) {
 
 int AES_GCM::reportProgress() {
 	if (pcb) {
-		bool tmp = cancelled.load();
+		if (cancelled.load()) return 1;
+		
 		uint64_t perc = size == 0 ? 100 : cur * 100 / size;
+		bool shouldCancel = cancelled.load();
 
-		pcb(perc, &tmp);
-		cancelled.store(tmp);
+		pcb(perc, &shouldCancel);
 
-		if (cancelled) return 1;
+		if (shouldCancel) {
+			cancelled.store(true);
+			return 1;
+		}
 	}
-
 	return 0;
 }
 

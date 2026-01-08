@@ -101,7 +101,7 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 	}
 
 	if (fwrite(iv, sizeof(uint8_t), IV_SIZE, dst) != IV_SIZE) {
-		reportError("ERROR: Cannot write initial vector to destination file header\n");
+		reportError("[File] Write failed - Cannot write initial vector to destination file header\n");
 		return 1;
 	}
 

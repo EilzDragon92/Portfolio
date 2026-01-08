@@ -21,7 +21,7 @@ This is a GUI file encryption/decryption program using AES-256-GCM algorithm.
 
 * **AES-GCM** 
   * Most used encryption algorithm, de facto industry standard
-  * Chosen by NIST, trusted by many governments and cooperations
+  * Chosen by NIST, trusted by many governments and corperations
   * Provides both confidentiality and integrity in a single operation (AEAD)
 
 * **Argon2id**
@@ -73,7 +73,7 @@ AES-GCM
 | Parameter | Value | Rationale |
 |-----------|-------|-----------|
 | Algorithm | Argon2id | Provides both side-channel resistance and GPU attack resistance |
-| Memory Cost | 512 MB | High memory requirement makes GPU/ASIC attacks impractical |
+| Memory Cost | 512 MiB | High memory requirement makes GPU/ASIC attacks impractical |
 | Time Cost | 4 iterations | Increases computational cost |
 | Parallelism | Auto-detected | Uses all available CPU cores |
 | Salt Size | 16 bytes | Randomly generated per encryption |
@@ -96,15 +96,15 @@ AES-GCM
 
 | Specification | Value |
 |---------------|-------|
-| Max File Size | 64 GB |
-| Buffer Size | 64 KB |
+| Max File Size | 64 GiB |
+| Buffer Size | 64 KiB |
 | Block Size | 16 bytes |
 | Language Standard | C++20 |
 
 
 ## Limitations
 
-* Maximum file size: 64 GB (AES-GCM counter limit)
+* Maximum file size: 64 GiB (AES-GCM counter limit)
 * Password-based: Security depends on password strength
 * No key file support (password only)
 

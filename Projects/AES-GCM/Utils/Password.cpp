@@ -25,7 +25,7 @@ void Password::setData(const Password &pw) {
 void Password::setData(const char *str, size_t len) {
 	clean();
 
-	if (str && len > 0) {
+	if (str) {
 		size = len;
 		data = new char[size + 1];
 
