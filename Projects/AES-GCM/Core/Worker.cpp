@@ -7,7 +7,7 @@
 #include "Worker.h"
 
 void Worker::requestCancel() {
-    shouldCancel = true;
+    shouldCancel.store(true, std::memory_order_release);
 }
 
 void Worker::work() {
@@ -32,7 +32,7 @@ void Worker::work() {
 
         emit progressUpdate(perc, status);
 
-        *cancelled = shouldCancel.load(std::memory_order_relaxed);
+        *cancelled = shouldCancel.load(std::memory_order_acquire);
         });
 
     if (mode == 0) {

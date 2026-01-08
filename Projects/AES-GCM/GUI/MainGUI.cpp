@@ -149,12 +149,12 @@ void MainGUI::clean() {
     }
 
     if (worker) {
-        delete worker;
+        worker->deleteLater();
         worker = nullptr;
     }
 
     if (thread) {
-        delete thread;
+        thread->deleteLater();
         thread = nullptr;
     }
 
