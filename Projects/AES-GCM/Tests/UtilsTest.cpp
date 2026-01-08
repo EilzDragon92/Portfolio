@@ -74,6 +74,67 @@ TEST_F(GetFileSizeTest, ArbitSizeFile) {
 
 
 /* ==================================================
+ * FileExists Test
+ * ================================================== */
+
+/**
+ * @class   FileExistsTest
+ * @brief   Test class for FileExists function
+ */
+class FileExistsTest : public ::testing::Test {
+protected:
+    QString path = "test_exists.tmp";
+
+    /**
+     * @brief   Clean up temporary files after each test
+     */
+    void TearDown() override {
+        RemoveFile(path);
+    }
+
+    /**
+     * @brief   Create a temporary test file
+     */
+    void create() {
+        FILE *file = nullptr;
+
+        OpenFile(&file, path, "wb");
+
+        if (file) fclose(file);
+    }
+};
+
+/**
+ * @brief   Verify FileExists returns true for existing file
+ */
+TEST_F(FileExistsTest, ExistingFile) {
+    create();
+
+    EXPECT_TRUE(FileExists(path));
+}
+
+/**
+ * @brief   Verify FileExists returns false for non-existent file
+ */
+TEST_F(FileExistsTest, NonExistentFile) {
+    EXPECT_FALSE(FileExists("fake.tmp"));
+}
+
+/**
+ * @brief   Verify FileExists returns false after file deletion
+ */
+TEST_F(FileExistsTest, AfterDeletion) {
+    create();
+
+    ASSERT_TRUE(FileExists(path));
+
+    RemoveFile(path);
+
+    EXPECT_FALSE(FileExists(path));
+}
+
+
+/* ==================================================
  * Argon2id Test
  * ================================================== */
 
