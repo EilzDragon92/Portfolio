@@ -5,7 +5,7 @@ This is a GUI file encryption/decryption program using AES-256-GCM algorithm.
 * Language: C++
 * OS: Windows, Linux
 
-https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml/badge.svg
+![Build](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/build.yml/badge.svg)
 
 
 ## Features
