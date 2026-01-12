@@ -1,0 +1,25 @@
+name: Build Test
+
+on: [push]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt6-base-dev libssl-dev libargon2-dev libgtest-dev
+      
+      - name: Build
+        run: |
+          cd Projects/AES-GCM
+          cmake -B build
+          cmake --build build
+      
+      - name: Test
+        run: |
+          cd Projects/AES-GCM
+          ctest --test-dir build --output-on-failure
