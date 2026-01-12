@@ -48,7 +48,7 @@ set(HEADERS
     Utils/Password.h
 )
 
-add_library(AES-GCM-lib STATIC ${LIB_SOURCES} ${HEADERS}   "CLI/CLI.h")
+add_library(AES-GCM-lib STATIC ${LIB_SOURCES} ${HEADERS})
 
 target_include_directories(AES-GCM-lib PUBLIC
     ${CMAKE_SOURCE_DIR}
@@ -67,7 +67,7 @@ if(WIN32)
     target_link_libraries(AES-GCM-lib PUBLIC bcrypt)
 endif()
 
-add_executable(${PROJECT_NAME} Common/main.cpp   "CLI/CLI.h")
+add_executable(${PROJECT_NAME} Common/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE AES-GCM-lib)
 
 enable_testing()
@@ -78,7 +78,7 @@ set(TEST_SOURCES
     Tests/UtilsTest.cpp
 )
 
-add_executable(AES-GCM-tests ${TEST_SOURCES}   "CLI/CLI.h")
+add_executable(AES-GCM-tests ${TEST_SOURCES})
 
 target_link_libraries(AES-GCM-tests PRIVATE
     AES-GCM-lib
