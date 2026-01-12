@@ -37,7 +37,7 @@ jobs:
       - name: Test
         run: |
           cd Projects/AES-GCM
-          ctest --test-dir build --config Release --output-on-failure
+          ctest --test-dir build -C Release --output-on-failure
   
   build-linux:
     runs-on: ubuntu-latest
