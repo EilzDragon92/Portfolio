@@ -45,6 +45,7 @@
 
 #else
 	#include <cerrno>
+	#include <sys/mman.h>
 	#include <sys/random.h>
 	#include <thread>
 	#include <unistd.h>
