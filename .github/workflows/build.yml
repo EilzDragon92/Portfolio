@@ -3,6 +3,42 @@ name: Build Test
 on: [push]
 
 jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.7.0'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2019_64'
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitCommitId: 'c82f74667287d3dc386bce81e44964370c91a289'
+
+      - name: Install dependencies
+        run: vcpkg install openssl:x64-windows argon2:x64-windows gtest:x64-windows
+
+      - name: Build
+        run: |
+          cd Projects/AES-GCM
+          cmake -B build `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+          cmake --build build --config Release
+
+      - name: Test
+        run: |
+          cd Projects/AES-GCM
+          ctest --test-dir build --config Release --output-on-failure
+  
   build-linux:
     runs-on: ubuntu-latest
     steps:
