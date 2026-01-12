@@ -34,14 +34,12 @@ int ShowGUI(int argc, char *argv[]) {
 
     gui->move(x, y);
 
-
     gui->show();
+
 
     return app.exec();
 }
 
 int main(int argc, char *argv[]) {
-    ShowGUI(argc, argv);
-
-    return 0;
+    return ShowGUI(argc, argv);
 }

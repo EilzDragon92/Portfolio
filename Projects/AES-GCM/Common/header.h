@@ -28,6 +28,7 @@
 
 /* System libraries */
 #include <argon2.h>
+#include <conio.h>
 #include <cstdio>
 #include <filesystem>
 #include <openssl/err.h>
@@ -53,6 +54,7 @@
 
 #define FONT_SCALE 1.2	/// GUI font scale
 
+#define MAX_PLEN 64				/// Maximum password length in CLI mode
 #define KEY_SIZE 32				/// AES-GCM key size in bytes
 #define SALT_SIZE 16			/// Argon2id salt size in bytes
 #define MEM_COST (512 * 1024)	/// Argon2id memory cost in KiB

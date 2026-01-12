@@ -34,9 +34,7 @@ public:
 	/**
 	 * @brief	Default constructor of AES_GCM class
 	 */
-	AES_GCM() {
-		;
-	}
+	AES_GCM();
 
 	/**
 	 * @brief	Destructor of AES_GCM class
