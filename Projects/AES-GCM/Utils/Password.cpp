@@ -29,6 +29,7 @@ void Password::setData(const char *str, size_t len) {
 		size = len;
 		data = new char[size + 1];
 
+		Lock(data, size + 1);
 		memcpy(data, str, size);
 
 		data[size] = '\0';
@@ -38,6 +39,8 @@ void Password::setData(const char *str, size_t len) {
 void Password::clean() {
 	if (data != nullptr) {
 		Wipe(data, size + 1);
+		Unlock(data, size + 1);
+
 		delete[] data;
 	}
 

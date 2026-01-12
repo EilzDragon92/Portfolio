@@ -9,11 +9,17 @@
 
 #include "Core/AES_GCM.h"
 
+AES_GCM::AES_GCM() {
+	Lock(key, KEY_SIZE);
+}
+
 AES_GCM::~AES_GCM() {
 	Wipe(buff, sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
 	Wipe(iv, sizeof(uint8_t) * IV_SIZE);
 	Wipe(key, sizeof(uint8_t) * KEY_SIZE);
 	Wipe(salt, sizeof(uint8_t) * SALT_SIZE);
+
+	Unlock(key, KEY_SIZE);
 
 	if (ctx) {
 		EVP_CIPHER_CTX_free(ctx);

@@ -49,9 +49,12 @@ void PWLineEdit::extract(Password &pw) {
     QByteArray data = pwLine->text().toUtf8();
     int size = data.size();
 
+    Lock(data.data(), size);
+
     pw.setData(data.constData(), size);
 
     Wipe(data.data(), size);
+    Unlock(data.data(), size);
 
     pwLine->clear();
 }

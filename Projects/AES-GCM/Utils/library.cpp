@@ -104,6 +104,16 @@ int Seek(FILE *file, int64_t offset, int origin) {
 #endif
 }
 
+void Lock(void *buff, size_t size) {
+#ifdef _WIN32
+    VirtualLock(buff, size);
+
+#else
+    mlock(buff, size);
+
+#endif
+}
+
 void OpenFile(FILE **file, const QString &path, const char *mode) {
 #ifdef _WIN32
     std::wstring wpath = path.toStdWString();
@@ -121,16 +131,29 @@ void OpenFile(FILE **file, const QString &path, const char *mode) {
 #endif
 }
 
-void Wipe(void *ptr, size_t size) {
+void Unlock(void *buff, size_t size) {
 #ifdef _WIN32
-    SecureZeroMemory(ptr, size);
-
-#elif defined(__GLIBC__) && __GLIBC__ >= 2 && __GLIBC_MINOR__ >= 25
-    explicit_bzero(ptr, size);
+    VirtualUnlock(buff, size);
 
 #else
-    volatile uint8_t *p = static_cast<volatile uint8_t *>(ptr);
+    munlock(buff, size);
+
+#endif
+}
+
+void Wipe(void *buff, size_t size) {
+#ifdef _WIN32
+    SecureZeroMemory(buff, size);
+
+#elif defined(__GLIBC__) && __GLIBC__ >= 2 && __GLIBC_MINOR__ >= 25
+    explicit_bzero(buff, size);
+
+#else
+    volatile uint8_t *p = static_cast<volatile uint8_t *>(buff);
+
     while (size--) *p++ = 0;
-    __asm__ __volatile__("" : : "r"(ptr) : "memory");
+
+    __asm__ __volatile__("" : : "r"(buff) : "memory");
+
 #endif
 }

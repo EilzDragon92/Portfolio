@@ -120,12 +120,26 @@ int RemoveFile(const QString &path);
 int Seek(FILE *file, int64_t dist, int ref);
 
 /**
+ * @brief	Lock memory space so that it cannot be swapped
+ * @param	buff	Buffer to lock
+ * @param	size	Buffer size in bytes
+ */
+void Lock(void *ptr, size_t size);
+
+/**
  * @brief	Open a file
  * @param	file	File pointer
  * @param	path	File path
  * @param	mode	Mode
  */
 void OpenFile(FILE **file, const QString &path, const char *mode);
+
+/**
+ * @brief	Unlock memory space so that it can be swapped
+ * @param	buff	Buffer to unlock
+ * @param	size	Buffer size in bytes
+ */
+void Unlock(void *ptr, size_t size);
 
 /**
  * @brief	Securely wipe data in memory
