@@ -67,14 +67,6 @@
 #define MAX_SIZE 64ULL * (1024 * 1024 * 1024)	/// Maximum source file size that can be processed (64 GiB)
 
 /**
- * @brief	Open a file
- * @param	file	File pointer
- * @param	path	File path
- * @param	mode	Mode
- */
-errno_t OpenFile(FILE **file, const QString &path, const char *mode);
-
-/**
  * @brief	Get the size of a file in bytes
  * @param	file	File pointer in read binary mode
  * @return	file size in bytes on success, -1 on failure
@@ -103,6 +95,14 @@ int Argon2id(uint8_t salt[], const char pw[], size_t plen, uint8_t key[]);
  * @return	Number of logical processors available
  */
 int GetProcNum();
+
+/**
+ * @brief	Open a file
+ * @param	file	File pointer
+ * @param	path	File path
+ * @param	mode	Mode
+ */
+int OpenFile(FILE **file, const QString &path, const char *mode);
 
 /**
  * @brief	Generates cryptographically secure random bytes
