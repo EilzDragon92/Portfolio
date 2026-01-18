@@ -10,6 +10,10 @@
 #include "Core/AES_GCM.h"
 
 AES_GCM::AES_GCM() {
+	memset(buff, 0, sizeof(uint8_t) * BUFF_SIZE);
+	memset(iv, 0, sizeof(uint8_t) * IV_SIZE);
+	memset(salt, 0, sizeof(uint8_t) * SALT_SIZE);
+
 	Lock(key, KEY_SIZE);
 }
 
@@ -27,7 +31,7 @@ AES_GCM::~AES_GCM() {
 	}
 }
 
-int AES_GCM::readBuffer(void *buff, int size) {
+int AES_GCM::readBuffer(const void *buff, int size) {
 	if (fread(buff, sizeof(uint8_t), size, src) != size) {
 		reportError("[File] Read failed - Cannot read source file data\n");
 		return 1;
@@ -65,15 +69,17 @@ int AES_GCM::reportProgress() {
 void AES_GCM::reportError(const char *msg) {
 	if (!ecb) return;
 
-	std::string res = msg;
+	std::string res;
 	unsigned long code;
-	char buff[256];
+	char errStr[256];
+
+	res += msg;
 
 	while (code = ERR_get_error()) {
-		ERR_error_string_n(code, buff, sizeof(buff));
+		ERR_error_string_n(code, errStr, sizeof(errStr));
 
 		res += " -> ";
-		res += buff;
+		res += errStr;
 		res += '\n';
 	}
 

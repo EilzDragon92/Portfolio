@@ -91,8 +91,8 @@ private:
 	ErrorCallback ecb = nullptr;		// Error reporting callback function
 	ProgressCallback pcb = nullptr;		// Progress reporting callback function
 
+	int64_t size = 0;	// Source file size
 	uint64_t cur = 0;	// Current bytes processed
-	uint64_t size = 0;	// Source file size
 
 	uint8_t buff[BUFF_SIZE][BLOCK_SIZE];	// Buffer
 	uint8_t iv[IV_SIZE];					// Initial vector
@@ -112,7 +112,7 @@ private:
 	  * @param	size	Number of bytes to read
 	  * @return	0 on success, 1 on failure
 	  */
-	int readBuffer(void *buff, int size);
+	int readBuffer(const void *buff, int size);
 
 	/**
 	  * @brief	Write data from buffer to destination file

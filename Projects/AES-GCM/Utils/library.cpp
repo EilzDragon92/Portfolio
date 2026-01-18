@@ -77,10 +77,9 @@ int Random(uint8_t *dst, size_t size) {
 
 #else
     size_t rem = size;
-    ssize_t res;
 
     while (rem > 0) {
-        res = getrandom(dst, rem, 0);
+        ssize_t res = getrandom(dst, rem, 0);
 
         if (res == -1) {
             if (errno == EINTR) continue;
