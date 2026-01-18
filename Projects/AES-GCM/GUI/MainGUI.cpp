@@ -109,7 +109,9 @@ int MainGUI::openFiles() {
 
     closeFiles();
 
-    if (OpenFile(&srcFile, userInput.src, "rb") != 0 || srcFile == nullptr) {
+    OpenFile(&srcFile, userInput.src, "rb");
+
+    if (srcFile == nullptr) {
         inputGUI->setErrMsg("ERROR: Failed to open source file");
         return 1;
     }

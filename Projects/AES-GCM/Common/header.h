@@ -97,14 +97,6 @@ int Argon2id(uint8_t salt[], const char pw[], size_t plen, uint8_t key[]);
 int GetProcNum();
 
 /**
- * @brief	Open a file
- * @param	file	File pointer
- * @param	path	File path
- * @param	mode	Mode
- */
-int OpenFile(FILE **file, const QString &path, const char *mode);
-
-/**
  * @brief	Generates cryptographically secure random bytes
  * @param	dst		Output buffer for random bytes
  * @param	size	Output buffer size
@@ -134,6 +126,14 @@ int Seek(FILE *file, int64_t dist, int ref);
  * @param	size	Buffer size in bytes
  */
 void Lock(void *ptr, size_t size);
+
+/**
+ * @brief	Open a file
+ * @param	file	File pointer
+ * @param	path	File path
+ * @param	mode	Mode
+ */
+void OpenFile(FILE **file, const QString &path, const char *mode);
 
 /**
  * @brief	Unlock memory space so that it can be swapped
