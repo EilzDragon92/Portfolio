@@ -6,6 +6,23 @@
 
 #include "Common/header.h"
 
+errno_t OpenFile(FILE **file, const QString &path, const char *mode) {
+#ifdef _WIN32
+    std::wstring wpath = path.toStdWString();
+    std::wstring wmode;
+
+    for (const char *p = mode; *p; ++p) wmode += static_cast<wchar_t>(*p);
+
+    return _wfopen_s(file, wpath.c_str(), wmode.c_str());
+
+#else
+    QByteArray qpath = path.toUtf8();
+
+    return fopen_s(file, qpath.constData(), mode);
+
+#endif
+}
+
 int64_t GetFileSize(FILE *file) {
     int64_t size;
 
@@ -110,23 +127,6 @@ void Lock(void *buff, size_t size) {
 
 #else
     mlock(buff, size);
-
-#endif
-}
-
-void OpenFile(FILE **file, const QString &path, const char *mode) {
-#ifdef _WIN32
-    std::wstring wpath = path.toStdWString();
-    std::wstring wmode;
-    
-    for (const char *p = mode; *p; ++p) wmode += static_cast<wchar_t>(*p);
-
-    *file = _wfopen(wpath.c_str(), wmode.c_str());
-
-#else
-    QByteArray qpath = path.toUtf8();
-
-    *file = fopen(qpath.constData(), mode);
 
 #endif
 }

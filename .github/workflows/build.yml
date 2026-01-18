@@ -48,6 +48,19 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y qt6-base-dev libssl-dev libargon2-dev libgtest-dev
+
+      - name: Run cppcheck
+        run: |
+          cppcheck \
+            --enable=warning,style,performance,portability \
+            --error-exitcode=1 \
+            --suppress=missingIncludeSystem \
+            --inline-suppr \
+            -I Projects/AES-GCM \
+            Projects/AES-GCM/Core \
+            Projects/AES-GCM/GUI \
+            Projects/AES-GCM/Utils \
+            Projects/AES-GCM/Common
       
       - name: Build
         run: |
