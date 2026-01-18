@@ -86,11 +86,11 @@ void MainGUI::onStartRequested(const UserInput &input) {
     }
 }
 
-void MainGUI::onProgressUpdated(int perc, QString &status) {
+void MainGUI::onProgressUpdated(int perc, const QString &status) {
     prgGUI->update(perc, status);
 }
 
-void MainGUI::onWorkFinished(QString &msg, bool shouldDelete) {
+void MainGUI::onWorkFinished(const QString &msg, bool shouldDelete) {
     prgGUI->showResult(msg);
     this->shouldDelete = shouldDelete;
 }
