@@ -16,8 +16,8 @@
   * @brief      Container for user input parameters
   */
 struct UserInput {
-    bool valid;
-    int mode;
+    bool valid = false;
+    int mode = -1;
     QString src;
     QString dst;
     Password pw;

@@ -51,16 +51,16 @@ private slots:
     /**
      * @brief	Update progress bar and status message
      * @param   perc    Progress percentage
-     * @param   status  Status messgae
+     * @param   status  Status message
      */
-    void onProgressUpdated(int perc, QString status);
+    void onProgressUpdated(int perc, QString &status);
 
     /**
      * @brief	Show result and set deletion flag
      * @param   msg             Result message
      * @param   shouldDelete    Destination file deletion flag value
      */
-    void onWorkFinished(QString msg, bool shouldDelete);
+    void onWorkFinished(QString &msg, bool shouldDelete);
 
     /**
      * @brief	Clean resources on worker thread finished

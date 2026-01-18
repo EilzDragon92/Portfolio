@@ -25,7 +25,7 @@ public:
      * @param   pw          Password
      * @param   mode        Encryption/decryption mode
      */
-    Worker(FILE *srcFile, FILE *dstFile, QString dstPath, Password pw, int mode) {
+    Worker(FILE *srcFile, FILE *dstFile, const QString &dstPath, const Password &pw, int mode) {
         this->srcFile = srcFile;
         this->dstFile = dstFile;
         this->dstPath = dstPath;

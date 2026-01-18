@@ -31,7 +31,7 @@ AES_GCM::~AES_GCM() {
 	}
 }
 
-int AES_GCM::readBuffer(const void *buff, int size) {
+int AES_GCM::readBuffer(void *buff, int size) {
 	if (fread(buff, sizeof(uint8_t), size, src) != size) {
 		reportError("[File] Read failed - Cannot read source file data\n");
 		return 1;
@@ -40,7 +40,7 @@ int AES_GCM::readBuffer(const void *buff, int size) {
 	return 0;
 }
 
-int AES_GCM::writeBuffer(void *buff, int size) {
+int AES_GCM::writeBuffer(const void *buff, int size) {
 	if (fwrite(buff, sizeof(uint8_t), size, dst) != size) {
 		reportError("[File] Write failed - Cannot write destination file data\n");
 		return 1;

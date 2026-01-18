@@ -60,8 +60,6 @@ void InputGUI::setErrMsg(const QString &msg) {
 void InputGUI::onStartClicked() {
     UserInput input;
 
-    input.valid = false;
-
     if ((input.mode = modeBtn->getMode()) == -1) {
         errMsg->setText("Mode is not selected");
         return;
