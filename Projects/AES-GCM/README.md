@@ -3,7 +3,8 @@
 This is the GUI, password-based file encryption/decryption program.
 
 * **Language:** C++ 20
-* **OS:** Windows, Linux
+* **License:** MIT
+* **Platform:** Windows, Linux
 
 ![Build](https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml/badge.svg)
 
@@ -12,9 +13,6 @@ This is the GUI, password-based file encryption/decryption program.
 * AES-256-GCM algorithm for authenticated file encryption
 * Argon2id for key derivation from password
 * Qt library for graphical user interface
-* RAII pattern for secure password handling
-* Randomly generated salt and initial vector for each session
-* Sensitive data are wiped after use
 * Asynchronous, multithread processing for non-blocking UI
 * Real-time progress tracking and cancellation support
 * Error report and automatic stop when error occurs
@@ -31,6 +29,14 @@ This is the GUI, password-based file encryption/decryption program.
 	* Hybrid of Argon2i and Argon2d, balances strength of both algorithms
 		* Argon2i: Data independent memory access, resistant to side channel attacks
 		* Argon2d: Memory hard function, resistant to brute force attacks using GPU or ASIC
+
+### 2-2. Security Considerations
+
+* Keys are locked in memory using `VirtualLock`/`mlock` to prevent swapping to disk
+* RAII class for secure password handling ensures data wipe on error or cancellation
+* Salt and IV are generated using OS-provided CSPRNG (`BCryptGenRandom`/`getrandom`)
+* Sensitive data (passwords, keys, buffers) are wiped using `SecureZeroMemory`/`explicit_bzero`
+* Tampered ciphertext files are rejected before any plaintext is output
 
 ## 3. Specifications
 
@@ -79,9 +85,105 @@ AES-GCM
     └── library.cpp        # Utility functions
 ```
 
-## 4. Limitations
+### 3-3. Limitations
 
-* Does not support CLI mode
-* Does not support key file (GUI-input password only)
-* No log file (GUI message only)
+* Maximum 64 GiB file
+* No batch encryption (Single file only)
+* No CLI mode (GUI only)
+* No key file support (Password-based key only)
+* No log file (GUI message and progress bar only)
+* No original file removal
 
+## 4. Build and Usage
+### 4-1. Prerequisites
+
+**Windows:**
+* Visual Studio 2022+ with C++ workload
+* CMake 3.16+
+* vcpkg
+* Qt 6.7+
+
+**Linux:**
+* GCC 11+ or Clang 14+
+* CMake 3.16+
+* Qt6 development packages
+
+### 4-2. Build
+
+**Windows:**
+```bash
+# Install dependencies
+vcpkg install openssl:x64-windows argon2:x64-windows gtest:x64-windows
+
+# Configure and build
+cd Projects/AES-GCM
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake
+cmake --build build --config Release
+```
+
+**Linux:**
+```bash
+# Install dependencies
+sudo apt-get install qt6-base-dev libssl-dev libargon2-dev libgtest-dev
+
+# Configure and build
+cd Projects/AES-GCM
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+```
+
+### 4-3. Usage
+
+![Screenshot](Screenshot.png)
+
+1\. Run the executable `AES-GCM.exe` or `AES-GCM`
+2\. Select mode
+3\. Enter source file path
+4\. Enter destination file path
+5\. Enter password
+6\. Click Start
+
+## 5. Testing and Code Quality
+### 5-1. Running Tests
+
+**Windows:**
+```bash
+cd Projects/AES-GCM
+ctest --test-dir build -C Release --output-on-failure
+```
+
+**Linux:**
+```bash
+cd Projects/AES-GCM
+ctest --test-dir build --output-on-failure
+```
+
+### 5-2. Test Coverage
+
+| Module   | Test File          | Test Cases                                                                                                                                                                                                                                                       |
+| -------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AES_GCM  | `AES_GCM_Test.cpp` | Basic encryption/decryption, wrong password rejection, tampered or corrupted ciphertext detection, empty file handling, exact buffer size file handling, progress callback invocation, error callback invocation, cancellation                                   |
+| Password | `PasswordTest.cpp` | Default constructor, `setData` with C-string and another `Password` class, data replacement, deep copy for copy constructor/assignment, ownership transfer for move constructor/assignment, self-assignment safety, null pointer handling, destructor after move |
+| Utils    | `UtilsTest.cpp`    | `GetFileSize`, `FileExists`, `Argon2id` determinism and uniqueness, `GetProcNum`, `OpenFile`, `Random` non-zero and uniqueness, `RemoveFile`, `Seek`, `Wipe`                                                                                                     |
+
+### 5-3. Static Analysis
+
+The project uses cppcheck for static code analysis:
+```bash
+cppcheck --library=qt --enable=warning,style,performance,portability \
+    --error-exitcode=1 --suppress=missingIncludeSystem --inline-suppr \
+    -I Projects/AES-GCM \
+    Projects/AES-GCM/Core \
+    Projects/AES-GCM/GUI \
+    Projects/AES-GCM/Utils \
+    Projects/AES-GCM/Common
+```
+
+### 5-4. Continuous Integration
+
+All commits are automatically validated via GitHub Actions:
+
+| Platform | Compiler  | Build System  | Checks                      |
+| -------- | --------- | ------------- | --------------------------- |
+| Windows  | MSVC 2022 | CMake + vcpkg | Build, Unit Tests           |
+| Linux    | GCC       | CMake + apt   | Build, Unit Tests, cppcheck |
