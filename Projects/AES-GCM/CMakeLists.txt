@@ -9,7 +9,7 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 
 # OpenSSL
-find_package(OpenSSL REQUIRED)
+find_package(OpenSSL 3.0 REQUIRED)
 
 # GoogleTest
 find_package(GTest CONFIG REQUIRED)

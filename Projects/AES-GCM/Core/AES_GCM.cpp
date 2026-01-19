@@ -10,7 +10,7 @@
 #include "Core/AES_GCM.h"
 
 AES_GCM::AES_GCM() {
-	memset(buff, 0, sizeof(uint8_t) * BUFF_SIZE);
+	memset(buff, 0, sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
 	memset(iv, 0, sizeof(uint8_t) * IV_SIZE);
 	memset(salt, 0, sizeof(uint8_t) * SALT_SIZE);
 
@@ -31,7 +31,7 @@ AES_GCM::~AES_GCM() {
 	}
 }
 
-int AES_GCM::readBuffer(void *buff, int size) {
+int AES_GCM::readTo(void *buff, int size) {
 	if (fread(buff, sizeof(uint8_t), size, src) != size) {
 		reportError("[File] Read failed - Cannot read source file data\n");
 		return 1;
@@ -40,9 +40,11 @@ int AES_GCM::readBuffer(void *buff, int size) {
 	return 0;
 }
 
-int AES_GCM::writeBuffer(const void *buff, int size) {
+int AES_GCM::writeFrom(const void *buff, int size) {
 	if (fwrite(buff, sizeof(uint8_t), size, dst) != size) {
-		reportError("[File] Write failed - Cannot write destination file data\n");
+		if (ferror(dst)) reportError("[File] Write failed - Disk may be full or I/O error\n");
+		else			 reportError("[File] Write failed - Cannot write destination file data\n");
+
 		return 1;
 	}
 
@@ -51,10 +53,11 @@ int AES_GCM::writeBuffer(const void *buff, int size) {
 
 int AES_GCM::reportProgress() {
 	if (pcb) {
-		if (cancelled.load()) return 1;
+		if (!pcb) return 1;
 		
-		uint64_t perc = size == 0 ? 100 : cur * 100 / size;
-		bool shouldCancel = cancelled.load();
+		uint64_t perc = cur / (size / 100 + 1);
+
+		bool shouldCancel = false;
 
 		pcb(perc, &shouldCancel);
 
@@ -63,6 +66,7 @@ int AES_GCM::reportProgress() {
 			return 1;
 		}
 	}
+
 	return 0;
 }
 
@@ -75,7 +79,7 @@ void AES_GCM::reportError(const char *msg) {
 
 	res += msg;
 
-	while (code = ERR_get_error()) {
+	while ((code = ERR_get_error()) != 0) {
 		ERR_error_string_n(code, errStr, sizeof(errStr));
 
 		res += " -> ";

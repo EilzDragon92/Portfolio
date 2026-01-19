@@ -41,10 +41,9 @@ AES-GCM
 │   ├── header.h                # Common includes, macros, function definitions
 │   └── main.cpp                # Application entry point
 ├── Core
-│   ├── AES_GCM.h               # Encryption/decryption engine
-│   ├── AES_GCM.h/cpp           # Core implementation
-│   ├── AES_GCM_enc.cpp  		# Encryption implementation
-│   ├── AES_GCM_dec.cpp  		# Decryption implementation
+│   ├── AES_GCM.h/cpp           # AES-GCM engine
+│   ├── AES_GCM_enc.cpp  	# Encryption implementation
+│   ├── AES_GCM_dec.cpp 	# Decryption implementation
 │   └── Worker.h/cpp            # Asynchronous worker thread
 ├── GUI
 │   ├── MainGUI.h/cpp           # Main workflow controller

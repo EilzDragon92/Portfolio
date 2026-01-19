@@ -22,7 +22,7 @@ PWLineEdit::PWLineEdit(QWidget *parent) : QWidget(parent) {
 
     /* Configure masking toggle button */
 
-    maskBtn->setFixedSize(45 * FONT_SCALE, pwLine->sizeHint().height() * FONT_SCALE);
+    maskBtn->setFixedSize(static_cast<int>(45 * FONT_SCALE), static_cast<int>(pwLine->sizeHint().height() * FONT_SCALE));
 
 
     /* Configure layout */

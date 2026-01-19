@@ -141,13 +141,13 @@ int AES_GCM::decryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 
 int AES_GCM::decryptBatch() {
 	while (cur + BUFF_SIZE * BLOCK_SIZE <= size) {
-		if (readBuffer(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
+		if (readTo(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 		for (int i = 0; i < BUFF_SIZE; i++) {
 			if (decryptBlock(buff[i], buff[i], BLOCK_SIZE)) return 1;
 		}
 
-		if (writeBuffer(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
+		if (writeFrom(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 		cur += BUFF_SIZE * BLOCK_SIZE;
 
@@ -160,7 +160,7 @@ int AES_GCM::decryptBatch() {
 int AES_GCM::decryptRemain() {
 	int crs = 0, rem = size % (BUFF_SIZE * BLOCK_SIZE);
 
-	if (readBuffer(buff, rem)) return 1;
+	if (readTo(buff, rem)) return 1;
 
 
 	/* Decrypt remaining full blocks */
@@ -185,7 +185,7 @@ int AES_GCM::decryptRemain() {
 	}
 
 
-	if (writeBuffer(buff, BLOCK_SIZE * crs + rem)) return 1;
+	if (writeFrom(buff, BLOCK_SIZE * crs + rem)) return 1;
 
 	if (reportProgress()) return 1;
 
@@ -201,7 +201,7 @@ int AES_GCM::decryptFinal() {
 		return 1;
 	}
 
-	if (finalLen > 0 && writeBuffer(final, finalLen)) return 1;
+	if (finalLen > 0 && writeFrom(final, finalLen)) return 1;
 
 	return 0;
 }
