@@ -1,130 +1,87 @@
-# Introduction
+## 1. Introduction
 
-This is a GUI file encryption/decryption program using AES-256-GCM algorithm.
+This is the GUI, password-based file encryption/decryption program.
 
-* Language: C++
-* OS: Windows, Linux
+* **Language:** C++ 20
+* **OS:** Windows, Linux
 
 ![Build](https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml/badge.svg)
 
+## 2. Features
 
-## Features
-
-* AES-256-GCM authenticated encryption
-* Argon2id password-based key derivation
-* Qt-based graphical user interface
-* Real-time progress tracking with cancellation support
-* Securely wipe sensitive data using RAII pattern
+* AES-256-GCM algorithm for authenticated file encryption
+* Argon2id for key derivation from password
+* Qt library for graphical user interface
+* RAII pattern for secure password handling
+* Randomly generated salt and initial vector for each session
+* Sensitive data are wiped after use
 * Asynchronous, multithread processing for non-blocking UI
-* Cross-platform support for Windows and Linux
+* Real-time progress tracking and cancellation support
+* Error report and automatic stop when error occurs
 
+### 2-1. Why use this?
 
-### Why This Project?
-
-* **AES-GCM** 
-  * Most used encryption algorithm, de facto industry standard
-  * Chosen by NIST, trusted by many governments and corperations
-  * Provides both confidentiality and integrity in a single operation (AEAD)
+* **AES-GCM**
+	* Most used encryption algorithm, de facto industry standard
+	* Chosen by NIST, trusted by many governments and corporations
+	* Provides both confidentiality and integrity using AEAD
 
 * **Argon2id**
-  * Winner of 2015 Password Hashing Competition
-  * Hybrid of Argon2i and Argon2d, balances strength of both algorithms
-    * Argon2i: Data independant memory access, resistant to side channel attack
-    * Argon2d: Memory hard function, resistant to brute force attack using GPU or ASIC
+	* Winner of 2015 Password Hashing Competition
+	* Hybrid of Argon2i and Argon2d, balances strength of both algorithms
+		* Argon2i: Data independent memory access, resistant to side channel attacks
+		* Argon2d: Memory hard function, resistant to brute force attacks using GPU or ASIC
 
+## 3. Specifications
 
-## Source File Architecture
+* **Maximum File Size:** 64 GiB (2 ^ 32 blocks, limitation of 32-bit counter)
 
-```
-AES-GCM
-├── Common
-│   ├── header.h                # Common includes, macros, function definitions
-│   └── main.cpp                # Application entry point
-├── Core
-│   ├── AES_GCM.h/cpp           # AES-GCM engine
-│   ├── AES_GCM_enc.cpp  	# Encryption implementation
-│   ├── AES_GCM_dec.cpp 	# Decryption implementation
-│   └── Worker.h/cpp            # Asynchronous worker thread
-├── GUI
-│   ├── MainGUI.h/cpp           # Main workflow controller
-│   ├── InputGUI.h/cpp          # User input GUI
-│   ├── ProgressGUI.h/cpp       # Progress tracking GUI
-│   ├── ModeButton.h/cpp        # Encrypt/Decrypt mode selection component
-│   └── PWLineEdit.h/cpp        # Password input component
-└── Utils
-    ├── Password.h/cpp          # Secure password container
-    └── library.cpp             # Utility functions
-```
+* **AES-256-GCM**
+	* **IV Size:** 96 bits (recommended for AES-256-GCM)
+	* **Key Size:** 256 bits (using AES-256)
+	* **Block Size:** 128 bits (using AES)
+	* **Authentication Tag Size:** 128 bits
 
+* **Argon2id**
+	* **Memory Cost:** 512 MiB
+	* **Time Cost:** 4 iterations
+	* **Parallelism:** All available CPU cores
+	* **Salt Size:** 128 bits
 
-## Security Design
+* **Buffer Size:** 4096 blocks (64 KiB)
 
-### Encryption Scheme
-
-| Component | Specification |
-|-----------|---------------|
-| Algorithm | AES-256-GCM |
-| Key Size | 256 bits |
-| IV Size | 96 bits (random) |
-| Auth Tag | 128 bits |
-
-
-### Key Derivation
-
-| Parameter | Value | Rationale |
-|-----------|-------|-----------|
-| Algorithm | Argon2id | Provides both side-channel resistance and GPU attack resistance |
-| Memory Cost | 512 MiB | High memory requirement makes GPU/ASIC attacks impractical |
-| Time Cost | 4 iterations | Increases computational cost |
-| Parallelism | Auto-detected | Uses all available CPU cores |
-| Salt Size | 16 bytes | Randomly generated per encryption |
-
-
-### Memory Security
-
-* Sensitive data (keys, passwords) are securely wiped after use
-* RAII classes ensure data wipe on error, exception or forced stop
-
-
-### Encrypted File Format
+### 3-1. Encrypted File Format
 
 ```
 │ Salt (16 bytes) │ IV (12 bytes) │ Ciphertext │ Tag (16 bytes) │
 ```
 
+### 3-2. Source Code Architecture
 
-## Technical Specifications
+```
+AES-GCM
+├── Common
+│   ├── header.h           # Common includes, macros, function definitions
+│   └── main.cpp           # Application entry point
+├── Core
+│   ├── AES_GCM.h/cpp      # AES-GCM engine
+│   ├── AES_GCM_enc.cpp    # Encryption implementation
+│   ├── AES_GCM_dec.cpp    # Decryption implementation
+│   └── Worker.h/cpp       # Asynchronous worker thread
+├── GUI
+│   ├── MainGUI.h/cpp      # Main workflow controller
+│   ├── InputGUI.h/cpp     # User input GUI
+│   ├── ProgressGUI.h/cpp  # Progress tracking GUI
+│   ├── ModeButton.h/cpp   # Encrypt/Decrypt mode selection component
+│   └── PWLineEdit.h/cpp   # Password input component
+└── Utils
+    ├── Password.h/cpp     # Secure password container
+    └── library.cpp        # Utility functions
+```
 
-| Specification | Value |
-|---------------|-------|
-| Max File Size | 64 GiB |
-| Buffer Size | 64 KiB |
-| Block Size | 16 bytes |
-| Language Standard | C++20 |
+## 4. Limitations
 
-
-## Limitations
-
-* Maximum file size: 64 GiB (AES-GCM counter limit)
-* Password-based: Security depends on password strength
-* No key file support (password only)
-
-
-## Dependencies
-
-* **Qt 6** (Core, GUI, Widgets)
-* **OpenSSL 3.x** (libcrypto)
-* **Argon2** (reference implementation)
-
-
-## Important Notes
-
-* Must use strong password
-* Keep the encrypted file and password separate
-* The original file is not modified or deleted
-
-
-## License
-
-MIT License
+* Does not support CLI mode
+* Does not support key file (GUI-input password only)
+* No log file (GUI message only)
 
