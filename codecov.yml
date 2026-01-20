@@ -1,0 +1,11 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 5%
+
+ignore:
+  - "Projects/AES-GCM/GUI/**/*"
+  - "Projects/AES-GCM/Core/Worker.cpp"
+  - "Projects/AES-GCM/Common/main.cpp"
