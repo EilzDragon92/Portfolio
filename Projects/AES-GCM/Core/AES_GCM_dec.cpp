@@ -38,10 +38,12 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 
 	size = GetFileSize(src);
 
+	// LCOV_EXCL_START
 	if (size == -1) {
 		reportError("[File] Size check failed - Cannot read source file size\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 	if (size < SALT_SIZE + IV_SIZE + TAG_SIZE) {
 		reportError("[File] Validation failed - File should be at least 44 bytes\n");
@@ -53,6 +55,7 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 
 	/* Read salt and IV */
 
+	// LCOV_EXCL_START
 	if (fread(salt, sizeof(uint8_t), SALT_SIZE, src) != SALT_SIZE) {
 		reportError("[File] Read failed - Cannot read salt from source file header\n");
 		return 1;
@@ -62,18 +65,22 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 		reportError("[File] Read failed - Cannot read initial vector from source file header\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 
 	/* Derive key from password */
 
+	// LCOV_EXCL_START
 	if (Argon2id(salt, pw, plen, key)) {
 		reportError("[Crypto] Key derivation failed - Argon2id error\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 
 	/* Set decryption context */
 
+	// LCOV_EXCL_START
 	if (!(ctx = EVP_CIPHER_CTX_new())) {
 		reportError("[Crypto] Initialization failed - Cannot create context\n");
 		return 1;
@@ -93,6 +100,7 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 		reportError("[Crypto] Initialization failed - Cannot set key and initial vector\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 	return 0;
 }
@@ -100,6 +108,7 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 int AES_GCM::decryptTag() {
 	uint8_t tag[TAG_SIZE];
 
+	// LCOV_EXCL_START
 	if (Seek(src, -TAG_SIZE, SEEK_END)) {
 		reportError("[File] Seek failed - Cannot move file pointer to authentication tag\n");
 		return 1;
@@ -119,6 +128,7 @@ int AES_GCM::decryptTag() {
 		reportError("[File] Seek failed - Cannot move file pointer to data\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 	return 0;
 }
@@ -126,6 +136,7 @@ int AES_GCM::decryptTag() {
 int AES_GCM::decryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 	int dstLen;
 
+	// LCOV_EXCL_START
 	if (EVP_DecryptUpdate(ctx, dst, &dstLen, src, srcLen) != 1) {
 		reportError("[Crypto] Decryption failed - Cannot decrypt block\n");
 		return 1;
@@ -135,6 +146,7 @@ int AES_GCM::decryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 		reportError("[Crypto] Decryption failed - Cannot decrypt block\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 	return 0;
 }
@@ -201,7 +213,7 @@ int AES_GCM::decryptFinal() {
 		return 1;
 	}
 
-	if (finalLen > 0 && writeFrom(final, finalLen)) return 1;
+	if (finalLen > 0 && writeFrom(final, finalLen)) return 1;  // LCOV_EXCL_LINE
 
 	return 0;
 }

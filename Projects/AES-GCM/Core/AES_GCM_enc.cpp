@@ -38,10 +38,12 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 
 	size = GetFileSize(src);
 
+	// LCOV_EXCL_START
 	if (size == -1) {
 		reportError("[File] Size check failed - Cannot read source file size\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 	if (size > MAX_SIZE) {
 		reportError("[File] Validation failed - File should be at most 64 GiB\n");
@@ -51,6 +53,7 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 
 	/* Generate salt and IV */
 
+	// LCOV_EXCL_START
 	if (Random(salt, SALT_SIZE)) {
 		reportError("[Crypto] Random failed - Cannot generate salt\n");
 		return 1;
@@ -60,18 +63,22 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 		reportError("[Crypto] Random failed - Cannot generate initial vector\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 
 	/* Derive key from password */
 
+	// LCOV_EXCL_START
 	if (Argon2id(salt, pw, plen, key)) {
 		reportError("[Crypto] Key derivation failed - Argon2id error\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 
 	/* Set encryption context */
 
+	// LCOV_EXCL_START
 	if (!(ctx = EVP_CIPHER_CTX_new())) {
 		reportError("[Crypto] Initialization failed - Cannot create context\n");
 		return 1;
@@ -91,10 +98,12 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 		reportError("[Crypto] Initialization failed - Cannot set key and initial vector\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 
 	/* Write salt and IV */
 
+	// LCOV_EXCL_START
 	if (fwrite(salt, sizeof(uint8_t), SALT_SIZE, dst) != SALT_SIZE) {
 		reportError("[File] Write failed - Cannot write salt to destination file header\n");
 		return 1;
@@ -104,6 +113,7 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 		reportError("[File] Write failed - Cannot write initial vector to destination file header\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 	return 0;
 }
@@ -111,6 +121,7 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 int AES_GCM::encryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 	int dstLen;
 
+	// LCOV_EXCL_START
 	if (EVP_EncryptUpdate(ctx, dst, &dstLen, src, srcLen) != 1) {
 		reportError("[Crypto] Encryption failed - Cannot encrypt block\n");
 		return 1;
@@ -120,6 +131,7 @@ int AES_GCM::encryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
 		reportError("[Crypto] Encryption failed - Cannot encrypt block\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 	return 0;
 }
@@ -181,12 +193,14 @@ int AES_GCM::encryptFinal() {
 	uint8_t final[BLOCK_SIZE];
 	int finalLen;
 
+	// LCOV_EXCL_START
 	if (EVP_EncryptFinal_ex(ctx, final, &finalLen) != 1) {
 		reportError("[Crypto] Finalization failed - Cannot finalize encryption\n");
 		return 1;
 	}
 
 	if (finalLen > 0 && writeFrom(final, finalLen)) return 1;
+	// LCOV_EXCL_STOP
 
 	return 0;
 }
@@ -194,6 +208,7 @@ int AES_GCM::encryptFinal() {
 int AES_GCM::encryptTag() {
 	uint8_t tag[TAG_SIZE];
 
+	// LCOV_EXCL_START
 	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, TAG_SIZE, tag) != 1) {
 		reportError("[Crypto] Tag Error - Cannot get authentication tag\n");
 		return 1;
@@ -203,6 +218,7 @@ int AES_GCM::encryptTag() {
 		reportError("[File] Write failed - Cannot write authentication tag on destination file\n");
 		return 1;
 	}
+	// LCOV_EXCL_STOP
 
 	return 0;
 }

@@ -158,14 +158,15 @@ ctest --test-dir build --output-on-failure
 
 ### 5-2. Test Coverage
 
+![Coverage](https://codecov.io/gh/EilzDragon92/Portfolio/branch/main/graph/badge.svg)
+
 | Module   | Test File          | Test Cases                                                                                                                                                                                                                                                       |
 | -------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | AES_GCM  | `AES_GCM_Test.cpp` | Basic encryption/decryption, wrong password rejection, tampered or corrupted ciphertext detection, empty file handling, exact buffer size file handling, progress callback invocation, error callback invocation, cancellation                                   |
 | Password | `PasswordTest.cpp` | Default constructor, `setData` with C-string and another `Password` class, data replacement, deep copy for copy constructor/assignment, ownership transfer for move constructor/assignment, self-assignment safety, null pointer handling, destructor after move |
 | Utils    | `UtilsTest.cpp`    | `GetFileSize`, `FileExists`, `Argon2id` determinism and uniqueness, `GetProcNum`, `OpenFile`, `Random` non-zero and uniqueness, `RemoveFile`, `Seek`, `Wipe`                                                                                                     |
 
-Code Coverage (GUI excluded): 
-![Coverage](https://codecov.io/gh/EilzDragon92/Portfolio/branch/main/graph/badge.svg)
+Note: GUI, OpenSSL errors, system call errors are excluded from tests.
 
 ### 5-3. Static Analysis
 

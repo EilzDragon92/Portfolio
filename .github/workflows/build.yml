@@ -85,6 +85,7 @@ jobs:
             '*/Tests/*' \
             '*/AES-GCM/GUI/*' \
             '*/AES-GCM/Core/Worker.cpp' \
+            '*/AES-GCM/Core/Worker.h' \
             '*/AES-GCM/Common/main.cpp' \
             --output-file coverage.info --ignore-errors mismatch,unused
           echo "=== Files in coverage report ==="
