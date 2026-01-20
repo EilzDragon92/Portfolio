@@ -63,13 +63,13 @@ jobs:
             Projects/AES-GCM/GUI \
             Projects/AES-GCM/Utils \
             Projects/AES-GCM/Common
-      
-      - name: Build
+
+      - name: Build with Coverage
         run: |
           cd Projects/AES-GCM
-          cmake -B build
+          cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCOVERAGE=ON
           cmake --build build
-      
+
       - name: Test
         run: |
           cd Projects/AES-GCM
