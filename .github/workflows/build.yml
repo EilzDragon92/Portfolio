@@ -81,11 +81,13 @@ jobs:
           lcov --capture --directory build --output-file coverage.info --ignore-errors mismatch
           lcov --remove coverage.info \
             '/usr/*' \
+            '*/gtest/*' \
             '*/Tests/*' \
-            '*/GUI/*' \
-            '*/Worker.cpp' \
-            '*/main.cpp' \
+            '*/AES-GCM/GUI/*' \
+            '*/AES-GCM/Core/Worker.cpp' \
+            '*/AES-GCM/Common/main.cpp' \
             --output-file coverage.info --ignore-errors mismatch,unused
+          echo "=== Files in coverage report ==="
           lcov --list coverage.info
 
       - name: Upload to Codecov
