@@ -79,7 +79,7 @@ jobs:
         run: |
           cd Projects/AES-GCM
           lcov --capture --directory build --output-file coverage.info --ignore-errors mismatch
-          lcov --remove coverage.info '/usr/*' '*/Tests/*' '*/Qt/*' --output-file coverage.info --ignore-errors mismatch
+          lcov --remove coverage.info '/usr/*' '*/Tests/*' --output-file coverage.info --ignore-errors mismatch,unused
           lcov --list coverage.info
 
       - name: Upload to Codecov
