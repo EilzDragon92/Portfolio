@@ -78,8 +78,8 @@ jobs:
       - name: Generate Coverage Report
         run: |
           cd Projects/AES-GCM
-          lcov --capture --directory build --output-file coverage.info
-          lcov --remove coverage.info '/usr/*' '*/Tests/*' '*/Qt/*' --output-file coverage.info
+          lcov --capture --directory build --output-file coverage.info --ignore-errors mismatch
+          lcov --remove coverage.info '/usr/*' '*/Tests/*' '*/Qt/*' --output-file coverage.info --ignore-errors mismatch
           lcov --list coverage.info
 
       - name: Upload to Codecov
