@@ -2,11 +2,9 @@
 
 This is the GUI, password-based file encryption/decryption program.
 
-* **Language:** C++ 20
-* **License:** MIT
-* **Platform:** Windows, Linux
-
 ![Build](https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml/badge.svg)
+![License](https://img.shields.io/badge/License-MIT-blue.svg) ![C++](https://img.shields.io/badge/C++-20-00599C?logo=cplusplus) ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey)
+![CMake](https://img.shields.io/badge/CMake-3.16+-064F8C?logo=cmake&logoColor=white) ![OpenSSL](https://img.shields.io/badge/OpenSSL-3.0-721412?logo=openssl&logoColor=white) ![Qt](https://img.shields.io/badge/Qt-6-41CD52?logo=qt&logoColor=white)
 
 ## 2. Features
 
@@ -136,12 +134,12 @@ cmake --build build
 
 ![Screenshot](Screenshot.png)
 
-1\. Run the executable `AES-GCM.exe` or `AES-GCM`
-2\. Select mode
-3\. Enter source file path
-4\. Enter destination file path
-5\. Enter password
-6\. Click Start
+1. Run the executable `AES-GCM.exe` or `AES-GCM`
+2. Select mode
+3. Enter source file path
+4. Enter destination file path
+5. Enter password
+6. Click Start
 
 ## 5. Testing and Code Quality
 ### 5-1. Running Tests
@@ -165,6 +163,8 @@ ctest --test-dir build --output-on-failure
 | AES_GCM  | `AES_GCM_Test.cpp` | Basic encryption/decryption, wrong password rejection, tampered or corrupted ciphertext detection, empty file handling, exact buffer size file handling, progress callback invocation, error callback invocation, cancellation                                   |
 | Password | `PasswordTest.cpp` | Default constructor, `setData` with C-string and another `Password` class, data replacement, deep copy for copy constructor/assignment, ownership transfer for move constructor/assignment, self-assignment safety, null pointer handling, destructor after move |
 | Utils    | `UtilsTest.cpp`    | `GetFileSize`, `FileExists`, `Argon2id` determinism and uniqueness, `GetProcNum`, `OpenFile`, `Random` non-zero and uniqueness, `RemoveFile`, `Seek`, `Wipe`                                                                                                     |
+
+![Coverage](https://codecov.io/gh/EilzDragon92/Portfolio/branch/main/graph/badge.svg)
 
 ### 5-3. Static Analysis
 

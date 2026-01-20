@@ -74,3 +74,19 @@ jobs:
         run: |
           cd Projects/AES-GCM
           ctest --test-dir build --output-on-failure
+
+      - name: Generate Coverage Report
+        run: |
+          cd Projects/AES-GCM
+          lcov --capture --directory build --output-file coverage.info
+          lcov --remove coverage.info '/usr/*' '*/Tests/*' '*/Qt/*' --output-file coverage.info
+          lcov --list coverage.info
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: Projects/AES-GCM/coverage.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
