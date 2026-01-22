@@ -118,17 +118,17 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 	return 0;
 }
 
-int AES_GCM::encryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
+int AES_GCM::encryptBuff(void *src, void *dst, int srcLen) {
 	int dstLen;
 
 	// LCOV_EXCL_START
-	if (EVP_EncryptUpdate(ctx, dst, &dstLen, src, srcLen) != 1) {
-		reportError("[Crypto] Encryption failed - Cannot encrypt block\n");
+	if (EVP_EncryptUpdate(ctx, static_cast<unsigned char *>(dst), &dstLen, static_cast<unsigned char *>(src), srcLen) != 1) {
+		reportError("[Crypto] Encryption failed - Cannot encrypt buffer\n");
 		return 1;
 	}
 
 	if (dstLen != srcLen) {
-		reportError("[Crypto] Encryption failed - Cannot encrypt block\n");
+		reportError("[Crypto] Encryption failed - Cannot encrypt buffer\n");
 		return 1;
 	}
 	// LCOV_EXCL_STOP
@@ -140,9 +140,7 @@ int AES_GCM::encryptBatch() {
 	while (cur + BUFF_SIZE * BLOCK_SIZE <= size) {
 		if (readTo(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
-		for (int i = 0; i < BUFF_SIZE; i++) {
-			if (encryptBlock(buff[i], buff[i], BLOCK_SIZE)) return 1;
-		}
+		if (encryptBuff(buff, buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 		if (writeFrom(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
@@ -163,7 +161,7 @@ int AES_GCM::encryptRemain() {
 	/* Encrypt remaining full blocks */
 
 	while (cur + BLOCK_SIZE <= size) {
-		if (encryptBlock(buff[crs], buff[crs], BLOCK_SIZE)) return 1;
+		if (encryptBuff(buff[crs], buff[crs], BLOCK_SIZE)) return 1;
 
 		crs++;
 
@@ -176,7 +174,7 @@ int AES_GCM::encryptRemain() {
 	rem = size % BLOCK_SIZE;
 
 	if (rem) {
-		if (encryptBlock(buff[crs], buff[crs], rem)) return 1;
+		if (encryptBuff(buff[crs], buff[crs], rem)) return 1;
 
 		cur += rem;
 	}

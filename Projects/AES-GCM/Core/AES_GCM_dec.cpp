@@ -133,11 +133,11 @@ int AES_GCM::decryptTag() {
 	return 0;
 }
 
-int AES_GCM::decryptBlock(uint8_t *src, uint8_t *dst, int srcLen) {
+int AES_GCM::decryptBuff(void *src, void *dst, int srcLen) {
 	int dstLen;
 
 	// LCOV_EXCL_START
-	if (EVP_DecryptUpdate(ctx, dst, &dstLen, src, srcLen) != 1) {
+	if (EVP_DecryptUpdate(ctx, static_cast<unsigned char *>(dst), &dstLen, static_cast<unsigned char *>(src), srcLen) != 1) {
 		reportError("[Crypto] Decryption failed - Cannot decrypt block\n");
 		return 1;
 	}
@@ -155,9 +155,7 @@ int AES_GCM::decryptBatch() {
 	while (cur + BUFF_SIZE * BLOCK_SIZE <= size) {
 		if (readTo(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
-		for (int i = 0; i < BUFF_SIZE; i++) {
-			if (decryptBlock(buff[i], buff[i], BLOCK_SIZE)) return 1;
-		}
+		if (decryptBuff(buff, buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 		if (writeFrom(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
@@ -178,7 +176,7 @@ int AES_GCM::decryptRemain() {
 	/* Decrypt remaining full blocks */
 
 	while (cur + BLOCK_SIZE <= size) {
-		if (decryptBlock(buff[crs], buff[crs], BLOCK_SIZE)) return 1;
+		if (decryptBuff(buff[crs], buff[crs], BLOCK_SIZE)) return 1;
 
 		crs++;
 
@@ -191,7 +189,7 @@ int AES_GCM::decryptRemain() {
 	rem = size % BLOCK_SIZE;
 
 	if (rem) {
-		if (decryptBlock(buff[crs], buff[crs], rem)) return 1;
+		if (decryptBuff(buff[crs], buff[crs], rem)) return 1;
 
 		cur += rem;
 	}

@@ -148,7 +148,7 @@ private:
 	 * @param	srcLen	Source buffer length
 	 * @return	0 on success, 1 on failure
 	 */
-	int decryptBlock(uint8_t *src, uint8_t *dst, int srcLen);
+	int decryptBuff(void *src, void *dst, int srcLen);
 
 	/**
 	 * @brief	Decrypt multiple blocks in a batch
@@ -188,7 +188,7 @@ private:
 	 * @param	srcLen	Source buffer length
 	 * @return	0 on success, 1 on failure
 	 */
-	int encryptBlock(uint8_t *src, uint8_t *dst, int srcLen);
+	int encryptBuff(void *src, void *dst, int srcLen);
 
 	/**
 	 * @brief	Encrypt multiple blocks in a batch
