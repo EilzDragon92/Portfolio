@@ -90,7 +90,7 @@ jobs:
             Projects/AES-GCM/Utils \
             Projects/AES-GCM/Common
 
-      - name: Build with Coverage
+      - name: Build with Coverage (Debug)
         run: |
           cd Projects/AES-GCM
           cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCOVERAGE=ON
@@ -126,10 +126,16 @@ jobs:
           name: codecov-umbrella
           fail_ci_if_error: false
 
+      - name: Build for Benchmark (Release)
+        run: |
+          cd Projects/AES-GCM
+          cmake -B build-release -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-release --target AES-GCM-bench
+
       - name: Run Benchmarks
         run: |
           cd Projects/AES-GCM
-          ./build/AES-GCM-bench --benchmark_format=json > benchmark_results.json
+          ./build-release/AES-GCM-bench --benchmark_format=json > benchmark_results.json
 
       - name: Upload Benchmark Results
         uses: actions/upload-artifact@v4
