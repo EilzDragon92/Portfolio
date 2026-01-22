@@ -5,6 +5,7 @@
   "dependencies": [
     "openssl",
     "argon2",
-    "gtest"
+    "gtest",
+    "benchmark"
   ]
 }

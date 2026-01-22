@@ -97,3 +97,16 @@ target_link_libraries(AES-GCM-tests PRIVATE
 
 include(GoogleTest)
 gtest_discover_tests(AES-GCM-tests)
+
+find_package(benchmark CONFIG REQUIRED)
+
+set(BENCH_SOURCES
+    Benchmark/Benchmark.cpp
+)
+
+add_executable(AES-GCM-bench ${BENCH_SOURCES})
+target_link_libraries(AES-GCM-bench PRIVATE
+    AES-GCM-lib
+    benchmark::benchmark
+    benchmark::benchmark_main
+)
