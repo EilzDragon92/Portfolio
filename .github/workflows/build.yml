@@ -129,7 +129,7 @@ jobs:
       - name: Run Benchmarks
         run: |
           cd Projects/AES-GCM
-          ./build/Release/AES-GCM-bench --benchmark_format=json > benchmark_results.json
+          ./build/AES-GCM-bench --benchmark_format=json > benchmark_results.json
 
       - name: Upload Benchmark Results
         uses: actions/upload-artifact@v4
