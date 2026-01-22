@@ -60,8 +60,8 @@ BENCHMARK_DEFINE_F(Benchmark, Encrypt)(benchmark::State &state) {
         if (dst) fclose(dst);
     }
 
-    state.SetBytesProcessed(int64_t(state.iterations()) * fsize);
-    state.SetLabel(std::to_string(fsize / (1024 * 1024)) + " MB");
+    state.SetBytesProcessed(int64_t(state.iterations()) * size);
+    state.SetLabel(std::to_string(size / (1024 * 1024)) + " MB");
 
     clean();
 }
