@@ -122,11 +122,11 @@ static void BM_Argon2id(benchmark::State &state) {
 }
 
 BENCHMARK_REGISTER_F(Benchmark, Encrypt)
-->Arg(1024 * 1024 * 1024) 
+->Arg(4 * 1024 * 1024 * 1024) // 4 GiB
 ->Unit(benchmark::kMillisecond);
 
 BENCHMARK_REGISTER_F(Benchmark, Decrypt)
-->Arg(1024 * 1024 * 1024)
+->Arg(4 * 1024 * 1024 * 1024) // 4 GiB
 ->Unit(benchmark::kMillisecond);
 
 BENCHMARK(BM_Argon2id)
