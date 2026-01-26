@@ -8,10 +8,12 @@
 #include "Core/AES_GCM.h"
 #include "Common/header.h"
 
- /**
-  * @class   Benchmark
-  * @brief   Fixture for AES-GCM and Argon2id performance test
-  */
+#define FILE_SIZE 4LL * 1024 * 1024 * 1024
+
+/**
+ * @class   Benchmark
+ * @brief   Fixture for AES-GCM and Argon2id performance test
+ */
 class Benchmark : public benchmark::Fixture {
 protected:
     QString srcPath = "bench_src.tmp";
@@ -122,11 +124,11 @@ static void BM_Argon2id(benchmark::State &state) {
 }
 
 BENCHMARK_REGISTER_F(Benchmark, Encrypt)
-->Arg(4 * 1024 * 1024 * 1024) // 4 GiB
+->Arg(FILE_SIZE) // 4 GiB
 ->Unit(benchmark::kMillisecond);
 
 BENCHMARK_REGISTER_F(Benchmark, Decrypt)
-->Arg(4 * 1024 * 1024 * 1024) // 4 GiB
+->Arg(FILE_SIZE) // 4 GiB
 ->Unit(benchmark::kMillisecond);
 
 BENCHMARK(BM_Argon2id)

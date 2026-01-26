@@ -57,7 +57,7 @@ int AES_GCM::writeFrom(const void *buff, int size) {
 
 int AES_GCM::reportProgress() {
 	if (pcb) {
-		uint64_t perc = cur / (size / 100 + 1);
+		uint64_t perc = size > 0 ? cur * 100 / size : 100;
 
 		bool shouldCancel = false;
 
