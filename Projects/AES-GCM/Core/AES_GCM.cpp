@@ -10,7 +10,11 @@
 #include "Core/AES_GCM.h"
 
 AES_GCM::AES_GCM() {
-	memset(buff, 0, sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
+	for (int i = 0; i < BUFF_NUM; i++) {
+		memset(buff[i].data, 0, sizeof(buff[i].data));
+		buff[i].size = 0;
+	}
+
 	memset(iv, 0, sizeof(uint8_t) * IV_SIZE);
 	memset(salt, 0, sizeof(uint8_t) * SALT_SIZE);
 
@@ -18,7 +22,8 @@ AES_GCM::AES_GCM() {
 }
 
 AES_GCM::~AES_GCM() {
-	Wipe(buff, sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
+	for (int i = 0; i < BUFF_NUM; i++) Wipe(buff[i].data, sizeof(buff[i].data));
+
 	Wipe(iv, sizeof(uint8_t) * IV_SIZE);
 	Wipe(key, sizeof(uint8_t) * KEY_SIZE);
 	Wipe(salt, sizeof(uint8_t) * SALT_SIZE);
@@ -57,7 +62,7 @@ int AES_GCM::writeFrom(const void *buff, int size) {
 
 int AES_GCM::reportProgress() {
 	if (pcb) {
-		uint64_t perc = size > 0 ? cur * 100 / size : 100;
+		uint64_t perc = size > 0 ? prog * 100 / size : 100;
 
 		bool shouldCancel = false;
 

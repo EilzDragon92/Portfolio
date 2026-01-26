@@ -10,7 +10,9 @@ int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw, size_t plen) {
 	this->src = src;
 	this->dst = dst;
 	cancelled = false;
-	cur = 0;
+	prog = 0;
+
+	hasAsyncWrite = false;
 
 	if (encryptInit(pw, plen)) return 1;
 
@@ -137,16 +139,54 @@ int AES_GCM::encryptBuff(void *src, void *dst, int srcLen) {
 }
 
 int AES_GCM::encryptBatch() {
-	while (cur + BUFF_SIZE * BLOCK_SIZE <= size) {
-		if (readTo(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
+	int cur = 0;
 
-		if (encryptBuff(buff, buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
+	while (prog + BUFF_SIZE * BLOCK_SIZE <= size) {
+		/* Read in main thread */
 
-		if (writeFrom(buff, BUFF_SIZE * BLOCK_SIZE)) return 1;
+		if (readTo(buff[cur].data, BUFF_SIZE * BLOCK_SIZE)) return 1;
 
-		cur += BUFF_SIZE * BLOCK_SIZE;
+
+		/* Encrypt in main thread */
+
+		if (encryptBuff(buff[cur].data, buff[cur].data, BUFF_SIZE * BLOCK_SIZE)) return 1;
+
+
+		/* Wait for the previous write to finish */
+
+		if (hasAsyncWrite && asyncWriteResult.get() != 0) return 1;
+
+
+		/* Asynchronous write in another thread */
+
+		buff[cur].size = BUFF_SIZE * BLOCK_SIZE;
+
+		asyncWriteResult = std::async(std::launch::async, [this, cur]() {
+			return writeFrom(buff[cur].data, buff[cur].size);
+		});
+
+		hasAsyncWrite = true;
+
+
+		/* Swap buffer */
+
+		cur = 1 - cur;
+
+
+		/* Update progress */
+
+		prog += BUFF_SIZE * BLOCK_SIZE;
 
 		if (reportProgress()) return 1;
+	}
+
+
+	/* Wait for the last write to finish */
+
+	if (hasAsyncWrite) {
+		if (asyncWriteResult.get() != 0) return 1;
+
+		hasAsyncWrite = false;
 	}
 
 	return 0;
@@ -155,17 +195,17 @@ int AES_GCM::encryptBatch() {
 int AES_GCM::encryptRemain() {
 	int crs = 0, rem = size % (BUFF_SIZE * BLOCK_SIZE);
 
-	if (readTo(buff, rem)) return 1;
+	if (readTo(buff[0].data, rem)) return 1;
 
 
 	/* Encrypt remaining full blocks */
 
-	while (cur + BLOCK_SIZE <= size) {
-		if (encryptBuff(buff[crs], buff[crs], BLOCK_SIZE)) return 1;
+	while (prog + BLOCK_SIZE <= size) {
+		if (encryptBuff(buff[0].data[crs], buff[0].data[crs], BLOCK_SIZE)) return 1;
 
 		crs++;
 
-		cur += BLOCK_SIZE;
+		prog += BLOCK_SIZE;
 	}
 
 
@@ -174,13 +214,13 @@ int AES_GCM::encryptRemain() {
 	rem = size % BLOCK_SIZE;
 
 	if (rem) {
-		if (encryptBuff(buff[crs], buff[crs], rem)) return 1;
+		if (encryptBuff(buff[0].data[crs], buff[0].data[crs], rem)) return 1;
 
-		cur += rem;
+		prog += rem;
 	}
 
+	if (writeFrom(buff[0].data, BLOCK_SIZE * crs + rem)) return 1;
 
-	if (writeFrom(buff, BLOCK_SIZE * crs + rem)) return 1;
 
 	if (reportProgress()) return 1;
 

@@ -12,6 +12,15 @@
 
 #include "Common/header.h"
 
+
+#define BUFF_NUM 2
+
+struct Buffer {
+	uint8_t data[BUFF_SIZE][BLOCK_SIZE];
+	int size = 0;
+};
+
+
 /**
  * @class	AES_GCM
  * @brief	AES-256-GCM file encryption/decryption engine
@@ -92,14 +101,16 @@ private:
 	ProgressCallback pcb = nullptr;		// Progress reporting callback function
 
 	int64_t size = 0;	// Source file size
-	uint64_t cur = 0;	// Current bytes processed
+	uint64_t prog = 0;	// Current progress
 
-	uint8_t buff[BUFF_SIZE][BLOCK_SIZE];	// Buffer
-	uint8_t iv[IV_SIZE];					// Initial vector
-	uint8_t key[KEY_SIZE];					// Key derived from password
-	uint8_t salt[SALT_SIZE];				// Key derivation salt
+	Buffer buff[BUFF_NUM];		// Buffer
+	uint8_t iv[IV_SIZE];		// Initial vector
+	uint8_t key[KEY_SIZE];		// Key derived from password
+	uint8_t salt[SALT_SIZE];	// Key derivation salt
 
 	std::atomic<bool> cancelled{ false };	// Cancellation flag
+	std::future<int> asyncWriteResult;
+	bool hasAsyncWrite = false;
 
 
 	/* ==================================================

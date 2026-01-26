@@ -30,6 +30,7 @@
 #include <argon2.h>
 #include <cstdio>
 #include <filesystem>
+#include <future>
 #include <openssl/err.h>
 #include <openssl/evp.h>
 
