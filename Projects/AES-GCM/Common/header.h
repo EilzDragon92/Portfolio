@@ -60,7 +60,7 @@
 #define TIME_COST 4				/// Argon2id time cost 
 
 #define BLOCK_SIZE 16		/// AES-GCM block size in bytes
-#define BUFF_SIZE 65536		/// Buffer size in blocks (256 KiB)
+#define BUFF_SIZE 4096		/// Buffer size in blocks (64 KiB)
 #define IV_SIZE 12			/// Initial vector size in bytes
 #define TAG_SIZE 16			/// Authentication tag size in bytes
 
