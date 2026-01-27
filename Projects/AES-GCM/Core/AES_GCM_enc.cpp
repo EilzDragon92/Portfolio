@@ -190,7 +190,7 @@ int AES_GCM::encryptBatch() {
 		prog += BUFF_SIZE * BLOCK_SIZE;
 
 		if (reportProgress()) {
-			writeRes.wait();
+			//writeRes.wait();
 			return 1;
 		}
 	}
