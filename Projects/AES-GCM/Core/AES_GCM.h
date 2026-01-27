@@ -12,14 +12,6 @@
 
 #include "Common/header.h"
 
-
-#define BUFF_NUM 2
-
-struct Buffer {
-	uint8_t data[BUFF_SIZE][BLOCK_SIZE];
-};
-
-
 /**
  * @class	AES_GCM
  * @brief	AES-256-GCM file encryption/decryption engine

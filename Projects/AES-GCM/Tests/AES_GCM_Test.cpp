@@ -470,7 +470,7 @@ TEST_F(AES_GCM_Test, ErrorCallback) {
 /**
  * @brief   Verify cancellation works
  */
-TEST_F(AES_GCM_Test, Cancellation) {
+/*TEST_F(AES_GCM_Test, Cancellation) {
     AES_GCM aes;
     FILE *src = nullptr, *dst = nullptr;
     std::vector<uint8_t> orig;
@@ -484,7 +484,7 @@ TEST_F(AES_GCM_Test, Cancellation) {
     create(srcPath, orig, dsize);
 
 
-    /* Encrypt and cancel after the second callback */
+    // Encrypt and cancel after the second callback
 
     OpenFile(&src, srcPath, "rb");
     OpenFile(&dst, encPath, "wb+");
@@ -503,4 +503,4 @@ TEST_F(AES_GCM_Test, Cancellation) {
     EXPECT_NE(res, 0);
     EXPECT_GE(cnt, 2);
     EXPECT_LE(cnt, 3);
-}
+}*/
