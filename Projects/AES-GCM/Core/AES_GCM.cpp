@@ -10,10 +10,7 @@
 #include "Core/AES_GCM.h"
 
 AES_GCM::AES_GCM() {
-	for (int i = 0; i < BUFF_NUM; i++) {
-		memset(buff[i].data, 0, sizeof(buff[i].data));
-		buff[i].size = 0;
-	}
+	for (int i = 0; i < BUFF_NUM; i++) memset(buff[i], 0, sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
 
 	memset(iv, 0, sizeof(uint8_t) * IV_SIZE);
 	memset(salt, 0, sizeof(uint8_t) * SALT_SIZE);
@@ -22,7 +19,7 @@ AES_GCM::AES_GCM() {
 }
 
 AES_GCM::~AES_GCM() {
-	for (int i = 0; i < BUFF_NUM; i++) Wipe(buff[i].data, sizeof(buff[i].data));
+	for (int i = 0; i < BUFF_NUM; i++) Wipe(buff[i], sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
 
 	Wipe(iv, sizeof(uint8_t) * IV_SIZE);
 	Wipe(key, sizeof(uint8_t) * KEY_SIZE);

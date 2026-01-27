@@ -12,7 +12,7 @@ int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw, size_t plen) {
 	cancelled = false;
 	prog = 0;
 
-	hasAsyncWrite = false;
+	writing = false;
 
 	if (encryptInit(pw, plen)) return 1;
 
@@ -144,28 +144,26 @@ int AES_GCM::encryptBatch() {
 	while (prog + BUFF_SIZE * BLOCK_SIZE <= size) {
 		/* Read in main thread */
 
-		if (readTo(buff[cur].data, BUFF_SIZE * BLOCK_SIZE)) return 1;
+		if (readTo(buff[cur], BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 
 		/* Encrypt in main thread */
 
-		if (encryptBuff(buff[cur].data, buff[cur].data, BUFF_SIZE * BLOCK_SIZE)) return 1;
+		if (encryptBuff(buff[cur], buff[cur], BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 
 		/* Wait for the previous write to finish */
 
-		if (hasAsyncWrite && asyncWriteResult.get() != 0) return 1;
+		if (writing && writeRes.get() != 0) return 1;
 
 
 		/* Asynchronous write in another thread */
 
-		buff[cur].size = BUFF_SIZE * BLOCK_SIZE;
-
-		asyncWriteResult = std::async(std::launch::async, [this, cur]() {
-			return writeFrom(buff[cur].data, buff[cur].size);
+		writeRes = std::async(std::launch::async, [this, cur]() {
+			return writeFrom(buff[cur], BUFF_SIZE * BLOCK_SIZE);
 		});
 
-		hasAsyncWrite = true;
+		writing = true;
 
 
 		/* Swap buffer */
@@ -183,10 +181,10 @@ int AES_GCM::encryptBatch() {
 
 	/* Wait for the last write to finish */
 
-	if (hasAsyncWrite) {
-		if (asyncWriteResult.get() != 0) return 1;
+	if (writing) {
+		if (writeRes.get() != 0) return 1;
 
-		hasAsyncWrite = false;
+		writing = false;
 	}
 
 	return 0;
@@ -195,13 +193,13 @@ int AES_GCM::encryptBatch() {
 int AES_GCM::encryptRemain() {
 	int crs = 0, rem = size % (BUFF_SIZE * BLOCK_SIZE);
 
-	if (readTo(buff[0].data, rem)) return 1;
+	if (readTo(buff[0], rem)) return 1;
 
 
 	/* Encrypt remaining full blocks */
 
 	while (prog + BLOCK_SIZE <= size) {
-		if (encryptBuff(buff[0].data[crs], buff[0].data[crs], BLOCK_SIZE)) return 1;
+		if (encryptBuff(buff[0][crs], buff[0][crs], BLOCK_SIZE)) return 1;
 
 		crs++;
 
@@ -214,12 +212,12 @@ int AES_GCM::encryptRemain() {
 	rem = size % BLOCK_SIZE;
 
 	if (rem) {
-		if (encryptBuff(buff[0].data[crs], buff[0].data[crs], rem)) return 1;
+		if (encryptBuff(buff[0][crs], buff[0][crs], rem)) return 1;
 
 		prog += rem;
 	}
 
-	if (writeFrom(buff[0].data, BLOCK_SIZE * crs + rem)) return 1;
+	if (writeFrom(buff[0], BLOCK_SIZE * crs + rem)) return 1;
 
 
 	if (reportProgress()) return 1;

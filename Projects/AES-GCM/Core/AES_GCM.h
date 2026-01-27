@@ -17,7 +17,6 @@
 
 struct Buffer {
 	uint8_t data[BUFF_SIZE][BLOCK_SIZE];
-	int size = 0;
 };
 
 
@@ -103,14 +102,14 @@ private:
 	int64_t size = 0;	// Source file size
 	uint64_t prog = 0;	// Current progress
 
-	Buffer buff[BUFF_NUM];		// Buffer
-	uint8_t iv[IV_SIZE];		// Initial vector
-	uint8_t key[KEY_SIZE];		// Key derived from password
-	uint8_t salt[SALT_SIZE];	// Key derivation salt
+	uint8_t buff[BUFF_NUM][BUFF_SIZE][BLOCK_SIZE];	// Buffer
+	uint8_t iv[IV_SIZE];							// Initial vector
+	uint8_t key[KEY_SIZE];							// Key derived from password
+	uint8_t salt[SALT_SIZE];						// Key derivation salt
 
-	std::atomic<bool> cancelled{ false };	// Cancellation flag
-	std::future<int> asyncWriteResult;
-	bool hasAsyncWrite = false;
+	std::atomic<bool> cancelled{ false };	// Is the program cancelled?
+	std::future<int> writeRes;				// Asynchronous write result
+	bool writing = false;					// Is there currently ongoing asynchronous write?
 
 
 	/* ==================================================

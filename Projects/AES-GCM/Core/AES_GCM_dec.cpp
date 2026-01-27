@@ -12,7 +12,7 @@ int AES_GCM::decrypt(FILE *src, FILE *dst, const char *pw, size_t plen) {
 	cancelled = false;
 	prog = 0;
 
-	hasAsyncWrite = false;
+	writing = false;
 
 	if (decryptInit(pw, plen)) return 1;
 
@@ -159,28 +159,26 @@ int AES_GCM::decryptBatch() {
 	while (prog + BUFF_SIZE * BLOCK_SIZE <= size) {
 		/* Read in main thread */
 
-		if (readTo(buff[cur].data, BUFF_SIZE * BLOCK_SIZE)) return 1;
+		if (readTo(buff[cur], BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 
 		/* Decrypt in main thread */
 
-		if (decryptBuff(buff[cur].data, buff[cur].data, BUFF_SIZE * BLOCK_SIZE)) return 1;
+		if (decryptBuff(buff[cur], buff[cur], BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 
 		/* Wait for the previous write to finish */
 
-		if (hasAsyncWrite && asyncWriteResult.get() != 0) return 1;
+		if (writing && writeRes.get() != 0) return 1;
 
 
 		/* Asynchronous write in another thread */
 
-		buff[cur].size = BUFF_SIZE * BLOCK_SIZE;
-
-		asyncWriteResult = std::async(std::launch::async, [this, cur]() {
-			return writeFrom(buff[cur].data, buff[cur].size);
+		writeRes = std::async(std::launch::async, [this, cur]() {
+			return writeFrom(buff[cur], BUFF_SIZE * BLOCK_SIZE);
 		});
 
-		hasAsyncWrite = true;
+		writing = true;
 
 
 		/* Swap buffer */
@@ -198,9 +196,9 @@ int AES_GCM::decryptBatch() {
 
 	/* Wait for the last write to finish */
 
-	if (hasAsyncWrite) {
-		if (asyncWriteResult.get() != 0) return 1;
-		hasAsyncWrite = false;
+	if (writing) {
+		if (writeRes.get() != 0) return 1;
+		writing = false;
 	}
 
 	return 0;
@@ -209,13 +207,13 @@ int AES_GCM::decryptBatch() {
 int AES_GCM::decryptRemain() {
 	int crs = 0, rem = size % (BUFF_SIZE * BLOCK_SIZE);
 
-	if (readTo(buff[0].data, rem)) return 1;
+	if (readTo(buff[0], rem)) return 1;
 
 
 	/* Decrypt remaining full blocks */
 
 	while (prog + BLOCK_SIZE <= size) {
-		if (decryptBuff(buff[0].data[crs], buff[0].data[crs], BLOCK_SIZE)) return 1;
+		if (decryptBuff(buff[0][crs], buff[0][crs], BLOCK_SIZE)) return 1;
 
 		crs++;
 
@@ -228,12 +226,12 @@ int AES_GCM::decryptRemain() {
 	rem = size % BLOCK_SIZE;
 
 	if (rem) {
-		if (decryptBuff(buff[0].data[crs], buff[0].data[crs], rem)) return 1;
+		if (decryptBuff(buff[0][crs], buff[0][crs], rem)) return 1;
 
 		prog += rem;
 	}
 
-	if (writeFrom(buff[0].data, BLOCK_SIZE * crs + rem)) return 1;
+	if (writeFrom(buff[0], BLOCK_SIZE * crs + rem)) return 1;
 
 
 	if (reportProgress()) return 1;
