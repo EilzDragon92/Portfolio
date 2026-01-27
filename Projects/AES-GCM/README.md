@@ -189,3 +189,35 @@ All commits are automatically validated via GitHub Actions:
 | -------- | --------- | ------------- | --------------------------- |
 | Windows  | MSVC 2022 | CMake + vcpkg | Build, Unit Tests           |
 | Linux    | GCC       | CMake + apt   | Build, Unit Tests, cppcheck |
+
+### 5-5. Performance Benchmark
+
+Benchmarks are run automatically via GitHub Actions on every push. 
+
+* **Test Environment**
+	* **CPU:** 4 Cores, 3.5 GHz
+	* **L3 Cache:** 48 MiB
+	* **File Size:** 4 GiB
+
+* **Results**
+	* **Encryption:** 1.96 GB/s
+	* **Decryption:** 1.87 GB/s
+	* **Argon2id Key Derivation:** 538ms
+
+Running Benchmarks Locally: 
+```bash
+cd Projects/AES-GCM
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --target AES-GCM-bench
+./build/AES-GCM-bench
+```
+
+## 6. License
+
+This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for more details.
+
+This project uses the following third-party libraries. See [LICENSES-THIRD-PARTY.md](LICENSES-THIRD-PARTY.md) for more details.
+- OpenSSL (Apache 2.0)
+- Argon2 (CC0/Apache 2.0)
+- Qt (LGPL v3)
+- Google Test (BSD 3-Clause)

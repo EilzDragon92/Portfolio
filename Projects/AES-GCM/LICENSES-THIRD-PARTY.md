@@ -21,3 +21,5 @@
 * Copyright (c) The Qt Company Ltd.
 * Licensed under LGPL v3
 * https://www.qt.io/licensing/
+
+This application uses Qt under LGPL v3. Users may obtain the Qt source code and replace the Qt libraries with modified versions. The Qt source code is available at https://www.qt.io/download-open-source
