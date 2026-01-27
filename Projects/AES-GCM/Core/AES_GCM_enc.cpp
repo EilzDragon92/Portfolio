@@ -156,6 +156,11 @@ int AES_GCM::encryptBatch() {
 	int cur = 0;
 
 	while (prog + BUFF_SIZE * BLOCK_SIZE <= size) {
+		/* Wait for the previous write to finish */
+
+		if (writing && writeRes.get() != 0) return 1;
+
+
 		/* Read in main thread */
 
 		if (readTo(buff[cur], BUFF_SIZE * BLOCK_SIZE)) return 1;
@@ -164,11 +169,6 @@ int AES_GCM::encryptBatch() {
 		/* Encrypt in main thread */
 
 		if (encryptBuff(buff[cur], buff[cur], BUFF_SIZE * BLOCK_SIZE)) return 1;
-
-
-		/* Wait for the previous write to finish */
-
-		if (writing && writeRes.get() != 0) return 1;
 
 
 		/* Asynchronous write in another thread */
