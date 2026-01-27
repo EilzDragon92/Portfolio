@@ -19,6 +19,8 @@ AES_GCM::AES_GCM() {
 }
 
 AES_GCM::~AES_GCM() {
+	if (writeRes.valid()) writeRes.wait();
+
 	for (int i = 0; i < BUFF_NUM; i++) Wipe(buff[i], sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
 
 	Wipe(iv, sizeof(uint8_t) * IV_SIZE);
