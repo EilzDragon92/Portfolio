@@ -242,15 +242,15 @@ int AES_GCM::encryptRemain() {
 int AES_GCM::encryptFinal() {
 	uint8_t final[BLOCK_SIZE];
 	int finalLen;
-
-	// LCOV_EXCL_START
+	
 	if (EVP_EncryptFinal_ex(ctx, final, &finalLen) != 1) {
+		// LCOV_EXCL_START
 		reportError("[Crypto] Finalization failed - Cannot finalize encryption\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	if (finalLen > 0 && writeFrom(final, finalLen)) return 1;
-	// LCOV_EXCL_STOP
 
 	return 0;
 }

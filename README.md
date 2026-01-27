@@ -13,7 +13,9 @@ GUI, password-based file encryption/decryption tool using AES-256-GCM.
 **Profile:** https://leetcode.com/u/EilzDragon92/
  
 **Statistics:** 
+
 [![LeetCode](https://leetcard.jacoblin.cool/EilzDragon92?theme=dark&font=Noto%20Sans)](https://leetcode.com/u/EilzDragon92/)
  
 **Badges:** 
+
 ![LeetCode Badges](https://leetcode-badge-showcase.vercel.app/api?username=EilzDragon92)

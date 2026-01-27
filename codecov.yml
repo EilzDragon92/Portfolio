@@ -6,8 +6,9 @@ coverage:
         threshold: 5%
 
 ignore:
-  - "Projects/AES-GCM/GUI/"
+  - "Projects/AES-GCM/Benchmark/Benchmark.cpp"
+  - "Projects/AES-GCM/Common/main.cpp"
   - "Projects/AES-GCM/Core/Worker.cpp"
   - "Projects/AES-GCM/Core/Worker.h"
-  - "Projects/AES-GCM/Common/main.cpp"
+  - "Projects/AES-GCM/GUI/"
   - "Projects/AES-GCM/Tests/"
