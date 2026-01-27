@@ -109,10 +109,11 @@ jobs:
             '/usr/*' \
             '*/gtest/*' \
             '*/Tests/*' \
-            '*/AES-GCM/GUI/*' \
+            '*/AES-GCM/Benchmark/Benchmark.cpp' \
+            '*/AES-GCM/Common/main.cpp' \
             '*/AES-GCM/Core/Worker.cpp' \
             '*/AES-GCM/Core/Worker.h' \
-            '*/AES-GCM/Common/main.cpp' \
+            '*/AES-GCM/GUI/*' \
             --output-file coverage.info --ignore-errors mismatch,unused
           echo "=== Files in coverage report ==="
           lcov --list coverage.info

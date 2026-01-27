@@ -39,17 +39,19 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 	/* Get source file size */
 
 	size = GetFileSize(src);
-
-	// LCOV_EXCL_START
+	
 	if (size == -1) {
+		// LCOV_EXCL_START
 		reportError("[File] Size check failed - Cannot read source file size\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
-	// LCOV_EXCL_STOP
 
 	if (size < SALT_SIZE + IV_SIZE + TAG_SIZE) {
+		// LCOV_EXCL_START
 		reportError("[File] Validation failed - File should be at least 44 bytes\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	size -= SALT_SIZE + IV_SIZE + TAG_SIZE;
@@ -57,52 +59,60 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 
 	/* Read salt and IV */
 
-	// LCOV_EXCL_START
 	if (fread(salt, sizeof(uint8_t), SALT_SIZE, src) != SALT_SIZE) {
+		// LCOV_EXCL_START
 		reportError("[File] Read failed - Cannot read salt from source file header\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	if (fread(iv, sizeof(uint8_t), IV_SIZE, src) != IV_SIZE) {
+		// LCOV_EXCL_START
 		reportError("[File] Read failed - Cannot read initial vector from source file header\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
-	// LCOV_EXCL_STOP
 
 
 	/* Derive key from password */
-
-	// LCOV_EXCL_START
+	
 	if (Argon2id(salt, pw, plen, key)) {
+		// LCOV_EXCL_START
 		reportError("[Crypto] Key derivation failed - Argon2id error\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
-	// LCOV_EXCL_STOP
 
 
 	/* Set decryption context */
-
-	// LCOV_EXCL_START
+	
 	if (!(ctx = EVP_CIPHER_CTX_new())) {
+		// LCOV_EXCL_START
 		reportError("[Crypto] Initialization failed - Cannot create context\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	if (EVP_DecryptInit_ex(ctx, EVP_aes_256_gcm(), NULL, NULL, NULL) != 1) {
+		// LCOV_EXCL_START
 		reportError("[Crypto] Initialization failed - Cannot set AES-256-GCM algorithm\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IV_SIZE, NULL) != 1) {
+		// LCOV_EXCL_START
 		reportError("[Crypto] Initialization failed - Cannot set initial vector size\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	if (EVP_DecryptInit_ex(ctx, NULL, NULL, key, iv) != 1) {
+		// LCOV_EXCL_START
 		reportError("[Crypto] Initialization failed - Cannot set key and initial vector\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
-	// LCOV_EXCL_STOP
 
 	return 0;
 }
@@ -110,45 +120,53 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 int AES_GCM::decryptTag() {
 	uint8_t tag[TAG_SIZE];
 
-	// LCOV_EXCL_START
 	if (Seek(src, -TAG_SIZE, SEEK_END)) {
+		// LCOV_EXCL_START
 		reportError("[File] Seek failed - Cannot move file pointer to authentication tag\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	if (fread(tag, sizeof(uint8_t), TAG_SIZE, src) != TAG_SIZE) {
+		// LCOV_EXCL_START
 		reportError("[File] Read failed - Cannot read authentication tag\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, TAG_SIZE, tag) != 1) {
+		// LCOV_EXCL_START
 		reportError("[Crypto] Tag failed - Cannot set authentication tag\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	if (Seek(src, SALT_SIZE + IV_SIZE, SEEK_SET)) {
+		// LCOV_EXCL_START
 		reportError("[File] Seek failed - Cannot move file pointer to data\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
-	// LCOV_EXCL_STOP
 
 	return 0;
 }
 
 int AES_GCM::decryptBuff(void *src, void *dst, int srcLen) {
 	int dstLen;
-
-	// LCOV_EXCL_START
+	
 	if (EVP_DecryptUpdate(ctx, static_cast<unsigned char *>(dst), &dstLen, static_cast<unsigned char *>(src), srcLen) != 1) {
+		// LCOV_EXCL_START
 		reportError("[Crypto] Decryption failed - Cannot decrypt block\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	if (dstLen != srcLen) {
+		// LCOV_EXCL_START
 		reportError("[Crypto] Decryption failed - Cannot decrypt block\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
-	// LCOV_EXCL_STOP
 
 	return 0;
 }

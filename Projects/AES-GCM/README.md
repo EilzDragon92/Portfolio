@@ -1,6 +1,6 @@
 ## 1. Introduction
 
-This is the GUI, password-based file encryption/decryption program.
+This is the GUI, password-based file encryption/decryption tool using AES-256-GCM.
 
 ![Build](https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg) ![C++](https://img.shields.io/badge/C++-20-00599C?logo=cplusplus) ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey)
@@ -8,26 +8,31 @@ This is the GUI, password-based file encryption/decryption program.
 
 ## 2. Features
 
-* AES-256-GCM algorithm for authenticated file encryption
+* AES-256-GCM algorithm for file encryption and integrity check
 * Argon2id for key derivation from password
 * Qt library for graphical user interface
 * Double buffering and asynchronous write for better performance 
 * Asynchronous, multithread processing for non-blocking UI
 * Real-time progress tracking and cancellation support
 * Error report and automatic stop when error occurs
+* Cross-platform support for Windows and Linux
 
 ### 2-1. Why use this?
 
 * **AES-GCM**
-	* Most used encryption algorithm, de facto industry standard
-	* Chosen by NIST, trusted by many governments and corporations
-	* Provides both confidentiality and integrity using AEAD
+	* **AES**
+		* Most used encryption algorithm, de facto industry standard
+		* Chosen by NIST, trusted by many governments and corporations
+	* **GCM
+		* Does not require padding, immune to padding oracle attack
+		* Can be parallelized in both encryption and decryption process 
+		* Provides both confidentiality and integrity using AEAD
 
 * **Argon2id**
 	* Winner of 2015 Password Hashing Competition
 	* Hybrid of Argon2i and Argon2d, balances strength of both algorithms
-		* Argon2i: Data independent memory access, resistant to side channel attacks
-		* Argon2d: Memory hard function, resistant to brute force attacks using GPU or ASIC
+		* Argon2i: Data independent memory access, resistant to side channel attack
+		* Argon2d: Memory hard function, resistant to brute force attack using GPU or ASIC
 
 ### 2-2. Security Considerations
 

@@ -324,6 +324,55 @@ TEST_F(AES_GCM_Test, ExactBuffSizeFile) {
     EXPECT_EQ(orig, copy);
 }
 
+/**
+ * @brief   Verify arbitrary sized file works correctly
+ */
+TEST_F(AES_GCM_Test, ArbitrarySizeFile) {
+    AES_GCM aes;
+    FILE *src = nullptr, *dst = nullptr;
+    std::vector<uint8_t> orig, copy;
+    const char *pw = "password";
+    int dsize = 50000;
+    int psize = strlen(pw);
+    int res;
+
+    orig.resize(dsize, 'a');
+
+    create(srcPath, orig, dsize);
+
+    /* Encrypt */
+
+    OpenFile(&src, srcPath, "rb");
+    OpenFile(&dst, encPath, "wb+");
+
+    res = aes.encrypt(src, dst, pw, psize);
+
+    if (src) fclose(src);
+    if (dst) fclose(dst);
+
+    EXPECT_EQ(res, 0);
+
+
+    /* Decrypt */
+
+    OpenFile(&src, encPath, "rb");
+    OpenFile(&dst, decPath, "wb+");
+
+    res = aes.decrypt(src, dst, pw, psize);
+
+    if (src) fclose(src);
+    if (dst) fclose(dst);
+
+    EXPECT_EQ(res, 0);
+
+
+    /* Compare with original */
+
+    read(decPath, copy);
+
+    EXPECT_EQ(orig, copy);
+}
+
 
 /* ==================================================
  * Callback Tests

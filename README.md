@@ -1,16 +1,19 @@
-# EilzDragon92 - Software Engineer
+## 1. Introduction
 
-**Language:** C/C++
+I'm EilzDragon92, C/C++ software engineer. Interested in security, practical tools, simple but efficient design.
 
-**OS:** Windows 11
+## 2. Projects
 
-**Email:** eilzdragon92@gmail.com
+### 2-1. [AES-GCM](./Projects/AES-GCM)
 
+GUI, password-based file encryption/decryption tool using AES-256-GCM.
 
-## LeetCode
+## 3. LeetCode
 
 **Profile:** https://leetcode.com/u/EilzDragon92/
-
-![Leetcode Stats](https://leetcard.jacoblin.cool/EilzDragon92)
-
+ 
+**Statistics:** 
+[![LeetCode](https://leetcard.jacoblin.cool/EilzDragon92?theme=dark&font=Noto%20Sans)](https://leetcode.com/u/EilzDragon92/)
+ 
+**Badges:** 
 ![LeetCode Badges](https://leetcode-badge-showcase.vercel.app/api?username=EilzDragon92)

@@ -36,25 +36,25 @@ AES_GCM::~AES_GCM() {
 }
 
 int AES_GCM::readTo(void *buff, int size) {
-	// LCOV_EXCL_START
 	if (fread(buff, sizeof(uint8_t), size, src) != size) {
+		// LCOV_EXCL_START
 		reportError("[File] Read failed - Cannot read source file data\n");
 		return 1;
+		// LCOV_EXCL_STOP 
 	}
-	// LCOV_EXCL_STOP 
 
 	return 0;
 }
 
 int AES_GCM::writeFrom(const void *buff, int size) {
-	// LCOV_EXCL_START
 	if (fwrite(buff, sizeof(uint8_t), size, dst) != size) {
+		// LCOV_EXCL_START
 		if (ferror(dst)) reportError("[File] Write failed - Disk may be full or I/O error\n");
 		else			 reportError("[File] Write failed - Cannot write destination file data\n");
 
 		return 1;
+		// LCOV_EXCL_STOP
 	}
-	// LCOV_EXCL_STOP 
 
 	return 0;
 }
