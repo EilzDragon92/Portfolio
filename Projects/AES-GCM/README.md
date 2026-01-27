@@ -206,8 +206,8 @@ Benchmarks are run automatically via GitHub Actions on every push.
 	* **File Size:** 4 GiB
 
 * **Results**
-	* **Encryption:** 1.96 GB/s
-	* **Decryption:** 1.87 GB/s
+	* **Encryption:** 1.29 GB/s
+	* **Decryption:** 1.27 GB/s
 	* **Argon2id Key Derivation:** 538ms
 
 Running Benchmarks Locally: 
