@@ -172,7 +172,7 @@ ctest --test-dir build --output-on-failure
 | Password | `PasswordTest.cpp` | Default constructor, `setData` with C-string and another `Password` class, data replacement, deep copy for copy constructor/assignment, ownership transfer for move constructor/assignment, self-assignment safety, null pointer handling, destructor after move |
 | Utils    | `UtilsTest.cpp`    | `GetFileSize`, `FileExists`, `Argon2id` determinism and uniqueness, `GetProcNum`, `OpenFile`, `Random` non-zero and uniqueness, `RemoveFile`, `Seek`, `Wipe`                                                                                                     |
 
-Note: GUI, external library errors, system call errors are excluded from tests.
+Note: GUI files, error reports for external libraries and system calls are excluded from tests.
 
 ### 5-3. Static Analysis
 
