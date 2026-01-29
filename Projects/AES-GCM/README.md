@@ -2,8 +2,8 @@
 
 This is the GUI, password-based file encryption/decryption tool using AES-256-GCM.
 
-![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white) ![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)
-![C++](https://img.shields.io/badge/C++-20-00599C?logo=cplusplus) ![OpenSSL](https://img.shields.io/badge/OpenSSL-3.0-721412?logo=openssl&logoColor=white) ![Qt](https://img.shields.io/badge/Qt-6-41CD52?logo=qt&logoColor=white)
+![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white) ![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)</br>
+![C++](https://img.shields.io/badge/C++-20-00599C?logo=cplusplus) ![OpenSSL](https://img.shields.io/badge/OpenSSL-3.0-721412?logo=openssl&logoColor=white) ![Qt](https://img.shields.io/badge/Qt-6-41CD52?logo=qt&logoColor=white)</br>
 ![Build](https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml/badge.svg) ![Coverage](https://codecov.io/gh/EilzDragon92/Portfolio/branch/main/graph/badge.svg)
 
 ## 2. Features
@@ -23,7 +23,7 @@ This is the GUI, password-based file encryption/decryption tool using AES-256-GC
 	* **AES**
 		* Most used encryption algorithm, de facto industry standard
 		* Chosen by NIST, trusted by many governments and corporations
-	* **GCM
+	* **GCM**
 		* Does not require padding, immune to padding oracle attack
 		* Can be parallelized in both encryption and decryption process 
 		* Provides both confidentiality and integrity using AEAD
