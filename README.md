@@ -20,7 +20,7 @@ GUI, password-based file encryption/decryption tool using AES-256-GCM.
 
 **Features**
 * Cross-platform support for Windows and Linux
-* Up to 2 GB/s throughput
+* About 2 GB/s throughput
 * Various security considerations: 
 	* Wide-used and wide-trusted encryption algorithm
 	* Key derivation resistant to brute force attack and side channel attack

@@ -2,6 +2,7 @@
 /.obsidian
 /Projects/AES-GCM/.vs
 /Projects/AES-GCM/AES-GCM
+/Projects/AES-GCM/build
 /Projects/AES-GCM/Debug
 /Projects/AES-GCM/out
 /Projects/AES-GCM/vcpkg_installed

@@ -196,24 +196,29 @@ All commits are automatically validated via GitHub Actions:
 
 ### 5-5. Performance Benchmark
 
-Benchmarks are run automatically via GitHub Actions on every push. 
-
-* **Test Environment**
-	* **CPU:** 4 Cores, 3.5 GHz
-	* **L3 Cache:** 48 MiB
+* **Test Environment** (Local)
+	* **OS:** Windows 11 Pro
+	* **CPU:** Intel Core i9-13980HX (24 Cores / 32 Threads)
+	* **RAM:** 16 GB DDR5-4800
+	* **Storage:** Micron 2400 NVMe SSD (1TB)
 	* **File Size:** 4 GiB
 
-* **Results**
-	* **Encryption:** 1.98 GB/s
-	* **Decryption:** 1.90 GB/s
-	* **Argon2id Key Derivation:** 538ms
+* **Results** (on cold start)
+	* **Encryption:** 1.1~1.3GB/s
+	* **Decryption:** 1.2~1.3GB/s
+	* **Argon2id Key Derivation:** 430ms
+
+* **Results** (after warm-up)
+	* **Encryption:** 1.9~2.1GB/s
+	* **Decryption:** 2.0~2.1GB/s
+	* **Argon2id Key Derivation:** 310ms
 
 Running Benchmarks Locally: 
-```bash
+```cmd
 cd Projects/AES-GCM
-cmake -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --target AES-GCM-bench
-./build/AES-GCM-bench
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake" -DCMAKE_PREFIX_PATH="C:/Qt/6.10.1/msvc2022_64" -DVCPKG_TARGET_TRIPLET=x64-windows
+cmake --build build --config Release --target AES-GCM-bench
+.\build\Release\AES-GCM-bench.exe
 ```
 
 ## 6. License
