@@ -18,14 +18,22 @@ I'm EilzDragon92, C/C++ software engineer. Interested in security, practical too
 
 GUI, password-based file encryption/decryption tool using AES-256-GCM.
 
+**Features**
+* Cross-platform support for Windows and Linux
+* Up to 2 GB/s throughput
+* Various security considerations: 
+	* Wide-used and wide-trusted encryption algorithm
+	* Key derivation resistant to brute force attack and side channel attack
+	* Integrity check for corrupted or tampered ciphertext
+	* Newly and randomly generated salt and IV for each time 
+	* Ensured memory wipe for sensitive data
+
 ## 4. LeetCode
 
 **Profile:** https://leetcode.com/u/EilzDragon92/
  
-**Statistics:** 
-
+**Statistics:** </br>
 [![LeetCode](https://leetcard.jacoblin.cool/EilzDragon92?theme=dark&font=Noto%20Sans)](https://leetcode.com/u/EilzDragon92/)
  
-**Badges:** 
-
+**Badges:** </br>
 ![LeetCode Badges](https://leetcode-badge-showcase.vercel.app/api?username=EilzDragon92)

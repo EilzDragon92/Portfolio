@@ -38,9 +38,9 @@ This is the GUI, password-based file encryption/decryption tool using AES-256-GC
 
 * Keys are locked in memory using `VirtualLock`/`mlock` to prevent swapping to disk
 * RAII class for secure password handling ensures data wipe on error or cancellation
-* Salt and IV are generated using OS-provided CSPRNG (`BCryptGenRandom`/`getrandom`)
-* Sensitive data (passwords, keys, buffers) are wiped using `SecureZeroMemory`/`explicit_bzero`
-* Tampered ciphertext files are rejected before any plaintext is output
+* Salt and IV are newly and randomly generated each time, using OS-provided CSPRNG (`BCryptGenRandom`/`getrandom`)
+* Sensitive data (passwords, keys, buffers) are ensured to be wiped using `SecureZeroMemory`/`explicit_bzero`
+* Tampered ciphertext files are rejected before any decrypted data output
 
 ## 3. Specifications
 
