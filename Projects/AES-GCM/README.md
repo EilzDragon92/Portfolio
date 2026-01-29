@@ -2,9 +2,9 @@
 
 This is the GUI, password-based file encryption/decryption tool using AES-256-GCM.
 
-![Build](https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml/badge.svg)
-![License](https://img.shields.io/badge/License-MIT-blue.svg) ![C++](https://img.shields.io/badge/C++-20-00599C?logo=cplusplus) ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey)
-![CMake](https://img.shields.io/badge/CMake-3.16+-064F8C?logo=cmake&logoColor=white) ![OpenSSL](https://img.shields.io/badge/OpenSSL-3.0-721412?logo=openssl&logoColor=white) ![Qt](https://img.shields.io/badge/Qt-6-41CD52?logo=qt&logoColor=white)
+![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white) ![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)
+![C++](https://img.shields.io/badge/C++-20-00599C?logo=cplusplus) ![OpenSSL](https://img.shields.io/badge/OpenSSL-3.0-721412?logo=openssl&logoColor=white) ![Qt](https://img.shields.io/badge/Qt-6-41CD52?logo=qt&logoColor=white)
+![Build](https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml/badge.svg) ![Coverage](https://codecov.io/gh/EilzDragon92/Portfolio/branch/main/graph/badge.svg)
 
 ## 2. Features
 
@@ -147,7 +147,7 @@ cmake --build build
 5. Enter password
 6. Click Start
 
-## 5. Testing and Code Quality
+## 5. Testing and Quality
 ### 5-1. Running Tests
 
 **Windows:**
@@ -163,8 +163,6 @@ ctest --test-dir build --output-on-failure
 ```
 
 ### 5-2. Test Coverage
-
-![Coverage](https://codecov.io/gh/EilzDragon92/Portfolio/branch/main/graph/badge.svg)
 
 | Module   | Test File          | Test Cases                                                                                                                                                                                                                                                       |
 | -------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -206,8 +204,8 @@ Benchmarks are run automatically via GitHub Actions on every push.
 	* **File Size:** 4 GiB
 
 * **Results**
-	* **Encryption:** 1.29 GB/s
-	* **Decryption:** 1.27 GB/s
+	* **Encryption:** 1.98 GB/s
+	* **Decryption:** 1.90 GB/s
 	* **Argon2id Key Derivation:** 538ms
 
 Running Benchmarks Locally: 
@@ -220,10 +218,9 @@ cmake --build build --target AES-GCM-bench
 
 ## 6. License
 
-This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for more details.
-
-This project uses the following third-party libraries. See [LICENSES-THIRD-PARTY.md](LICENSES-THIRD-PARTY.md) for more details.
-- OpenSSL (Apache 2.0)
-- Argon2 (CC0/Apache 2.0)
-- Qt (LGPL v3)
-- Google Test (BSD 3-Clause)
+* This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for more details.
+* This project uses the following third-party libraries. See [LICENSES-THIRD-PARTY.md](LICENSES-THIRD-PARTY.md) for more details.
+	- OpenSSL (Apache 2.0)
+	- Argon2 (CC0/Apache 2.0)
+	- Qt (LGPL v3)
+	- Google Test (BSD 3-Clause)
