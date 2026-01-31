@@ -147,8 +147,20 @@ cmake --build build
 5. Enter password
 6. Click Start
 
-## 5. Testing and Quality
-### 5-1. Running Tests
+## 5. Testing
+### 5-1. Coverage
+
+**Code Coverage:** 96%
+
+| Module   | Test File          | Test Cases                                                             |
+| -------- | ------------------ | ---------------------------------------------------------------------- |
+| AES_GCM  | `AES_GCM_Test.cpp` | Encrypt/Decrypt. Integrity Check, Edge Cases, Callbacks                |
+| Password | `PasswordTest.cpp` | RAII, Copy/Move Semantics, Memory Safety                               |
+| Utils    | `UtilsTest.cpp`    | File I/O, Delete, Existence Check, Key Derivation, CSPRNG, Memory Wipe |
+
+**Note:** GUI files, error reports for external libraries and system calls are excluded from tests.
+
+### 5-2. Running Tests
 
 **Windows:**
 ```bash
@@ -162,39 +174,16 @@ cd Projects/AES-GCM
 ctest --test-dir build --output-on-failure
 ```
 
-### 5-2. Test Coverage
+### 5-3. Continuous Integration
 
-| Module   | Test File          | Test Cases                                                                                                                                                                                                                                                       |
-| -------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AES_GCM  | `AES_GCM_Test.cpp` | Basic encryption/decryption, wrong password rejection, tampered or corrupted ciphertext detection, empty file handling, exact buffer size file handling, progress callback invocation, error callback invocation, cancellation                                   |
-| Password | `PasswordTest.cpp` | Default constructor, `setData` with C-string and another `Password` class, data replacement, deep copy for copy constructor/assignment, ownership transfer for move constructor/assignment, self-assignment safety, null pointer handling, destructor after move |
-| Utils    | `UtilsTest.cpp`    | `GetFileSize`, `FileExists`, `Argon2id` determinism and uniqueness, `GetProcNum`, `OpenFile`, `Random` non-zero and uniqueness, `RemoveFile`, `Seek`, `Wipe`                                                                                                     |
+| Check | Windows | Linux |
+|-------|---------|-------|
+| Build | ✅ MSVC 2022 | ✅ GCC 11+ |
+| Unit Tests | ✅ | ✅ |
+| Static Analysis (cppcheck) | - | ✅ |
+| Coverage Report | - | ✅ Codecov |
 
-Note: GUI files, error reports for external libraries and system calls are excluded from tests.
-
-### 5-3. Static Analysis
-
-The project uses cppcheck for static code analysis:
-```bash
-cppcheck --library=qt --enable=warning,style,performance,portability \
-    --error-exitcode=1 --suppress=missingIncludeSystem --inline-suppr \
-    -I Projects/AES-GCM \
-    Projects/AES-GCM/Core \
-    Projects/AES-GCM/GUI \
-    Projects/AES-GCM/Utils \
-    Projects/AES-GCM/Common
-```
-
-### 5-4. Continuous Integration
-
-All commits are automatically validated via GitHub Actions:
-
-| Platform | Compiler  | Build System  | Checks                      |
-| -------- | --------- | ------------- | --------------------------- |
-| Windows  | MSVC 2022 | CMake + vcpkg | Build, Unit Tests           |
-| Linux    | GCC       | CMake + apt   | Build, Unit Tests, cppcheck |
-
-### 5-5. Performance Benchmark
+## 6. Benchmark
 
 * **Test Environment** (Local)
 	* **OS:** Windows 11 Pro
@@ -213,7 +202,7 @@ All commits are automatically validated via GitHub Actions:
 	* **Decryption:** 2.0~2.1GB/s
 	* **Argon2id Key Derivation:** 310ms
 
-Running Benchmarks Locally: 
+**Running Benchmarks Locally:** 
 ```cmd
 cd Projects/AES-GCM
 cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake" -DCMAKE_PREFIX_PATH="C:/Qt/6.10.1/msvc2022_64" -DVCPKG_TARGET_TRIPLET=x64-windows
@@ -221,7 +210,7 @@ cmake --build build --config Release --target AES-GCM-bench
 .\build\Release\AES-GCM-bench.exe
 ```
 
-## 6. License
+## 7. License
 
 * This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for more details.
 * This project uses the following third-party libraries. See [LICENSES-THIRD-PARTY.md](LICENSES-THIRD-PARTY.md) for more details.

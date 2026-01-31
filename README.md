@@ -18,7 +18,7 @@ I'm EilzDragon92, C/C++ software engineer. Interested in security, practical too
 
 GUI, password-based file encryption/decryption tool using AES-256-GCM.
 
-**Features**
+**Features:**
 * Cross-platform support for Windows and Linux
 * About 2 GB/s throughput
 * Various security considerations: 
