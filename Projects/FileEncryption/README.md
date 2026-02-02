@@ -23,6 +23,7 @@ This is the GUI, password-based file encryption/decryption tool using AES-256-GC
 	* **AES**
 		* Most used encryption algorithm, de facto industry standard
 		* Chosen by NIST, trusted by many governments and corporations
+		* Modern processors support hardware acceleration for AES
 	* **GCM**
 		* Does not require padding, immune to padding oracle attack
 		* Can be parallelized in both encryption and decryption process 
@@ -38,7 +39,7 @@ This is the GUI, password-based file encryption/decryption tool using AES-256-GC
 
 * Keys are locked in memory using `VirtualLock`/`mlock` to prevent swapping to disk
 * RAII class for secure password handling ensures data wipe on error or cancellation
-* Salt and IV are newly and randomly generated each time, using OS-provided CSPRNG (`BCryptGenRandom`/`getrandom`)
+* Salt and IV are newly and randomly generated each time using OS-provided CSPRNG (`BCryptGenRandom`/`getrandom`)
 * Sensitive data (passwords, keys, buffers) are ensured to be wiped using `SecureZeroMemory`/`explicit_bzero`
 * Tampered ciphertext files are rejected before any decrypted data output
 
@@ -69,7 +70,7 @@ This is the GUI, password-based file encryption/decryption tool using AES-256-GC
 ### 3-2. Source Code Architecture
 
 ```
-AES-GCM
+FileEncryption
 ├── Common
 │   ├── header.h           # Common includes, macros, function definitions
 │   └── main.cpp           # Application entry point
@@ -120,7 +121,7 @@ AES-GCM
 vcpkg install openssl:x64-windows argon2:x64-windows gtest:x64-windows
 
 # Configure and build
-cd Projects/AES-GCM
+cd Projects/FileEncryption
 cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake
 cmake --build build --config Release
 ```
@@ -131,7 +132,7 @@ cmake --build build --config Release
 sudo apt-get install qt6-base-dev libssl-dev libargon2-dev libgtest-dev
 
 # Configure and build
-cd Projects/AES-GCM
+cd Projects/FileEncryption
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
@@ -164,13 +165,13 @@ cmake --build build
 
 **Windows:**
 ```bash
-cd Projects/AES-GCM
+cd Projects/FileEncryption
 ctest --test-dir build -C Release --output-on-failure
 ```
 
 **Linux:**
 ```bash
-cd Projects/AES-GCM
+cd Projects/FileEncryption
 ctest --test-dir build --output-on-failure
 ```
 
@@ -204,10 +205,10 @@ ctest --test-dir build --output-on-failure
 
 **Running Benchmarks Locally:** 
 ```cmd
-cd Projects/AES-GCM
+cd Projects/FileEncryption
 cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake" -DCMAKE_PREFIX_PATH="C:/Qt/6.10.1/msvc2022_64" -DVCPKG_TARGET_TRIPLET=x64-windows
-cmake --build build --config Release --target AES-GCM-bench
-.\build\Release\AES-GCM-bench.exe
+cmake --build build --config Release --target FileEncryption-bench
+.\build\Release\FileEncryption-bench.exe
 ```
 
 ## 7. License

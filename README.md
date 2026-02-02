@@ -1,6 +1,6 @@
 ## 1. Introduction
 
-I'm EilzDragon92, C/C++ software engineer. Interested in security, practical tools, simple but efficient design.
+I'm EilzDragon92, C/C++ software engineer. I'm interested in security and system programming. I like simple and efficient design, with minimal but necessary features.
 
 ## 2. Tech Stack
 
@@ -14,18 +14,18 @@ I'm EilzDragon92, C/C++ software engineer. Interested in security, practical too
 
 ## 3. Projects
 
-### 3-1. [AES-GCM](./Projects/AES-GCM)
+### 3-1. [FileEncryption](./Projects/FileEncryption)
 
 GUI, password-based file encryption/decryption tool using AES-256-GCM.
 
 **Features:**
-* Cross-platform support for Windows and Linux
 * About 2 GB/s throughput
+* Cross-platform support for Windows and Linux
 * Various security considerations: 
-	* Wide-used and wide-trusted encryption algorithm
-	* Key derivation resistant to brute force attack and side channel attack
+	* Widely used and widely trusted AES encryption algorithm
+	* Memory hard and data independent Argon2id key derivation
 	* Integrity check for corrupted or tampered ciphertext
-	* Newly and randomly generated salt and IV for each time 
+	* Random salt and IV newly generated each time
 	* Ensured memory wipe for sensitive data
 
 ## 4. LeetCode

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(AES-GCM VERSION 1.0.0 LANGUAGES CXX)
+project(FileEncryption VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -57,14 +57,14 @@ set(HEADERS
     Utils/Password.h
 )
 
-add_library(AES-GCM-lib STATIC ${LIB_SOURCES} ${HEADERS})
+add_library(FileEncryption-lib STATIC ${LIB_SOURCES} ${HEADERS})
 
-target_include_directories(AES-GCM-lib PUBLIC
+target_include_directories(FileEncryption-lib PUBLIC
     ${CMAKE_SOURCE_DIR}
     ${ARGON2_INCLUDE_DIR}
 )
 
-target_link_libraries(AES-GCM-lib PUBLIC
+target_link_libraries(FileEncryption-lib PUBLIC
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets
@@ -73,11 +73,11 @@ target_link_libraries(AES-GCM-lib PUBLIC
 )
 
 if(WIN32)
-    target_link_libraries(AES-GCM-lib PUBLIC bcrypt)
+    target_link_libraries(FileEncryption-lib PUBLIC bcrypt)
 endif()
 
 add_executable(${PROJECT_NAME} Common/main.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE AES-GCM-lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE FileEncryption-lib)
 
 enable_testing()
 
@@ -87,16 +87,16 @@ set(TEST_SOURCES
     Tests/UtilsTest.cpp
 )
 
-add_executable(AES-GCM-tests ${TEST_SOURCES})
+add_executable(FileEncryption-tests ${TEST_SOURCES})
 
-target_link_libraries(AES-GCM-tests PRIVATE
-    AES-GCM-lib
+target_link_libraries(FileEncryption-tests PRIVATE
+    FileEncryption-lib
     GTest::gtest
     GTest::gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(AES-GCM-tests)
+gtest_discover_tests(FileEncryption-tests)
 
 find_package(benchmark CONFIG REQUIRED)
 
@@ -104,9 +104,9 @@ set(BENCH_SOURCES
     Benchmark/Benchmark.cpp
 )
 
-add_executable(AES-GCM-bench ${BENCH_SOURCES})
-target_link_libraries(AES-GCM-bench PRIVATE
-    AES-GCM-lib
+add_executable(FileEncryption-bench ${BENCH_SOURCES})
+target_link_libraries(FileEncryption-bench PRIVATE
+    FileEncryption-lib
     benchmark::benchmark
     benchmark::benchmark_main
 )

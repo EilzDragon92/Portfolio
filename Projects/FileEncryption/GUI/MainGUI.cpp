@@ -27,7 +27,7 @@ MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
     vBox->setContentsMargins(0, 0, 0, 0);
 
     setLayout(vBox);
-    setWindowTitle("AES-GCM");
+    setWindowTitle("FileEncryption");
 
 
     /* Connect functions to buttons */
