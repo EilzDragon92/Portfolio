@@ -85,10 +85,10 @@ jobs:
             --suppress=missingIncludeSystem \
             --inline-suppr \
             -I Projects/FileEncryption \
-            Projects/FileEncryption/Core \
-            Projects/FileEncryption/GUI \
-            Projects/FileEncryption/Utils \
-            Projects/FileEncryption/Common
+            Projects/FileEncryption/src/Core \
+            Projects/FileEncryption/src/GUI \
+            Projects/FileEncryption/src/Utils \
+            Projects/FileEncryption/src/Common
 
       - name: Build with Coverage (Debug)
         run: |
