@@ -4,7 +4,7 @@ This is the GUI, password-based file encryption/decryption tool using AES-256-GC
 
 ![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white) ![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)</br>
 ![C++](https://img.shields.io/badge/C++-20-00599C?logo=cplusplus) ![OpenSSL](https://img.shields.io/badge/OpenSSL-3.0-721412?logo=openssl&logoColor=white) ![Qt](https://img.shields.io/badge/Qt-6-41CD52?logo=qt&logoColor=white)</br>
-![Build](https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml/badge.svg) ![Coverage](https://codecov.io/gh/EilzDragon92/Portfolio/branch/main/graph/badge.svg)
+![Build](https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml/badge.svg)
 
 ## 2. Features
 
@@ -70,7 +70,7 @@ This is the GUI, password-based file encryption/decryption tool using AES-256-GC
 ### 3-2. Source Code Architecture
 
 ```
-FileEncryption
+Source
 ├── Common
 │   ├── header.h           # Common includes, macros, function definitions
 │   └── main.cpp           # Application entry point
@@ -151,15 +151,25 @@ cmake --build build
 ## 5. Testing
 ### 5-1. Coverage
 
-**Code Coverage:** 96%
+![Coverage](https://codecov.io/gh/EilzDragon92/Portfolio/tree/main/Projects/FileEncryption/badge.svg)
+
+| File                 | Tracked Lines | Covered | Partial | Missed | Coverage % |
+| -------------------- | ------------- | ------- | ------- | ------ | ---------- |
+| Core/AES_GCM.cpp     | 40            | 36      | 0       | 4      | 90.00%     |
+| Core/AES_GCM.h       | 4             | 4       | 0       | 0      | 100.00%    |
+| Core/AES_GCM_dec.cpp | 76            | 74      | 0       | 2      | 97.37%     |
+| Core/AES_GCM_enc.cpp | 74            | 72      | 0       | 2      | 97.30%     |
+| Utils/Password.cpp   | 23            | 23      | 0       | 0      | 100.00%    |
+| Utils/Password.h     | 21            | 21      | 0       | 0      | 100.00%    |
+| Utils/library.h      | 80            | 78      | 0       | 2      | 94.44%     |
 
 | Module   | Test File          | Test Cases                                                             |
 | -------- | ------------------ | ---------------------------------------------------------------------- |
-| AES_GCM  | `AES_GCM_Test.cpp` | Encrypt/Decrypt. Integrity Check, Edge Cases, Callbacks                |
+| AES_GCM  | `AES_GCM_Test.cpp` | Encrypt/Decrypt, Integrity Check, Edge Cases, Callbacks                |
 | Password | `PasswordTest.cpp` | RAII, Copy/Move Semantics, Memory Safety                               |
 | Utils    | `UtilsTest.cpp`    | File I/O, Delete, Existence Check, Key Derivation, CSPRNG, Memory Wipe |
 
-**Note:** GUI files, error reports for external libraries and system calls are excluded from tests.
+**Note:** GUI files, error messages for external libraries and system calls are excluded from tests.
 
 ### 5-2. Running Tests
 

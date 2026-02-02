@@ -6,9 +6,9 @@ coverage:
         threshold: 5%
 
 ignore:
-  - "Projects/FileEncryption/Benchmark/Benchmark.cpp"
-  - "Projects/FileEncryption/Common/main.cpp"
-  - "Projects/FileEncryption/Core/Worker.cpp"
-  - "Projects/FileEncryption/Core/Worker.h"
-  - "Projects/FileEncryption/GUI/"
-  - "Projects/FileEncryption/Tests/"
+  - "Projects/FileEncryption/src/Benchmark/Benchmark.cpp"
+  - "Projects/FileEncryption/src/Common/main.cpp"
+  - "Projects/FileEncryption/src/Core/Worker.cpp"
+  - "Projects/FileEncryption/src/Core/Worker.h"
+  - "Projects/FileEncryption/src/GUI/"
+  - "Projects/FileEncryption/src/Tests/"

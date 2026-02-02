@@ -32,35 +32,35 @@ if(NOT ARGON2_LIBRARY OR NOT ARGON2_INCLUDE_DIR)
 endif()
 
 set(LIB_SOURCES
-    Core/AES_GCM.cpp
-    Core/AES_GCM_dec.cpp
-    Core/AES_GCM_enc.cpp
-    Core/Worker.cpp
-    GUI/MainGUI.cpp
-    GUI/InputGUI.cpp
-    GUI/ProgressGUI.cpp
-    GUI/ModeButton.cpp
-    GUI/PWLineEdit.cpp
-    Utils/Password.cpp
-    Utils/library.cpp
+    src/Core/AES_GCM.cpp
+    src/Core/AES_GCM_dec.cpp
+    src/Core/AES_GCM_enc.cpp
+    src/Core/Worker.cpp
+    src/GUI/MainGUI.cpp
+    src/GUI/InputGUI.cpp
+    src/GUI/ProgressGUI.cpp
+    src/GUI/ModeButton.cpp
+    src/GUI/PWLineEdit.cpp
+    src/Utils/Password.cpp
+    src/Utils/library.cpp
 )
 
 set(HEADERS
-    Common/header.h
-    Core/AES_GCM.h
-    Core/Worker.h
-    GUI/MainGUI.h
-    GUI/InputGUI.h
-    GUI/ProgressGUI.h
-    GUI/ModeButton.h
-    GUI/PWLineEdit.h
-    Utils/Password.h
+    src/Common/header.h
+    src/Core/AES_GCM.h
+    src/Core/Worker.h
+    src/GUI/MainGUI.h
+    src/GUI/InputGUI.h
+    src/GUI/ProgressGUI.h
+    src/GUI/ModeButton.h
+    src/GUI/PWLineEdit.h
+    src/Utils/Password.h
 )
 
 add_library(FileEncryption-lib STATIC ${LIB_SOURCES} ${HEADERS})
 
 target_include_directories(FileEncryption-lib PUBLIC
-    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src
     ${ARGON2_INCLUDE_DIR}
 )
 
@@ -76,15 +76,15 @@ if(WIN32)
     target_link_libraries(FileEncryption-lib PUBLIC bcrypt)
 endif()
 
-add_executable(${PROJECT_NAME} Common/main.cpp)
+add_executable(${PROJECT_NAME} src/Common/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE FileEncryption-lib)
 
 enable_testing()
 
 set(TEST_SOURCES
-    Tests/AES_GCM_Test.cpp
-    Tests/PasswordTest.cpp
-    Tests/UtilsTest.cpp
+    src/Tests/AES_GCM_Test.cpp
+    src/Tests/PasswordTest.cpp
+    src/Tests/UtilsTest.cpp
 )
 
 add_executable(FileEncryption-tests ${TEST_SOURCES})
@@ -101,7 +101,7 @@ gtest_discover_tests(FileEncryption-tests)
 find_package(benchmark CONFIG REQUIRED)
 
 set(BENCH_SOURCES
-    Benchmark/Benchmark.cpp
+    src/Benchmark/Benchmark.cpp
 )
 
 add_executable(FileEncryption-bench ${BENCH_SOURCES})

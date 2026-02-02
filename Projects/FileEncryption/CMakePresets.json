@@ -2,6 +2,24 @@
   "version": 3,
   "configurePresets": [
     {
+      "name": "windows-debug",
+      "displayName": "Windows Debug",
+      "inherits": "Qt",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "windows-release",
+      "displayName": "Windows Release",
+      "inherits": "windows-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
       "hidden": true,
       "name": "Qt",
       "cacheVariables": {
@@ -12,30 +30,11 @@
           "checksum": "wVa86FgEkvdCTVp1/nxvrkaemJc="
         }
       }
-    },
-    {
-      "name": "windows-debug",
-      "displayName": "Windows Debug",
-      "inherits": "Qt",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-      }
-    },
-    {
-      "name": "windows-release",
-      "displayName": "Windows Release",
-      "inherits": "windows-debug",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
-      }
     }
   ],
   "vendor": {
     "qt-project.org/Presets": {
-      "checksum": "6j+OxS8pa6XqhFmRh0/lLyVyy+I="
+      "checksum": "Kbt+/5dYUIADI+1JndwAKNJT/fk="
     }
   }
 }
