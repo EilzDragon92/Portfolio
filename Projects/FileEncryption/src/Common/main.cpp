@@ -1,6 +1,6 @@
 /**
  * @file	main.cpp
- * @brief	Start point of the application
+ * @brief	Entry point of the application
  * @author	EilzDragon92
  */
 

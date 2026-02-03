@@ -1,12 +1,7 @@
 /**
  * @file	header.h
- * @brief	Common header file for AES-GCM file encryption/decryption application
+ * @brief	Common header file for includes, macros, utility function declarations
  * @author	EilzDragon92
- * 
- * Contents:
- *	- Libraries
- *	- Macros
- *	- Utility function declarations
  */
 
 #pragma once
