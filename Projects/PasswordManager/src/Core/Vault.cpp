@@ -5,3 +5,11 @@
  */
 
 #include "Core/Vault.h"
+
+int Vault::create() {
+	return 0;
+}
+
+int Vault::open() {
+	return 0;
+}

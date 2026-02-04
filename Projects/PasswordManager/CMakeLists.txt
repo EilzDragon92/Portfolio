@@ -23,12 +23,15 @@ if(NOT ARGON2_LIBRARY OR NOT ARGON2_INCLUDE_DIR)
 endif()
 
 set(LIB_SOURCES
-    src/core/Vault.cpp
+    src/Core/Vault.cpp
+    src/Utils/library.cpp
+    src/Utils/Password.cpp
 )
 
 set(HEADERS
     src/Common/header.h
     src/Core/Vault.h
+    src/Utils/Password.h
 )
 
 add_library(PasswordManager-lib STATIC ${LIB_SOURCES} ${HEADERS})

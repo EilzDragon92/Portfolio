@@ -1,10 +1,18 @@
 /**
  * @file	Vault.h
- * @brief	Password encryption, storage, and retrieval class
+ * @brief	Manages password vaults
  * @author	EilzDragon92
  */
 
 #include "Common/header.h"
+#include "Utils/Password.h"
+
+struct entry {
+	std::string site;
+	std::string acc;
+	Password pw;
+	uint64_t id;
+};
 
 class Vault {
 public:
@@ -12,14 +20,17 @@ public:
 
 	~Vault();
 
-private:
 	/**
-	 * @brief	Create new password vault
+	 * @brief	Create new vault
 	 */
-	int createVault();
+	int create();
 
 	/**
-	 * @brief	Open existing password vault
+	 * @brief	Open existing vault
 	 */
-	int openVault();
+	int open();
+
+private:
+	uint8_t salt[SALT_SIZE];
+	uint8_t iv[IV_SIZE];
 };

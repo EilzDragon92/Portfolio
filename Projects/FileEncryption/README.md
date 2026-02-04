@@ -64,7 +64,7 @@ This is the GUI, password-based file encryption/decryption tool using AES-256-GC
 ### 3-1. Encrypted File Format
 
 ```
-│ Salt (16 bytes) │ IV (12 bytes) │ Ciphertext │ Tag (16 bytes) │
+Salt (16 bytes) │ IV (12 bytes) │ Encrypted Data │ Tag (16 bytes)
 ```
 
 ### 3-2. Source Code Architecture
@@ -141,7 +141,7 @@ cmake --build build
 
 ![Screenshot](Screenshot.png)
 
-1. Run the executable `AES-GCM.exe` or `AES-GCM`
+1. Run the executable `FileEncryption.exe` or `FileEncryption`
 2. Select mode
 3. Enter source file path
 4. Enter destination file path

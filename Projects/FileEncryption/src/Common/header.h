@@ -55,13 +55,13 @@
 #define MEM_COST (512 * 1024)	/// Argon2id memory cost in KiB
 #define TIME_COST 4				/// Argon2id time cost 
 
-#define BLOCK_SIZE 16		/// AES-GCM block size in bytes
-#define BUFF_NUM 2			/// Number of buffers for swapping
-#define BUFF_SIZE 4096		/// Buffer size in blocks (64 KiB)
-#define IV_SIZE 12			/// Initial vector size in bytes
-#define TAG_SIZE 16			/// Authentication tag size in bytes
+#define BLOCK_SIZE 16	/// AES-GCM block size in bytes
+#define BUFF_NUM 2		/// Number of buffers for swapping
+#define BUFF_SIZE 4096	/// Buffer size in blocks
+#define IV_SIZE 12		/// Initial vector size in bytes
+#define TAG_SIZE 16		/// Authentication tag size in bytes
 
-#define MAX_SIZE 64ULL * (1024 * 1024 * 1024)	/// Maximum source file size that can be processed (64 GiB)
+#define MAX_SIZE 64ULL * (1024 * 1024 * 1024)	/// Maximum source file size that can be processed
 
 /**
  * @brief	Get the size of a file in bytes
