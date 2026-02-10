@@ -76,7 +76,7 @@ int Vault::open(const QString &path, const Password &pw) {
 		return 1;
 	}
 
-	aes.decrypt(srcBuff, dstBuff, srcSize, pw.getData(), pw.getSize());
+	aes.decrypt(srcBuff + MAGIC_NUM, dstBuff, srcSize - MAGIC_NUM, pw.getData(), pw.getSize());
 
 	Wipe(srcBuff, srcSize);
 	Wipe(dstBuff, dstSize);
