@@ -8,7 +8,7 @@
 #include "Core/AES_GCM.h"
 #include "Utils/Password.h"
 
-struct entry {
+struct Entry {
 	std::string site;
 	std::string acc;
 	Password pw;
@@ -51,4 +51,6 @@ public:
 
 private:
 	AES_GCM aes;
+
+	std::vector<Entry> vec;
 };

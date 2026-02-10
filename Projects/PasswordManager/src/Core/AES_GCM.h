@@ -33,7 +33,7 @@ public:
 	  * @brief		Decrypt a buffer
 	  * @param		src		Source buffer
 	  * @param		dst		Destination buffer
-	  * @param		size	Buffer size
+	  * @param		size	Source buffer size
 	  * @param		pw		Password
 	  * @param		plen	Password length
 	  * @return		0 on success, 1 on failure
@@ -44,8 +44,7 @@ public:
 	  * @brief		Encrypt a buffer
 	  * @param		src			Source buffer
 	  * @param		dst			Destination buffer
-	  * @param		srcSize		Source buffer size
-	  * @param		dstSize		Destination buffer size
+	  * @param		size		Source buffer size
 	  * @param		pw			Password
 	  * @param		plen		Password length
 	  * @return		0 on success, 1 on failure

@@ -6,6 +6,22 @@
 
 #include "Common/header.h"
 
+int64_t GetFileSize(FILE *file) {
+    int64_t size;
+
+#ifdef _WIN32
+    if (_fseeki64(file, 0, SEEK_END)) return -1;
+    size = _ftelli64(file);
+
+#else
+    if (fseeko(file, 0, SEEK_END)) return -1;
+    size = ftello(file);
+
+#endif
+    rewind(file);
+    return size;
+}
+
 bool FileExists(const QString &path) {
 #ifdef _WIN32
     std::wstring wpath = path.toStdWString();
