@@ -16,19 +16,38 @@ struct entry {
 
 class Vault {
 public:
+	/**
+	 * @brief	Default constructor of Vault class
+	 */
 	Vault();
 
+	/**
+	 * @brief	Default destructor of Vault class
+	 */
 	~Vault();
 
 	/**
 	 * @brief	Create new vault
+	 * @param   path    Vault file path
+	 * @param   pw      Master password
+	 * @return  0 on success, 1 on failure
 	 */
-	int create();
+	int create(const QString &path, const Password &pw);
 
 	/**
-	 * @brief	Open existing vault
+	 * @brief	Open vault
+	 * @param   path    Vault file path
+	 * @param   pw      Master password
+	 * @return  0 on success, 1 on failure
 	 */
-	int open();
+	int open(const QString &path, const Password &pw);
+
+	/**
+	 * @brief	Save vault
+	 * @param   path    Vault file path
+	 * @return  0 on success, 1 on failure
+	 */
+	int save(const QString &path);
 
 private:
 	uint8_t salt[SALT_SIZE];

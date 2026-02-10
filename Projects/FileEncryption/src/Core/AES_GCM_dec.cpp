@@ -114,6 +114,7 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 		// LCOV_EXCL_STOP
 	}
 
+
 	return 0;
 }
 
@@ -182,7 +183,7 @@ int AES_GCM::decryptBatch() {
 		
 		/* Read in main thread */
 
-		if (readTo(buff[cur], BUFF_SIZE * BLOCK_SIZE)) return 1;
+		if (readFile(buff[cur], BUFF_SIZE * BLOCK_SIZE)) return 1;
 
 
 		/* Decrypt in main thread */
@@ -193,7 +194,7 @@ int AES_GCM::decryptBatch() {
 		/* Asynchronous write in another thread */
 
 		writeRes = std::async(std::launch::async, [this, cur]() {
-			return writeFrom(buff[cur], BUFF_SIZE * BLOCK_SIZE);
+			return writeFile(buff[cur], BUFF_SIZE * BLOCK_SIZE);
 		});
 
 		writing = true;
@@ -228,7 +229,7 @@ int AES_GCM::decryptBatch() {
 int AES_GCM::decryptRemain() {
 	int crs = 0, rem = size % (BUFF_SIZE * BLOCK_SIZE);
 
-	if (readTo(buff[0], rem)) return 1;
+	if (readFile(buff[0], rem)) return 1;
 
 
 	/* Decrypt remaining full blocks */
@@ -252,7 +253,7 @@ int AES_GCM::decryptRemain() {
 		prog += rem;
 	}
 
-	if (writeFrom(buff[0], BLOCK_SIZE * crs + rem)) return 1;
+	if (writeFile(buff[0], BLOCK_SIZE * crs + rem)) return 1;
 
 
 	if (reportProgress()) return 1;
@@ -269,7 +270,7 @@ int AES_GCM::decryptFinal() {
 		return 1;
 	}
 
-	if (finalLen > 0 && writeFrom(final, finalLen)) return 1;  // LCOV_EXCL_LINE
+	if (finalLen > 0 && writeFile(final, finalLen)) return 1;  // LCOV_EXCL_LINE
 
 	return 0;
 }

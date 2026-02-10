@@ -114,7 +114,7 @@ private:
 	  * @param	size	Number of bytes to read
 	  * @return	0 on success, 1 on failure
 	  */
-	int readTo(void *buff, int size);
+	int readFile(void *buff, int size);
 
 	/**
 	  * @brief	Write data from buffer to destination file
@@ -122,7 +122,7 @@ private:
 	  * @param	size	Number of bytes to write
 	  * @return	0 on success, 1 on failure
 	  */
-	int writeFrom(const void *buff, int size);
+	int writeFile(const void *buff, int size);
 
 
 	/* ==================================================

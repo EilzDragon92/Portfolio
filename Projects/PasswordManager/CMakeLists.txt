@@ -23,6 +23,9 @@ if(NOT ARGON2_LIBRARY OR NOT ARGON2_INCLUDE_DIR)
 endif()
 
 set(LIB_SOURCES
+    src/Core/AES_GCM.cpp
+    src/Core/AES_GCM_dec.cpp
+    src/Core/AES_GCM_enc.cpp
     src/Core/Vault.cpp
     src/Utils/library.cpp
     src/Utils/Password.cpp
@@ -30,6 +33,7 @@ set(LIB_SOURCES
 
 set(HEADERS
     src/Common/header.h
+    src/Core/AES_GCM.h
     src/Core/Vault.h
     src/Utils/Password.h
 )

@@ -13,6 +13,8 @@
 #include <argon2.h>
 #include <cstdio>
 #include <filesystem>
+#include <openssl/err.h>
+#include <openssl/evp.h>
 
 /* String libraries */
 #include <cstring>
