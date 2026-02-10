@@ -7,3 +7,12 @@ Magic Number (4 bytes) | Salt (16 bytes) | IV (12 bytes) | Encrypted Data | Tag 
 ```
 Entry Count (4 bytes) | Entries
 ```
+
+**Entry Example:** 
+```
+{ 
+	site: "Google", 
+	acc: "username@google.com", 
+	pw: "password" 
+}
+```

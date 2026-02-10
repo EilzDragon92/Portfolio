@@ -64,8 +64,39 @@ private:
 	uint8_t *src;	// Source buffer
 	uint8_t *dst;	// Destination buffer
 
-	int crs = 0;	// Current read/write position in buffer
+	int cur = 0;	// Current read/write position in buffer
 	int size = 0;	// Source buffer size
+
+
+	/* ==================================================
+	 * Decryption functions
+	 * ================================================== */
+
+	/**
+	 * @brief	Intialize decryption context
+	 * @param	pw		Password
+	 * @param	plen	Password length
+	 * @return	0 on success, 1 on failure
+	 */
+	int decryptInit(const char *pw, size_t plen);
+
+	/**
+	 * @brief	Read and verify authentication tag
+	 * @return	0 on success, 1 on failure
+	 */
+	int decryptTag();
+
+	/**
+	 * @brief	Decrypt buffer
+	 * @return	0 on success, 1 on failure
+	 */
+	int decryptBuff();
+
+	/**
+	 * @brief	Finialize decryption
+	 * @return	0 on success, 1 on failure
+	 */
+	int decryptFinal();
 
 
 	/* ==================================================
@@ -81,10 +112,7 @@ private:
 	int encryptInit(const char *pw, size_t plen);
 
 	/**
-	 * @brief	Encrypt a block
-	 * @param	src		Source buffer
-	 * @param	dst		Destination buffer
-	 * @param	srcLen	Source buffer length
+	 * @brief	Encrypt buffer
 	 * @return	0 on success, 1 on failure
 	 */
 	int encryptBuff();

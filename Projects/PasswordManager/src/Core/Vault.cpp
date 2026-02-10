@@ -7,6 +7,10 @@
 #include "Core/Vault.h"
 
 int Vault::create(const QString &path, const Password &pw) {
+	FILE *dst;
+
+	OpenFile(&dst, path, "wb");
+
 	return 0;
 }
 

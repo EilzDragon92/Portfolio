@@ -5,13 +5,13 @@
  */
 
 #include "Common/header.h"
+#include "Core/AES_GCM.h"
 #include "Utils/Password.h"
 
 struct entry {
 	std::string site;
 	std::string acc;
 	Password pw;
-	uint64_t id;
 };
 
 class Vault {
@@ -50,6 +50,5 @@ public:
 	int save(const QString &path);
 
 private:
-	uint8_t salt[SALT_SIZE];
-	uint8_t iv[IV_SIZE];
+	AES_GCM aes;
 };

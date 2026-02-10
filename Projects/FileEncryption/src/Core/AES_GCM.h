@@ -144,7 +144,7 @@ private:
 	int decryptTag();
 
 	/**
-	 * @brief	Decrypt a block
+	 * @brief	Decrypt buffer
 	 * @param	src		Source buffer
 	 * @param	dst		Destination buffer
 	 * @param	srcLen	Source buffer length
@@ -184,7 +184,7 @@ private:
 	int encryptInit(const char *pw, size_t plen);
 
 	/**
-	 * @brief	Encrypt a block
+	 * @brief	Encrypt buffer
 	 * @param	src		Source buffer
 	 * @param	dst		Destination buffer
 	 * @param	srcLen	Source buffer length
