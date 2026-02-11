@@ -10,8 +10,9 @@ int Vault::create(const QString &path, const Password &pw) {
 	FILE *file;
 	uint8_t *srcBuff, *dstBuff;
 	uint32_t magicNum = MAGIC_NUM;
-	int64_t srcSize = 0;
+	int64_t srcSize = COUNT_SIZE;
 	int64_t dstSize = MAGIC_SIZE + SALT_SIZE + IV_SIZE + TAG_SIZE;
+	int entryCnt = 0;
 
 	OpenFile(&file, path, "wb");
 
@@ -23,6 +24,7 @@ int Vault::create(const QString &path, const Password &pw) {
 	srcBuff = new uint8_t[srcSize]{};
 	dstBuff = new uint8_t[dstSize]{};
 
+	memcpy(srcBuff, &entryCnt, COUNT_SIZE);
 	memcpy(dstBuff, &magicNum, MAGIC_SIZE);
 
 	aes.encrypt(srcBuff, dstBuff + MAGIC_SIZE, srcSize, pw.getData(), pw.getSize());
@@ -33,7 +35,6 @@ int Vault::create(const QString &path, const Password &pw) {
 	}
 
 	Wipe(srcBuff, srcSize);
-	Wipe(dstBuff, dstSize);
 
 	delete[] srcBuff;
 	delete[] dstBuff;
@@ -46,6 +47,7 @@ int Vault::open(const QString &path, const Password &pw) {
 	uint8_t *srcBuff, *dstBuff;
 	uint32_t magicNum = MAGIC_NUM;
 	int64_t srcSize, dstSize;
+	int cur = 0, entryCnt;
 
 	OpenFile(&file, path, "rb");
 
@@ -78,7 +80,19 @@ int Vault::open(const QString &path, const Password &pw) {
 
 	aes.decrypt(srcBuff + MAGIC_NUM, dstBuff, srcSize - MAGIC_NUM, pw.getData(), pw.getSize());
 
-	Wipe(srcBuff, srcSize);
+	memcpy(&entryCnt, dstBuff, COUNT_SIZE);
+	cur += COUNT_SIZE;
+	
+	for (int i = 0; i < entryCnt; i++) {
+		Entry entry;
+
+		memcpy(&entry.size, dstBuff + cur, sizeof(size_t));
+		memcpy(&entry, dstBuff + cur, entry.size);
+		cur += entry.size;
+
+		entrySet.insert(entry);
+	}
+
 	Wipe(dstBuff, dstSize);
 
 	delete[] srcBuff;

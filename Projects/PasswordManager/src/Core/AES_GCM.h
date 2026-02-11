@@ -38,7 +38,7 @@ public:
 	  * @param		plen	Password length
 	  * @return		0 on success, 1 on failure
 	  */
-	int decrypt(uint8_t *src, uint8_t *dst, int size, const char *pw, size_t plen);
+	int decrypt(uint8_t *src, uint8_t *dst, size_t size, const char *pw, size_t plen);
 
 	/**
 	  * @brief		Encrypt a buffer
@@ -49,7 +49,7 @@ public:
 	  * @param		plen		Password length
 	  * @return		0 on success, 1 on failure
 	  */
-	int encrypt(uint8_t *src, uint8_t *dst, int size, const char *pw, size_t plen);
+	int encrypt(uint8_t *src, uint8_t *dst, size_t size, const char *pw, size_t plen);
 
 private:
 	EVP_CIPHER_CTX *ctx = nullptr;	// OpenSSL encryption/decryption context

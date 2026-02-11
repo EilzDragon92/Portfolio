@@ -6,7 +6,7 @@
 
 #include "Core/AES_GCM.h"
 
-int AES_GCM::decrypt(uint8_t *src, uint8_t *dst, int size, const char *pw, size_t plen) {
+int AES_GCM::decrypt(uint8_t *src, uint8_t *dst, size_t size, const char *pw, size_t plen) {
 	this->src = src;
 	this->dst = dst;
 	this->size = size;

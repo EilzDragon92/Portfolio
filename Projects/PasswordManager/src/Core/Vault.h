@@ -9,9 +9,19 @@
 #include "Utils/Password.h"
 
 struct Entry {
+	size_t size;
 	std::string site;
 	std::string acc;
 	Password pw;
+};
+
+struct entryCmp {
+	bool operator()(const Entry &a, const Entry &b) const {
+		if (a.site != b.site) return a.site.compare(b.site);
+		if (a.acc != b.acc) return a.acc.compare(b.acc);
+
+		return false;
+	}
 };
 
 class Vault {
@@ -52,5 +62,5 @@ public:
 private:
 	AES_GCM aes;
 
-	std::vector<Entry> vec;
+	std::set<Entry, entryCmp> entrySet;
 };

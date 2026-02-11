@@ -6,17 +6,22 @@
 
 #pragma once
 
-/* Qt framework libraries */
-#include <QString>
+/* Container */
+#include <set>
 
-/* System libraries */
+/* Cryptography */
 #include <argon2.h>
-#include <cstdio>
-#include <filesystem>
 #include <openssl/err.h>
 #include <openssl/evp.h>
 
-/* String libraries */
+/* Qt framework */
+#include <QString>
+
+/* System */
+#include <cstdio>
+#include <filesystem>
+
+/* String */
 #include <cstring>
 #include <string>
 
@@ -50,6 +55,7 @@
 
 #define MAGIC_NUM 0x63a5baf3	/// Magic number to distinguish vault file
 #define MAGIC_SIZE 4			/// Magic number size
+#define COUNT_SIZE sizeof(int)	/// Entry count field size
 
 /**
  * @brief	Get the size of a file in bytes

@@ -6,7 +6,12 @@
 
 #pragma once
 
-/* Qt framework libraries */
+/* Cryptography */
+#include <argon2.h>
+#include <openssl/err.h>
+#include <openssl/evp.h>
+
+/* Qt framework */
 #include <QApplication>
 #include <QBoxLayout>
 #include <QButtonGroup>
@@ -21,15 +26,12 @@
 #include <QThread>
 #include <QWidget>
 
-/* System libraries */
-#include <argon2.h>
+/* System */
 #include <cstdio>
 #include <filesystem>
 #include <future>
-#include <openssl/err.h>
-#include <openssl/evp.h>
 
-/* String libraries */
+/* String */
 #include <cstring>
 #include <string>
 
