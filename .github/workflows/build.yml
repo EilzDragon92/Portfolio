@@ -21,7 +21,7 @@ jobs:
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
         with:
-          vcpkgGitCommitId: 'c82f74667287d3dc386bce81e44964370c91a289'
+          vcpkgGitCommitId: '0a434205c521ca43d66921271ae2a1d051e718a5'
 
       - name: Install dependencies
         run: vcpkg install openssl:x64-windows argon2:x64-windows gtest:x64-windows
