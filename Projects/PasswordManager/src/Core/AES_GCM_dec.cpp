@@ -10,14 +10,15 @@ int AES_GCM::decrypt(uint8_t *src, uint8_t *dst, size_t size, const char *pw, si
 	this->src = src;
 	this->dst = dst;
 	this->size = size;
+	cur = 0;
 
 	if (decryptInit(pw, plen)) return -1;
+
+	if (decryptTag()) return -1;
 
 	if (decryptBuff()) return -1;
 
 	if (decryptFinal()) return -1;
-
-	if (decryptTag()) return -1;
 
 	return 0;
 }
@@ -33,10 +34,10 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 
 	/* Read salt and IV */
 
-	memcpy(salt + cur, src, SALT_SIZE);
+	memcpy(salt, src + cur, SALT_SIZE);
 	cur += SALT_SIZE;
 
-	memcpy(iv + cur, src, IV_SIZE);
+	memcpy(iv, src + cur, IV_SIZE);
 	cur += IV_SIZE;
 
 
@@ -125,7 +126,7 @@ int AES_GCM::decryptFinal() {
 	uint8_t final[BLOCK_SIZE];
 	int finalLen;
 
-	if (EVP_EncryptFinal_ex(ctx, final, &finalLen) != 1) {
+	if (EVP_DecryptFinal_ex(ctx, final, &finalLen) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Finalization failed - Cannot finalize encryption\n");
 		return 1;

@@ -4,6 +4,8 @@
  * @author	EilzDragon92
  */
 
+#pragma once
+
 #include "Common/header.h"
 
 class AES_GCM {

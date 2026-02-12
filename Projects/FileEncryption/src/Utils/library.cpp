@@ -36,7 +36,7 @@ bool FileExists(const QString &path) {
 #endif
 }
 
-int Argon2id(uint8_t salt[], const char pw[], size_t plen, uint8_t key[]) {
+int Argon2id(uint8_t *salt, const char *pw, size_t plen, uint8_t *key) {
     return argon2id_hash_raw(TIME_COST, MEM_COST, GetProcNum(), pw, plen, salt, SALT_SIZE, key, KEY_SIZE);
 }
 

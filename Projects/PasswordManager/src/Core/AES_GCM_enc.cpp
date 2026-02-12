@@ -10,6 +10,7 @@ int AES_GCM::encrypt(uint8_t *src, uint8_t *dst, size_t size, const char *pw, si
 	this->src = src;
 	this->dst = dst;
 	this->size = size;
+	cur = 0;
 
 	if (encryptInit(pw, plen)) return -1;
 

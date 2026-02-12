@@ -6,20 +6,22 @@
 
 #include "Core/Vault.h"
 
-int Vault::create(const QString &path, const Password &pw) {
-	FILE *file;
-	uint8_t *srcBuff, *dstBuff;
-	uint32_t magicNum = MAGIC_NUM;
-	int64_t srcSize = COUNT_SIZE;
-	int64_t dstSize = MAGIC_SIZE + SALT_SIZE + IV_SIZE + TAG_SIZE;
+Vault::Vault() {
+	;
+}
+
+Vault::~Vault() {
+	clear();
+}
+
+int Vault::create(const QString &path) {
 	int entryCnt = 0;
 
-	OpenFile(&file, path, "wb");
 
-	if (file == nullptr) {
-		// ERROR: Failed to open file
-		return 1;
-	}
+	/* Generate initial data */
+
+	srcSize = COUNT_SIZE;
+	dstSize = MAGIC_SIZE + SALT_SIZE + IV_SIZE + TAG_SIZE;
 
 	srcBuff = new uint8_t[srcSize]{};
 	dstBuff = new uint8_t[dstSize]{};
@@ -27,58 +29,90 @@ int Vault::create(const QString &path, const Password &pw) {
 	memcpy(srcBuff, &entryCnt, COUNT_SIZE);
 	memcpy(dstBuff, &magicNum, MAGIC_SIZE);
 
-	aes.encrypt(srcBuff, dstBuff + MAGIC_SIZE, srcSize, pw.getData(), pw.getSize());
 
-	if (fwrite(dstBuff, sizeof(uint8_t), dstSize, file) != dstSize) {
-		// ERROR: Failed to write file
+	/* Encrypt */
+
+	if (aes.encrypt(srcBuff, dstBuff + MAGIC_SIZE, srcSize, pw.getData(), pw.getSize())) {
+		reportError("Encryption failed");
 		return 1;
 	}
 
-	Wipe(srcBuff, srcSize);
 
-	delete[] srcBuff;
-	delete[] dstBuff;
+	/* Write vault */
+
+	OpenFile(&file, path, "wb");
+
+	if (file == nullptr) {
+		reportError("Failed to open file");
+		return 1;
+	}
+
+	if (fwrite(dstBuff, sizeof(uint8_t), dstSize, file) != dstSize) {
+		reportError("ERROR: Failed to write file");
+		return 1;
+	}
+
+
+	clear();
 
 	return 0;
 }
 
-int Vault::open(const QString &path, const Password &pw) {
-	FILE *file;
-	uint8_t *srcBuff, *dstBuff;
-	uint32_t magicNum = MAGIC_NUM;
-	int64_t srcSize, dstSize;
-	int cur = 0, entryCnt;
+int Vault::open(const QString &path) {
+	int cur = 0, entryCnt = 0;
+
+
+	/* Open file pointer */
 
 	OpenFile(&file, path, "rb");
 
 	if (file == nullptr) {
-		// ERROR: Failed to open file
+		reportError("Failed to open file");
 		return 1;
 	}
+
+
+	/* Get vault size */
 
 	srcSize = GetFileSize(file);
 
 	if (srcSize == -1) {
-		// ERROR: Failed to read file size
+		reportError("Failed to read file size");
 		return 1;
 	}
+
+
+	/* Read vault */
+
+	srcBuff = new uint8_t[srcSize]{};
+
+	if (fread(srcBuff, sizeof(uint8_t), srcSize, file) != srcSize) {
+		reportError("Failed to read file");
+		return 1;
+	}
+
+
+	/* Check magic number */
+
+	if (memcmp(srcBuff, &magicNum, MAGIC_SIZE) != 0) {
+		reportError("Magic number mismatch");
+		return 1;
+	}
+
+
+	/* Decrypt */
 
 	dstSize = srcSize - (MAGIC_SIZE + SALT_SIZE + IV_SIZE + TAG_SIZE);
 
-	srcBuff = new uint8_t[srcSize]{};
 	dstBuff = new uint8_t[dstSize]{};
 
-	if (fread(srcBuff, sizeof(uint8_t), srcSize, file) != srcSize) {
-		// ERROR: Failed to read file
+	if (aes.decrypt(srcBuff + MAGIC_SIZE, dstBuff, srcSize - MAGIC_SIZE, pw.getData(), pw.getSize())) {
+		reportError("Decryption failed");
 		return 1;
 	}
 
-	if (memcmp(srcBuff, &magicNum, MAGIC_SIZE) != 0) {
-		// ERROR: Magic number mismatch
-		return 1;
-	}
 
-	aes.decrypt(srcBuff + MAGIC_NUM, dstBuff, srcSize - MAGIC_NUM, pw.getData(), pw.getSize());
+	/* Deserialize */
 
 	memcpy(&entryCnt, dstBuff, COUNT_SIZE);
 	cur += COUNT_SIZE;
@@ -86,21 +120,95 @@ int Vault::open(const QString &path, const Password &pw) {
 	for (int i = 0; i < entryCnt; i++) {
 		Entry entry;
 
-		memcpy(&entry.size, dstBuff + cur, sizeof(size_t));
-		memcpy(&entry, dstBuff + cur, entry.size);
-		cur += entry.size;
+		cur += entry.deser(dstBuff + cur);
 
-		entrySet.insert(entry);
+		entrySet.insert(std::move(entry));
 	}
 
-	Wipe(dstBuff, dstSize);
 
-	delete[] srcBuff;
-	delete[] dstBuff;
+	clear();
 
 	return 0;
 }
 
 int Vault::save(const QString &path) {
+	int srcCur = 0, dstCur = 0;
+	int entryCnt = static_cast<int>(entrySet.size());
+
+
+	/* Calculate vault size */
+
+	srcSize = sizeof(uint32_t);
+
+	for (auto it = entrySet.begin(); it != entrySet.end(); it++) srcSize += it->size();
+
+	dstSize = MAGIC_SIZE + SALT_SIZE + IV_SIZE + srcSize + TAG_SIZE;
+
+	srcBuff = new uint8_t[srcSize]{};
+	dstBuff = new uint8_t[dstSize]{};
+
+
+	/* Write entry count to buffer */
+
+	memcpy(srcBuff + srcCur, &entryCnt, sizeof(uint32_t));
+	srcCur += sizeof(uint32_t);
+
+
+	/* Write entries to buffer */
+
+	for (auto it = entrySet.begin(); it != entrySet.end(); it++) srcCur += it->ser(srcBuff + srcCur);
+
+	memcpy(dstBuff + dstCur, &magicNum, MAGIC_SIZE);
+	dstCur += MAGIC_SIZE;
+
+
+	/* Encrypt */
+
+	if (aes.encrypt(srcBuff, dstBuff + dstCur, srcSize, pw.getData(), pw.getSize())) {
+		reportError("Encryption failed");
+		return 1;
+	}
+
+	dstCur += SALT_SIZE + IV_SIZE + srcSize + TAG_SIZE;
+
+
+	/* Save vault */
+
+	OpenFile(&file, path, "wb");
+
+	if (fwrite(dstBuff, sizeof(uint8_t), dstSize, file) != dstSize) {
+		reportError("ERROR: Failed to write file");
+		return 1;
+	}
+
+
+	clear();
+
 	return 0;
+}
+
+void Vault::clear() {
+	if (file) {
+		fclose(file);
+		file = nullptr;
+	}
+
+	if (srcBuff) {
+		Wipe(srcBuff, srcSize);
+		delete[] srcBuff;
+		srcBuff = nullptr;
+	}
+
+	if (dstBuff) {
+		Wipe(dstBuff, dstSize);
+		delete[] dstBuff;
+		dstBuff = nullptr;
+	}
+
+	srcSize = 0;
+	dstSize = 0;
+}
+
+void Vault::reportError(const char *msg) {
+	clear();
 }
