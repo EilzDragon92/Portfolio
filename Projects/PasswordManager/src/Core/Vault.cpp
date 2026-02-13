@@ -210,5 +210,7 @@ void Vault::clear() {
 }
 
 void Vault::reportError(const char *msg) {
+	if (ecb) ecb(msg);
+
 	clear();
 }

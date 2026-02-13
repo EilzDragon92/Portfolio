@@ -1,6 +1,6 @@
 /**
  * @file	Entry.h
- * @brief	Password entry with serialization support
+ * @brief	Password entry
  * @author	EilzDragon92
  */
 
@@ -10,8 +10,8 @@
 #include "Utils/Password.h"
 
  /**
-  * @struct  Entry
-  * @brief   Single password entry containing site, account, and password
+  * @struct     Entry
+  * @brief      Password entry
   */
 struct Entry {
     std::string site;
@@ -20,7 +20,7 @@ struct Entry {
 
     /**
      * @brief   Calculate serialized size in bytes
-     * @return  Total bytes needed for serialization
+     * @return  Serialized size in bytes
      */
     size_t size() const;
 

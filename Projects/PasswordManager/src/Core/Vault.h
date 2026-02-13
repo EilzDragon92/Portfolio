@@ -10,15 +10,10 @@
 #include "Core/AES_GCM.h"
 #include "Core/Entry.h"
 
-struct entryCmp {
-	bool operator()(const Entry &a, const Entry &b) const {
-		if (a.site != b.site) return a.site.compare(b.site);
-		if (a.acc != b.acc) return a.acc.compare(b.acc);
-
-		return false;
-	}
-};
-
+ /**
+  * @class	Vault
+  * @brief	Manages password vaults
+  */
 class Vault {
 public:
 	/**
@@ -61,7 +56,7 @@ public:
 private:
 	AES_GCM aes;
 	Password pw;
-	std::set<Entry, entryCmp> entrySet;
+	std::set<Entry, EntryCmp> entrySet;
 
 	ErrorCallback ecb = nullptr;
 

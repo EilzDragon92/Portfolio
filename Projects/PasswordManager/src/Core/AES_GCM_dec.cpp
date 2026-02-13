@@ -103,7 +103,7 @@ int AES_GCM::decryptTag() {
 int AES_GCM::decryptBuff() {
 	int res;
 
-	if (EVP_DecryptUpdate(ctx, dst + cur, &res, src, size) != 1) {
+	if (EVP_DecryptUpdate(ctx, dst, &res, src + cur, size - SALT_SIZE - IV_SIZE - TAG_SIZE) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Encryption failed - Cannot encrypt buffer\n");
 		return 1;
