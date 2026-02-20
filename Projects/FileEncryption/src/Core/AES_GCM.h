@@ -18,26 +18,17 @@
  */
 class AES_GCM {
 public:
-	/**
-	 * @brief	Callback function for error reporting
-	 * @param	errMsg	Error message string
-	 */
-	using ErrorCallback = std::function<void(const char *errMsg)>;
+	/* ==================================================
+	 * Constructor, destructor, operators
+	 * ================================================== */
 
 	/**
-	 * @brief	Callback function for progress reporting
-	 * @param	perc		Current progress in percentage
-	 * @param	cancelled	Pointer of cancellation flag
-	 */
-	using ProgressCallback = std::function<void(int perc, bool *cancelled)>;
-
-	/**
-	 * @brief	Default constructor of AES_GCM class
+	 * @brief	DDefault constructor of AES_GCM
 	 */
 	AES_GCM();
 
 	/**
-	 * @brief	Destructor of AES_GCM class
+	 * @brief	 Destructor of AES_GCM
 	 */
 	~AES_GCM();
 
@@ -45,6 +36,11 @@ public:
 	AES_GCM &operator=(const AES_GCM &) = delete;	// Delete copy assignment operator
 	AES_GCM(AES_GCM &&) = delete;					// Delete move constructor
 	AES_GCM &operator=(AES_GCM &&) = delete;		// Delete move assignment operator
+
+
+	/* ==================================================
+	 * Interface functions
+	 * ================================================== */
 
 	/**
 	  * @brief		Decrypt a file
@@ -65,6 +61,24 @@ public:
 	  * @return		0 on success, 1 on failure
 	  */
 	int encrypt(FILE *src, FILE *dst, const char *pw, size_t plen);
+
+
+	/* ==================================================
+	 * Callback functions
+	 * ================================================== */
+
+	/**
+	 * @brief	Callback function for error reporting
+	 * @param	errMsg	Error message string
+	 */
+	using ErrorCallback = std::function<void(const char *errMsg)>;
+
+	/**
+	 * @brief	Callback function for progress reporting
+	 * @param	perc		Current progress in percentage
+	 * @param	cancelled	Pointer of cancellation flag
+	 */
+	using ProgressCallback = std::function<void(int perc, bool *cancelled)>;
 
 	/**
 	 * @brief	Set error callback function

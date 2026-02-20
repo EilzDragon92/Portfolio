@@ -16,11 +16,9 @@
   */
 class Vault {
 public:
-	/**
-	 * @brief	Callback function for error reporting
-	 * @param	errMsg	Error message string
-	 */
-	using ErrorCallback = std::function<void(const char *errMsg)>;
+	/* ==================================================
+	 * Constructor and Destructor
+	 * ================================================== */
 
 	/**
 	 * @brief	Default constructor of Vault class
@@ -32,26 +30,73 @@ public:
 	 */
 	~Vault();
 
+
+	/* ==================================================
+	 * Vault functions
+	 * ================================================== */
+
 	/**
 	 * @brief	Create empty new vault
 	 * @param   path    Vault file path
 	 * @return  0 on success, 1 on failure
 	 */
-	int create(const QString &path);
+	int newVault(const QString &path);
 
 	/**
 	 * @brief	Open vault and read its data
 	 * @param   path    Vault file path
 	 * @return  0 on success, 1 on failure
 	 */
-	int open(const QString &path);
+	int openVault(const QString &path);
 
 	/**
 	 * @brief	Save vault with current data
 	 * @param   path    Vault file path
-	 * @return  0 on success, 1 on failure
+	 * @return	0 on success, 1 on failure
 	 */
-	int save(const QString &path);
+	int saveVault(const QString &path);
+
+
+	/* ==================================================
+	 * Entry CRUD functions
+	 * ================================================== */
+
+	/**
+	 * @brief	Create new entry
+	 * @param	site	Site name of the new entry
+	 * @param	acc		Account of the new entry
+	 * @param	pw		Password of the new entry
+	 */
+	int createEntry(const std::string &site, const std::string &acc, const Password &pw);
+
+	/**
+	 * @brief	Update an entry
+	 * @param	oldSite		Site name of the target entry
+	 * @param	oldAcc		Account of the target entry
+	 * @param	newSite		New site name
+	 * @param	newAcc		New account
+	 * @param	newPw		New password
+	 */
+	int updateEntry(const std::string &oldSite, const std::string &oldAcc, 
+					const std::string &newSite, const std::string &newAcc, const Password &newPW);
+
+	/**
+	 * @brief	Delete an entry
+	 * @param	site	Site name of the target entry
+	 * @param	acc		Account of the target entry
+	 */
+	int deleteEntry(const std::string &site, const std::string &acc);
+
+
+	/* ==================================================
+	 * Callback functions
+	 * ================================================== */
+
+	/**
+	 * @brief	Callback function for error reporting
+	 * @param	errMsg	Error message string
+	 */
+	using ErrorCallback = std::function<void(const char *errMsg)>;
 
 private:
 	AES_GCM aes;
@@ -64,6 +109,7 @@ private:
 	uint8_t *srcBuff = nullptr, *dstBuff = nullptr;
 	int64_t srcSize = 0, dstSize = 0;
 	uint32_t magicNum = MAGIC_NUM;
+
 
 	void clear();
 

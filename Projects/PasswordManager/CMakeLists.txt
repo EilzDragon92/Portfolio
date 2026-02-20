@@ -28,6 +28,8 @@ set(LIB_SOURCES
     src/Core/AES_GCM_enc.cpp
     src/Core/Entry.cpp
     src/Core/Vault.cpp
+    src/Core/Vault_entry.cpp
+    src/Core/Vault_vault.cpp
     src/Utils/library.cpp
     src/Utils/Password.cpp
 )
