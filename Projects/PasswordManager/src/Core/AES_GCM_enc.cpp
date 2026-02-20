@@ -7,20 +7,18 @@
 #include "Core/AES_GCM.h"
 
 int AES_GCM::encrypt(uint8_t *src, uint8_t *dst, size_t size, const char *pw, size_t plen) {
-	this->src = src;
-	this->dst = dst;
-	this->size = size;
-	cur = 0;
+	this->src = src, this->dst = dst, this->size = size;
+	srcCrs = 0, dstCrs = 0;
 
-	if (encryptInit(pw, plen)) return -1;
+	if (encryptInit(pw, plen)) return 1;
 
-	if (encryptBuff()) return -1;
+	if (encryptBuff()) return 1;
 
-	if (encryptFinal()) return -1;
+	if (encryptFinal()) return 1;
 
-	if (encryptTag()) return -1;
+	if (encryptTag()) return 1;
 
-	return cur;
+	return 0;
 }
 
 int AES_GCM::encryptInit(const char *pw, size_t plen) {
@@ -92,11 +90,11 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 
 	/* Write salt and IV */
 
-	memcpy(dst + cur, salt, SALT_SIZE);
-	cur += SALT_SIZE;
+	memcpy(dst + dstCrs, salt, SALT_SIZE);
+	dstCrs += SALT_SIZE;
 
-	memcpy(dst + cur, iv, IV_SIZE);
-	cur += IV_SIZE;
+	memcpy(dst + dstCrs, iv, IV_SIZE);
+	dstCrs += IV_SIZE;
 
 
 	return 0;
@@ -105,7 +103,7 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 int AES_GCM::encryptBuff() {
 	int res;
 
-	if (EVP_EncryptUpdate(ctx, dst + cur, &res, src, size) != 1) {
+	if (EVP_EncryptUpdate(ctx, dst + dstCrs, &res, src, size) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Encryption failed - Cannot encrypt buffer\n");
 		return 1;
@@ -119,7 +117,7 @@ int AES_GCM::encryptBuff() {
 		// LCOV_EXCL_STOP
 	}
 
-	cur += size;
+	dstCrs += size;
 
 	return 0;
 }
@@ -137,8 +135,8 @@ int AES_GCM::encryptFinal() {
 
 	if (finalLen > 0) return 1;
 
-	memcpy(dst + cur, final, finalLen);
-	cur += finalLen;
+	memcpy(dst + dstCrs, final, finalLen);
+	dstCrs += finalLen;
 
 	return 0;
 }
@@ -153,8 +151,8 @@ int AES_GCM::encryptTag() {
 		// LCOV_EXCL_STOP
 	}
 
-	memcpy(dst + cur, tag, TAG_SIZE);
-	cur += TAG_SIZE;
+	memcpy(dst + dstCrs, tag, TAG_SIZE);
+	dstCrs += TAG_SIZE;
 
 	return 0;
 }

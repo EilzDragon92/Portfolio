@@ -7,18 +7,16 @@
 #include "Core/AES_GCM.h"
 
 int AES_GCM::decrypt(uint8_t *src, uint8_t *dst, size_t size, const char *pw, size_t plen) {
-	this->src = src;
-	this->dst = dst;
-	this->size = size;
-	cur = 0;
+	this->src = src, this->dst = dst, this->size = size;
+	srcCrs = 0, dstCrs = 0;
 
-	if (decryptInit(pw, plen)) return -1;
+	if (decryptInit(pw, plen)) return 1;
 
-	if (decryptTag()) return -1;
+	if (decryptTag()) return 1;
 
-	if (decryptBuff()) return -1;
+	if (decryptBuff()) return 1;
 
-	if (decryptFinal()) return -1;
+	if (decryptFinal()) return 1;
 
 	return 0;
 }
@@ -34,11 +32,11 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 
 	/* Read salt and IV */
 
-	memcpy(salt, src + cur, SALT_SIZE);
-	cur += SALT_SIZE;
+	memcpy(salt, src + srcCrs, SALT_SIZE);
+	srcCrs += SALT_SIZE;
 
-	memcpy(iv, src + cur, IV_SIZE);
-	cur += IV_SIZE;
+	memcpy(iv, src + srcCrs, IV_SIZE);
+	srcCrs += IV_SIZE;
 
 
 	/* Derive key from password */
@@ -101,23 +99,24 @@ int AES_GCM::decryptTag() {
 }
 
 int AES_GCM::decryptBuff() {
+	int len = size - SALT_SIZE - IV_SIZE - TAG_SIZE;
 	int res;
 
-	if (EVP_DecryptUpdate(ctx, dst, &res, src + cur, size - SALT_SIZE - IV_SIZE - TAG_SIZE) != 1) {
+	if (EVP_DecryptUpdate(ctx, dst, &res, src + srcCrs, len) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Encryption failed - Cannot encrypt buffer\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	if (res != size) {
+	if (res != len) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Encryption failed - Cannot encrypt buffer\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	cur += size;
+	dstCrs += len;
 
 	return 0;
 }
@@ -135,8 +134,8 @@ int AES_GCM::decryptFinal() {
 
 	if (finalLen > 0) return 1;
 
-	memcpy(dst + cur, final, finalLen);
-	cur += finalLen;
+	memcpy(dst + dstCrs, final, finalLen);
+	dstCrs += finalLen;
 
 	return 0;
 }

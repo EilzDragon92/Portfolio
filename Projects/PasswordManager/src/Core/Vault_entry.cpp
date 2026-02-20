@@ -20,18 +20,25 @@ int Vault::updateEntry(const std::string &oldSite, const std::string &oldAcc,
 
 	Entry oldEntry = { oldSite, oldAcc };
 
-	auto it = entrySet.find(oldEntry);
+	auto oldIt = entrySet.find(oldEntry);
 
-	if (it == entrySet.end()) return 1;
+	if (oldIt == entrySet.end()) return 1;
 
 
 	/* Check new entry data conflicts with existing entry */
 
-	Entry newEntry = { newSite, newAcc };
+	Entry newEntry = { newSite, newAcc, newPW };
 
-	it = entrySet.find(newEntry);
+	auto newIt = entrySet.find(newEntry);
 
-	if (it != entrySet.end()) return 2;
+	if (newIt != entrySet.end()) return 2;
+
+
+	entrySet.erase(oldIt);
+
+	auto res = entrySet.insert(newEntry);
+
+	return res.second ? 0 : 1;
 }
 
 int Vault::deleteEntry(const std::string &site, const std::string &acc) {
