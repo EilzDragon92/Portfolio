@@ -168,6 +168,11 @@ int Vault::saveVault(const QString &path) {
 
 	OpenFile(&file, path, "wb");
 
+	if (file == nullptr) {
+		reportError("Failed to open file");
+		return 1;
+	}
+
 	if (fwrite(dstBuff, sizeof(uint8_t), dstSize, file) != dstSize) {
 		reportError("ERROR: Failed to write file");
 		return 1;

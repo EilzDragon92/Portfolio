@@ -31,8 +31,7 @@ int Vault::updateEntry(const std::string &oldSite, const std::string &oldAcc,
 
 	auto newIt = entrySet.find(newEntry);
 
-	if (newIt != entrySet.end()) return 2;
-
+	if (newIt != entrySet.end() && newIt != oldIt) return 2;
 
 	entrySet.erase(oldIt);
 

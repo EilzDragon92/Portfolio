@@ -1,5 +1,5 @@
 /**
- * @file	Entry.h
+ * @file	Entry.cpp
  * @brief	Implementation of Entry struct
  * @author	EilzDragon92
  */
