@@ -60,9 +60,17 @@
 /**
  * @brief	Get the size of a file in bytes
  * @param	file	File pointer in read binary mode
- * @return	file size in bytes on success, -1 on failure
+ * @return	File size in bytes on success, -1 on failure
  */
 int64_t GetFileSize(FILE *file);
+
+/**
+ * @brief	Generate CSPRN in given range
+ * @param	min		Minimum value
+ * @param	max		Maximum value
+ * @return	CSPRN
+ */
+uint32_t RandomRange(uint32_t min, uint32_t max);
 
 /**
  * @brief	Check a file exists
@@ -88,7 +96,7 @@ int Argon2id(uint8_t salt[], const char pw[], size_t plen, uint8_t key[]);
 int GetProcNum();
 
 /**
- * @brief	Generates cryptographically secure random bytes
+ * @brief	Generates cryptographically secure pseudorandom bytes
  * @param	dst		Output buffer for random bytes
  * @param	size	Output buffer size
  * @return	0 on success, non-zero on failure
@@ -109,6 +117,20 @@ void Lock(void *ptr, size_t size);
  * @param	mode	Mode
  */
 void OpenFile(FILE **file, const QString &path, const char *mode);
+
+/**
+ * @brief	Shuffle an array
+ * @param	arr		Array to shuffle
+ * @param	size	Array size
+ */
+void Shuffle(uint8_t *arr, int size);
+
+/**
+ * @brief	Swap two data
+ * @param	a	First datum
+ * @param	b	Second datum
+ */
+void Swap(uint8_t *a, uint8_t *b);
 
 /**
  * @brief	Unlock memory space so that it can be swapped

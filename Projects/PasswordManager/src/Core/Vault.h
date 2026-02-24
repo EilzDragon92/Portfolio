@@ -66,6 +66,7 @@ public:
 	 * @param	site	Site name of the new entry
 	 * @param	acc		Account of the new entry
 	 * @param	pw		Password of the new entry
+	 * @return	0 on success, 1 on failure
 	 */
 	int createEntry(const std::string &site, const std::string &acc, const Password &pw);
 
@@ -76,6 +77,7 @@ public:
 	 * @param	newSite		New site name
 	 * @param	newAcc		New account
 	 * @param	newPw		New password
+	 * @return	0 on success, 1 on failure
 	 */
 	int updateEntry(const std::string &oldSite, const std::string &oldAcc, 
 					const std::string &newSite, const std::string &newAcc, const Password &newPW);
@@ -84,8 +86,23 @@ public:
 	 * @brief	Delete an entry
 	 * @param	site	Site name of the target entry
 	 * @param	acc		Account of the target entry
+	 * @return	0 on success, 1 on failure
 	 */
 	int deleteEntry(const std::string &site, const std::string &acc);
+
+
+	/* ==================================================
+	 * Helper functions
+	 * ================================================== */
+
+	/**
+	 * @brief	Generate a random password that includes at least one each of uppercase, lowercase, number, and special
+	 * @param	dst		Destination password
+	 * @param	vec		List of specials to be used
+	 * @param	size	Destination password size
+	 * @return	0 on success, 1 on failure
+	 */
+	int genPW(Password &dst, std::vector<bool> &spcList, int size);
 
 
 	/* ==================================================
@@ -110,6 +127,10 @@ private:
 	int64_t srcSize = 0, dstSize = 0;
 	uint32_t magicNum = MAGIC_NUM;
 
+
+	/* ==================================================
+	 * Helper functions
+	 * ================================================== */
 
 	void clear();
 
