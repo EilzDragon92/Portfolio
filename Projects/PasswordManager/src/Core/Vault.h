@@ -36,21 +36,21 @@ public:
 	 * ================================================== */
 
 	/**
-	 * @brief	Create empty new vault
+	 * @brief	Create an empty new vault
 	 * @param   path    Vault file path
 	 * @return  0 on success, 1 on failure
 	 */
 	int newVault(const QString &path);
 
 	/**
-	 * @brief	Open vault and read its data
+	 * @brief	Open a vault and read its data
 	 * @param   path    Vault file path
 	 * @return  0 on success, 1 on failure
 	 */
 	int openVault(const QString &path);
 
 	/**
-	 * @brief	Save vault with current data
+	 * @brief	Save the current vault
 	 * @param   path    Vault file path
 	 * @return	0 on success, 1 on failure
 	 */
@@ -62,7 +62,7 @@ public:
 	 * ================================================== */
 
 	/**
-	 * @brief	Create new entry
+	 * @brief	Create a new entry
 	 * @param	site	Site name of the new entry
 	 * @param	acc		Account of the new entry
 	 * @param	pw		Password of the new entry
@@ -92,17 +92,23 @@ public:
 
 
 	/* ==================================================
-	 * Helper functions
+	 * Password functions
 	 * ================================================== */
 
 	/**
-	 * @brief	Generate a random password that includes at least one each of uppercase, lowercase, number, and special
+	 * @brief	Generate a random password including at least one each of uppercase, lowercase, number, and special
 	 * @param	dst		Destination password
 	 * @param	vec		List of specials to be used
 	 * @param	size	Destination password size
 	 * @return	0 on success, 1 on failure
 	 */
 	int genPW(Password &dst, std::vector<bool> &spcList, int size);
+
+	/**
+	 * @brief	Set the master password
+	 * @param	pw	Master password
+	 */
+	void setPW(Password &pw);
 
 
 	/* ==================================================

@@ -58,7 +58,7 @@ int Vault::genPW(Password &dst, std::vector<bool> &spcList, int pwSize) {
 	res[0] = lower[RandomRange(0, 25)];
 	res[1] = upper[RandomRange(0, 25)];
 	res[2] = num[RandomRange(0, 9)];
-	res[3] = spc[RandomRange(62, poolSize - 1)];
+	res[3] = pool[RandomRange(62, poolSize - 1)];
 
 	for (int i = 4; i < pwSize; i++) res[i] = pool[RandomRange(0, poolSize - 1)];
 
@@ -76,6 +76,10 @@ int Vault::genPW(Password &dst, std::vector<bool> &spcList, int pwSize) {
 
 
 	return 0;
+}
+
+void Vault::setPW(Password &pw) {
+	this->pw = pw;
 }
 
 void Vault::clear() {
