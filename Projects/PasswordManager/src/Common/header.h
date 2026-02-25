@@ -17,6 +17,7 @@
 /* Qt framework */
 #include <QApplication>
 #include <QBoxLayout>
+#include <QFileDialog>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>

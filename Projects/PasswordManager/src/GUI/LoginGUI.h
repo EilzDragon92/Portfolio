@@ -1,25 +1,17 @@
 /**
  * @file	LoginGUI.h
- * @brief	Login window for vault management
+ * @brief	Login window for vault file selection
  * @author	EilzDragon92
  */
 
+#pragma once
+
 #include "Common/header.h"
-#include "GUI/PWLineEdit.h"
 
-/**
- * @struct	LoginInput
- * @brief	Container for login input parameters
- */
-struct LoginInput {
-	QString path;
-	Password pw;
-};
-
-/**
- * @class	LoginGUI
- * @brief	Login window for vault management
- */
+ /**
+  * @class	LoginGUI
+  * @brief	Login window for vault file selection
+  */
 class LoginGUI : public QWidget {
 	Q_OBJECT
 
@@ -30,34 +22,27 @@ public:
 	 */
 	explicit LoginGUI(QWidget *parent = nullptr);
 
+signals:
 	/**
-	 * @brief	Display error message
-	 * @param	msg		Error message string
+	 * @brief	Signal when vault file is selected
+	 * @param	mode	0 for new, 1 for open
+	 * @param	path	Selected vault file path
 	 */
-	void setErrMsg(const QString &msg);
+	void vaultSelected(int mode, const QString &path);
 
 private slots:
 	/**
-	 * @brief	Open file dialog to select vault file
-	 */
-	void onBrowseClicked();
-
-	/**
-	 * @brief	Validate input and emit new vault request
+	 * @brief	Open file dialog for new vault creation
 	 */
 	void onNewClicked();
 
 	/**
-	 * @brief	Validate input and emit open vault request
+	 * @brief	Open file dialog for existing vault
 	 */
 	void onOpenClicked();
 
 private:
-	PWLineEdit *pwLine;
-	QLabel *errMsg;
-	QPushButton *browseBtn;
 	QPushButton *newBtn;
 	QPushButton *openBtn;
-	QHBoxLayout *btnBox;
-	QVBoxLayout *vBox;
+	QHBoxLayout *hBox;
 };
