@@ -15,7 +15,14 @@
 #include <openssl/evp.h>
 
 /* Qt framework */
+#include <QApplication>
+#include <QBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QScreen>
 #include <QString>
+#include <QWidget>
 
 /* System */
 #include <cstdio>
