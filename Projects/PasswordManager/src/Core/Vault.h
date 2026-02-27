@@ -92,6 +92,23 @@ public:
 
 
 	/* ==================================================
+	 * Accessor functions
+	 * ================================================== */
+
+	/**
+	 * @brief	Get a reference to the entry set
+	 * @return	Reference to the entry set
+	 */
+	const std::set<Entry, EntryCmp> &getEntries() const;
+
+	/**
+	 * @brief	Get the number of entries
+	 * @return	Number of entries
+	 */
+	int getEntryCount() const;
+
+
+	/* ==================================================
 	 * Password functions
 	 * ================================================== */
 

@@ -18,11 +18,14 @@
 #include <QApplication>
 #include <QBoxLayout>
 #include <QFileDialog>
+#include <QHeaderView>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QScreen>
+#include <QStackedWidget>
 #include <QString>
+#include <QTableWidget>
 #include <QWidget>
 
 /* System */

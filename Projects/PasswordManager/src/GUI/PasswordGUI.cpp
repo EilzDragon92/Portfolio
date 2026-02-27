@@ -11,18 +11,18 @@ PasswordGUI::PasswordGUI(QWidget *parent) : QWidget(parent) {
 
 	pwLine = new PWLineEdit; 
 	errMsg = new QLabel;
-	pathLabel = new QLabel;
 	backBtn = new QPushButton("Back");
 	confirmBtn = new QPushButton("Confirm");
 	btnBox = new QHBoxLayout;
 	vBox = new QVBoxLayout;
+
+	errMsg->setContentsMargins(5, 0, 0, 0);
 
 
 	/* Put buttons and error message in the same line */
 
 	btnBox->addWidget(confirmBtn);
 	btnBox->addWidget(backBtn);
-	btnBox->addWidget(errMsg);
 	btnBox->addStretch();
 	btnBox->setSpacing(10);
 	btnBox->setContentsMargins(0, 0, 0, 0);
@@ -30,10 +30,14 @@ PasswordGUI::PasswordGUI(QWidget *parent) : QWidget(parent) {
 
 	/* Configure main layout */
 
-	vBox->addWidget(pathLabel);
+	vBox->addStretch();
 	vBox->addWidget(pwLine);
+	vBox->addStretch();
 	vBox->addLayout(btnBox);
 	vBox->addStretch();
+	vBox->addWidget(errMsg);
+	vBox->addStretch();
+
 	vBox->setSpacing(10);
 	vBox->setContentsMargins(10, 10, 10, 10);
 

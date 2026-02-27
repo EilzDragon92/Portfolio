@@ -14,6 +14,14 @@ Vault::~Vault() {
 	clear();
 }
 
+const std::set<Entry, EntryCmp> &Vault::getEntries() const {
+	return entrySet;
+}
+
+int Vault::getEntryCount() const {
+	return static_cast<int>(entrySet.size());
+}
+
 int Vault::genPW(Password &dst, std::vector<bool> &spcList, int pwSize) {
 	std::string pool;
 	const char lower[] = "abcdefghijklmnopqrstuvwxyz";

@@ -18,6 +18,7 @@ LoginGUI::LoginGUI(QWidget *parent) : QWidget(parent) {
 
 	hBox->addStretch();
 	hBox->addWidget(newBtn);
+	hBox->addStretch();
 	hBox->addWidget(openBtn);
 	hBox->addStretch();
 	hBox->setSpacing(10);

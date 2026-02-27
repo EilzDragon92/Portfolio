@@ -22,6 +22,23 @@
         "CMAKE_TOOLCHAIN_FILE": "C:/vcpkg/scripts/buildsystems/vcpkg.cmake",
         "CMAKE_PREFIX_PATH": "C:/Qt/6.10.1/msvc2022_64"
       }
+    },
+    {
+      "hidden": true,
+      "name": "Qt",
+      "cacheVariables": {
+        "CMAKE_PREFIX_PATH": "$env{QTDIR}"
+      },
+      "vendor": {
+        "qt-project.org/Qt": {
+          "checksum": "wVa86FgEkvdCTVp1/nxvrkaemJc="
+        }
+      }
     }
-  ]
+  ],
+  "vendor": {
+    "qt-project.org/Presets": {
+      "checksum": "v8ILmo275xa8dXNujZtlJNwFI3I="
+    }
+  }
 }

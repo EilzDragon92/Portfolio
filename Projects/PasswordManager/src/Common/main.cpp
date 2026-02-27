@@ -6,10 +6,12 @@
 
 #include "Common/header.h"
 #include "GUI/LoginGUI.h"
+#include "GUI/PasswordGUI.h"
 
 int ShowGUI(int argc, char *argv[]) {
     QApplication app(argc, argv);
-    LoginGUI *gui = new LoginGUI;
+    //LoginGUI *gui = new LoginGUI;
+    PasswordGUI *gui = new PasswordGUI;
 
 
     /* Configure font size */
