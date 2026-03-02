@@ -7,6 +7,7 @@
 #pragma once
 
 #include "Core/Vault.h"
+#include "GUI/EntryGUI.h"
 #include "GUI/ListGUI.h"
 #include "GUI/LoginGUI.h"
 #include "GUI/PasswordGUI.h"
@@ -50,6 +51,18 @@ private slots:
 	void onBackToLogin();
 
 	/**
+	 * @brief	Process entry add request
+	 */
+	void onAddRequested();
+
+	/**
+	 * @brief	Process entry edit request
+	 * @param	site	Site of entry to be edited
+	 * @param	acc		Account of entry to be edited
+	 */
+	void onEditRequested(const std::string &site, const std::string &acc);
+
+	/**
 	 * @brief	Process entry delete request
 	 * @param	site	Site of entry to be deleted
 	 * @param	acc		Account of entry to be deleted
@@ -57,11 +70,17 @@ private slots:
 	void onDeleteRequested(const std::string &site, const std::string &acc);
 
 	/**
+	 * @brief	Process password generation request
+	 */
+	void onGenerateRequested();
+
+	/**
 	 * @brief	Process vault save request
 	 */
 	void onSaveRequested();
 
 private:
+	EntryGUI *entryGUI;
 	ListGUI *listGUI;
 	LoginGUI *loginGUI;
 	PasswordGUI *pwGUI;
@@ -69,6 +88,10 @@ private:
 	QString vaultPath;
 	QVBoxLayout *vBox;
 	Vault vault;
+
+	std::string editSite;	// Original site for edit mode
+	std::string editAcc;	// Original account for edit mode
+	bool isEditMode = false;
 
 	/**
 	 * @brief	Refresh list GUI

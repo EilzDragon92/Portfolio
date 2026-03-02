@@ -12,6 +12,7 @@ MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
 	loginGUI = new LoginGUI(this);
 	pwGUI = new PasswordGUI(this);
 	listGUI = new ListGUI(this);
+	entryGUI = new EntryGUI(this);
 	stack = new QStackedWidget(this);
 	vBox = new QVBoxLayout(this);
 
@@ -41,8 +42,15 @@ MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
 
 	/* Connect list signals */
 
+	connect(listGUI, &ListGUI::addRequested, this, &MainGUI::onAddRequested);
+	connect(listGUI, &ListGUI::editRequested, this, &MainGUI::onEditRequested);
 	connect(listGUI, &ListGUI::deleteRequested, this, &MainGUI::onDeleteRequested);
 	connect(listGUI, &ListGUI::saveRequested, this, &MainGUI::onSaveRequested);
+
+
+	/* Connect entry dialog signals */
+
+	connect(entryGUI, &EntryGUI::generateRequested, this, &MainGUI::onGenerateRequested);
 }
 
 MainGUI::~MainGUI() {
@@ -94,6 +102,61 @@ void MainGUI::onBackToLogin() {
 	stack->setCurrentWidget(loginGUI);
 }
 
+void MainGUI::onAddRequested() {
+	isEditMode = false;
+
+	entryGUI->setAddMode();
+
+	if (entryGUI->exec() == QDialog::Accepted) {
+		Entry entry = entryGUI->getInput();
+
+		if (vault.createEntry(entry.site, entry.acc, entry.pw)) {
+			listGUI->setErrMsg("Entry already exists");
+			return;
+		}
+
+		refreshList();
+	}
+}
+
+void MainGUI::onEditRequested(const std::string &site, const std::string &acc) {
+	isEditMode = true;
+	editSite = site;
+	editAcc = acc;
+
+
+	/* Find the entry to get its password */
+
+	
+	Entry target = { site, acc };
+	const auto &entries = vault.getEntries();
+	auto it = entries.find(target);
+
+	if (it == entries.end()) {
+		listGUI->setErrMsg("Entry not found");
+		return;
+	}
+
+	entryGUI->setEditMode(site, acc, it->pw);
+
+	if (entryGUI->exec() == QDialog::Accepted) {
+		Entry entry = entryGUI->getInput();
+		int res = vault.updateEntry(editSite, editAcc, entry.site, entry.acc, entry.pw);
+
+		if (res == 1) {
+			listGUI->setErrMsg("Original entry not found");
+			return;
+		}
+
+		if (res == 2) {
+			listGUI->setErrMsg("Entry already exists");
+			return;
+		}
+
+		refreshList();
+	}
+}
+
 void MainGUI::onDeleteRequested(const std::string &site, const std::string &acc) {
 	if (vault.deleteEntry(site, acc)) {
 		listGUI->setErrMsg("Failed to delete entry");
@@ -101,6 +164,18 @@ void MainGUI::onDeleteRequested(const std::string &site, const std::string &acc)
 	}
 
 	refreshList();
+}
+
+void MainGUI::onGenerateRequested() {
+	std::vector<bool> spcList = entryGUI->getSpecialsList();
+	int size = entryGUI->getPasswordSize();
+	Password generated;
+
+	if (vault.genPW(generated, spcList, size)) {
+		return;
+	}
+
+	entryGUI->setPassword(generated);
 }
 
 void MainGUI::onSaveRequested() {
@@ -113,11 +188,10 @@ void MainGUI::onSaveRequested() {
 }
 
 void MainGUI::refreshList() {
-	std::vector<std::pair<std::string, std::string>> entries;
+	std::vector<std::pair<std::string, std::string>> entryVec;
+	const auto &entrySet = vault.getEntries();
 
-	for (const auto &entry : vault.getEntries()) {
-		entries.emplace_back(entry.site, entry.acc);
-	}
+	for (auto it = entrySet.begin(); it != entrySet.end(); it++) entryVec.emplace_back(it->site, it->acc);
 
-	listGUI->loadEntries(entries);
+	listGUI->loadEntries(entryVec);
 }

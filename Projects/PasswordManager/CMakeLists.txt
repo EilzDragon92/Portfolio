@@ -54,7 +54,7 @@ set(HEADERS
     src/Utils/Password.h
 )
 
-add_library(PasswordManager-lib STATIC ${LIB_SOURCES} ${HEADERS} "src/GUI/EntryGUI.cpp")
+add_library(PasswordManager-lib STATIC ${LIB_SOURCES} ${HEADERS})
 
 target_include_directories(PasswordManager-lib PUBLIC
     ${CMAKE_SOURCE_DIR}/src
@@ -73,5 +73,5 @@ if(WIN32)
     target_link_libraries(PasswordManager-lib PUBLIC bcrypt)
 endif()
 
-add_executable(${PROJECT_NAME} src/Common/main.cpp "src/GUI/EntryGUI.cpp")
+add_executable(${PROJECT_NAME} src/Common/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE PasswordManager-lib)

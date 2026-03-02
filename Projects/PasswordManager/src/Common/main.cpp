@@ -5,16 +5,11 @@
  */
 
 #include "Common/header.h"
-#include "GUI/ListGUI.h"
-//#include "GUI/LoginGUI.h"
-//#include "GUI/PasswordGUI.h"
-
+#include "GUI/MainGUI.h"
 
 int ShowGUI(int argc, char *argv[]) {
     QApplication app(argc, argv);
-    ListGUI *gui = new ListGUI;
-    //LoginGUI *gui = new LoginGUI;
-    //PasswordGUI *gui = new PasswordGUI;
+    MainGUI *gui = new MainGUI;
 
 
     /* Configure font size */

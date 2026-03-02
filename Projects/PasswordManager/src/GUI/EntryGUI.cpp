@@ -9,16 +9,18 @@
 EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 	/* Create layouts and components */
 
+	pwLine = new PWLineEdit;
+	spcGrid = new QGridLayout;
+	errMsg = new QLabel;
+	lenLabel = new QLabel("Length: 16");
 	siteLine = new QLineEdit;
 	accLine = new QLineEdit;
-	pwLine = new PWLineEdit;
-	lenSpin = new QSpinBox;
 	genBtn = new QPushButton("Generate");
 	okBtn = new QPushButton("OK");
+	lenSlider = new QSlider(Qt::Horizontal);
 	cancelBtn = new QPushButton("Cancel");
-	errMsg = new QLabel;
 	btnBox = new QHBoxLayout;
-	spcBox = new QHBoxLayout;
+	lenBox = new QHBoxLayout;
 	vBox = new QVBoxLayout;
 
 
@@ -28,35 +30,39 @@ EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 	accLine->setPlaceholderText("Account");
 
 
-	/* Configure password length spinner */
+	/* Configure password length slider */
 
-	lenSpin->setRange(8, 128);
-	lenSpin->setValue(16);
-	lenSpin->setPrefix("Length: ");
+	lenSlider->setRange(8, 32);
+	lenSlider->setValue(16);
+
+	lenBox->addWidget(lenLabel);
+	lenBox->addWidget(lenSlider);
+	lenBox->setSpacing(10);
+	lenBox->setContentsMargins(0, 0, 0, 0);
 
 
 	/* Configure special character checkboxes */
 
 	for (int i = 0; i < 32; i++) {
-		QString label = QString(SPC_CHARS[i]);
+		QString label = QString(spcs[i]);
 
 		spcChecks[i] = new QCheckBox(label);
 		spcChecks[i]->setChecked(true);
 
-		spcBox->addWidget(spcChecks[i]);
+		spcGrid->addWidget(spcChecks[i], i / 8, i % 8);
 	}
 
-	spcBox->addStretch();
-	spcBox->setSpacing(2);
-	spcBox->setContentsMargins(0, 0, 0, 0);
+	spcGrid->setSpacing(5);
+	spcGrid->setContentsMargins(0, 0, 0, 0);
 
 
 	/* Put OK, Cancel, and error message in the same line */
 
+	btnBox->addWidget(genBtn);
 	btnBox->addWidget(okBtn);
 	btnBox->addWidget(cancelBtn);
-	btnBox->addWidget(errMsg);
 	btnBox->addStretch();
+
 	btnBox->setSpacing(10);
 	btnBox->setContentsMargins(0, 0, 0, 0);
 
@@ -66,10 +72,11 @@ EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 	vBox->addWidget(siteLine);
 	vBox->addWidget(accLine);
 	vBox->addWidget(pwLine);
-	vBox->addWidget(lenSpin);
-	vBox->addLayout(spcBox);
-	vBox->addWidget(genBtn);
+	vBox->addLayout(lenBox);
+	vBox->addLayout(spcGrid);
+	vBox->addWidget(errMsg);
 	vBox->addLayout(btnBox);
+
 	vBox->setSpacing(10);
 	vBox->setContentsMargins(10, 10, 10, 10);
 
@@ -81,8 +88,11 @@ EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 	connect(okBtn, &QPushButton::clicked, this, &EntryGUI::onOKClicked);
 	connect(cancelBtn, &QPushButton::clicked, this, &QDialog::reject);
 	connect(genBtn, &QPushButton::clicked, this, &EntryGUI::generateRequested);
-}
 
+	connect(lenSlider, &QSlider::valueChanged, this, [this](int val) {
+		lenLabel->setText(QString("Length: %1").arg(val));
+	});
+}
 
 void EntryGUI::setAddMode() {
 	setWindowTitle("Add Entry");
@@ -102,21 +112,21 @@ void EntryGUI::setEditMode(const std::string &site, const std::string &acc, cons
 	errMsg->clear();
 }
 
-EntryInput EntryGUI::getInput() {
-	EntryInput input;
+Entry EntryGUI::getInput() {
+	Entry entry;
 
-	input.site = siteLine->text().toStdString();
-	input.acc = accLine->text().toStdString();
-	pwLine->extract(input.pw);
+	entry.site = siteLine->text().toStdString();
+	entry.acc = accLine->text().toStdString();
+	pwLine->extract(entry.pw);
 
-	return input;
+	return entry;
 }
 
-void EntryGUI::setGeneratedPW(const Password &pw) {
+void EntryGUI::setPassword(const Password &pw) {
 	pwLine->setPassword(pw);
 }
 
-std::vector<bool> EntryGUI::getSpcList() {
+std::vector<bool> EntryGUI::getSpecialsList() {
 	std::vector<bool> list(32);
 
 	for (int i = 0; i < 32; i++) list[i] = spcChecks[i]->isChecked();
@@ -124,8 +134,8 @@ std::vector<bool> EntryGUI::getSpcList() {
 	return list;
 }
 
-int EntryGUI::getPWLength() {
-	return lenSpin->value();
+int EntryGUI::getPasswordSize() {
+	return lenSlider->value();
 }
 
 void EntryGUI::onOKClicked() {

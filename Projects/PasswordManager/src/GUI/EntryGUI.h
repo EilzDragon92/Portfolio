@@ -7,18 +7,9 @@
 #pragma once
 
 #include "Common/header.h"
+#include "Core/Entry.h"
 #include "GUI/PWLineEdit.h"
 #include "Utils/Password.h"
-
-/**
- * @struct	EntryInput
- * @brief	Container for entry input parameters
- */
-struct EntryInput {
-	std::string site;
-	std::string acc;
-	Password pw;
-};
 
 /**
  * @class	EntryGUI
@@ -51,25 +42,25 @@ public:
 	 * @brief	Get the entry input from the dialog
 	 * @return	Entry input parameters
 	 */
-	EntryInput getInput();
+	Entry getInput();
 
 	/**
 	 * @brief	Set the generated password to the password field
 	 * @param	pw	Generated password
 	 */
-	void setGeneratedPW(const Password &pw);
+	void setPassword(const Password &pw);
 
 	/**
 	 * @brief	Get the special character selection list
 	 * @return	Special character selection list
 	 */
-	std::vector<bool> getSpcList();
+	std::vector<bool> getSpecialsList();
 
 	/**
 	 * @brief	Get the password length
 	 * @return	Password length
 	 */
-	int getPWLength();
+	int getPasswordSize();
 
 signals:
 	/**
@@ -84,18 +75,20 @@ private slots:
 	void onOKClicked();
 
 private:
+	PWLineEdit *pwLine; 
+	QCheckBox *spcChecks[32];
+	QGridLayout *spcGrid;
+	QLabel *errMsg;
+	QLabel *lenLabel;
 	QLineEdit *siteLine;
 	QLineEdit *accLine;
-	PWLineEdit *pwLine;
-	QSpinBox *lenSpin;
-	QCheckBox *spcChecks[32];
 	QPushButton *genBtn;
 	QPushButton *okBtn;
 	QPushButton *cancelBtn;
-	QLabel *errMsg;
+	QSlider *lenSlider;
 	QHBoxLayout *btnBox;
-	QHBoxLayout *spcBox;
+	QHBoxLayout *lenBox;
 	QVBoxLayout *vBox;
 
-	static constexpr char SPC_CHARS[] = "`~!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
+	static constexpr char spcs[] = "`~!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
 };
