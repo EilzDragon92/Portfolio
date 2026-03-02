@@ -17,16 +17,19 @@
 /* Qt framework */
 #include <QApplication>
 #include <QBoxLayout>
+#include <QCheckbox>
 #include <QFileDialog>
 #include <QHeaderView>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QScreen>
+#include <QSpinbox>
 #include <QStackedWidget>
 #include <QString>
 #include <QTableWidget>
 #include <QWidget>
+
 
 /* System */
 #include <cstdio>

@@ -34,6 +34,12 @@ public:
      */
     void extract(Password &pw);
 
+    /**
+     * @brief	Set password data to the input field
+     * @param	pw	Source password
+     */
+    void setPassword(const Password &pw);
+
 private slots:
     /**
      * @brief   Signal when toggle masking button clicked

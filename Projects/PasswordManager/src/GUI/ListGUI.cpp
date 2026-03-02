@@ -30,9 +30,11 @@ ListGUI::ListGUI(QWidget *parent) : QWidget(parent) {
 
 	table->setColumnCount(2);
 	table->setHorizontalHeaderLabels({ "Site", "Account" });
+
 	table->setSelectionBehavior(QAbstractItemView::SelectRows);
 	table->setSelectionMode(QAbstractItemView::SingleSelection);
 	table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
 	table->horizontalHeader()->setStretchLastSection(true);
 	table->verticalHeader()->setVisible(false);
 
@@ -46,6 +48,7 @@ ListGUI::ListGUI(QWidget *parent) : QWidget(parent) {
 	btnBox->addWidget(saveBtn);
 	btnBox->addWidget(errMsg);
 	btnBox->addStretch();
+
 	btnBox->setSpacing(10);
 	btnBox->setContentsMargins(0, 0, 0, 0);
 
@@ -72,14 +75,16 @@ ListGUI::ListGUI(QWidget *parent) : QWidget(parent) {
 }
 
 void ListGUI::loadEntries(const std::vector<std::pair<std::string, std::string>> &entries) {
+	int size = entries.size();
+
 	table->setRowCount(0);
 
-	for (const auto &[site, acc] : entries) {
+	for (int i = 0; i < size; i++) {
 		int row = table->rowCount();
 
 		table->insertRow(row);
-		table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(site)));
-		table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(acc)));
+		table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(entries[i].first)));
+		table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(entries[i].second)));
 	}
 
 	errMsg->clear();
@@ -120,10 +125,12 @@ void ListGUI::onCopyPWClicked() {
 }
 
 void ListGUI::onSearchChanged(const QString &text) {
-	for (int i = 0; i < table->rowCount(); i++) {
+	int rows = table->rowCount(), cols = table->columnCount();
+
+	for (int i = 0; i < rows; i++) {
 		bool match = false;
 
-		for (int j = 0; j < table->columnCount(); j++) {
+		for (int j = 0; j < cols; j++) {
 			QTableWidgetItem *item = table->item(i, j);
 
 			if (item && item->text().contains(text, Qt::CaseInsensitive)) {

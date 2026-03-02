@@ -30,6 +30,7 @@ set(LIB_SOURCES
     src/Core/Vault.cpp
     src/Core/Vault_entry.cpp
     src/Core/Vault_vault.cpp
+    src/GUI/EntryGUI.cpp
     src/GUI/ListGUI.cpp
     src/GUI/LoginGUI.cpp
     src/GUI/MainGUI.cpp
@@ -44,6 +45,7 @@ set(HEADERS
     src/Core/AES_GCM.h
     src/Core/Entry.h
     src/Core/Vault.h
+    src/GUI/EntryGUI.h
     src/GUI/ListGUI.h
     src/GUI/LoginGUI.h
     src/GUI/MainGUI.h
@@ -52,7 +54,7 @@ set(HEADERS
     src/Utils/Password.h
 )
 
-add_library(PasswordManager-lib STATIC ${LIB_SOURCES} ${HEADERS})
+add_library(PasswordManager-lib STATIC ${LIB_SOURCES} ${HEADERS} "src/GUI/EntryGUI.cpp")
 
 target_include_directories(PasswordManager-lib PUBLIC
     ${CMAKE_SOURCE_DIR}/src
@@ -71,5 +73,5 @@ if(WIN32)
     target_link_libraries(PasswordManager-lib PUBLIC bcrypt)
 endif()
 
-add_executable(${PROJECT_NAME} src/Common/main.cpp)
+add_executable(${PROJECT_NAME} src/Common/main.cpp "src/GUI/EntryGUI.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE PasswordManager-lib)

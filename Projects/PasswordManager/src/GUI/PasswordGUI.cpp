@@ -24,6 +24,7 @@ PasswordGUI::PasswordGUI(QWidget *parent) : QWidget(parent) {
 	btnBox->addWidget(confirmBtn);
 	btnBox->addWidget(backBtn);
 	btnBox->addStretch();
+
 	btnBox->setSpacing(10);
 	btnBox->setContentsMargins(0, 0, 0, 0);
 
@@ -32,13 +33,11 @@ PasswordGUI::PasswordGUI(QWidget *parent) : QWidget(parent) {
 
 	vBox->addStretch();
 	vBox->addWidget(pwLine);
-	vBox->addStretch();
 	vBox->addLayout(btnBox);
-	vBox->addStretch();
 	vBox->addWidget(errMsg);
 	vBox->addStretch();
 
-	vBox->setSpacing(10);
+	vBox->setSpacing(15);
 	vBox->setContentsMargins(10, 10, 10, 10);
 
 	setLayout(vBox);

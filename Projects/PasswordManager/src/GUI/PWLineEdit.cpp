@@ -59,6 +59,12 @@ void PWLineEdit::extract(Password &pw) {
     pwLine->clear();
 }
 
+void PWLineEdit::setPassword(const Password &pw) {
+    if (!pw.isEmpty()) {
+        pwLine->setText(QString::fromUtf8(pw.getData(), static_cast<int>(pw.getSize())));
+    }
+}
+
 void PWLineEdit::toggleMask() {
     if (pwLine->echoMode() == QLineEdit::Password) {
         pwLine->setEchoMode(QLineEdit::Normal);
