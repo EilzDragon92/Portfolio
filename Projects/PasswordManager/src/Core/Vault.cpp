@@ -59,6 +59,14 @@ int Vault::genPW(Password &dst, std::vector<bool> &spcList, int pwSize) {
 	poolSize = pool.size();
 
 
+	/* Check at least one speical character is selected */
+
+	if (poolSize <= 62) {
+		reportError("No special characters selected");
+		return 1;
+	}
+
+
 	/* Generate password */
 
 	res = new char[pwSize] {};
@@ -78,7 +86,7 @@ int Vault::genPW(Password &dst, std::vector<bool> &spcList, int pwSize) {
 	/* Cleanup */
 
 	Wipe(pool.data(), pool.size());
-	Wipe(res, sizeof(res));
+	Wipe(res, pwSize);
 
 	delete[] res;
 

@@ -74,6 +74,26 @@ private slots:
 	 */
 	void onOKClicked();
 
+	/**
+	 * @brief	Validate special character selection and emit generate request
+	 */
+	void onGenerateClicked();
+
+	/**
+	 * @brief	Check all special character checkboxes
+	 */
+	void onCheckAllClicked();
+
+	/**
+	 * @brief	Uncheck all special character checkboxes
+	 */
+	void onUncheckAllClicked();
+
+	/**
+	 * @brief	Reset special character checkboxes to default
+	 */
+	void onResetClicked();
+
 private:
 	PWLineEdit *pwLine; 
 	QCheckBox *spcChecks[32];
@@ -82,13 +102,34 @@ private:
 	QLabel *lenLabel;
 	QLineEdit *siteLine;
 	QLineEdit *accLine;
+	QPushButton *checkAllBtn;
+	QPushButton *uncheckAllBtn;
+	QPushButton *resetBtn;
 	QPushButton *genBtn;
 	QPushButton *okBtn;
 	QPushButton *cancelBtn;
 	QSlider *lenSlider;
 	QHBoxLayout *btnBox;
 	QHBoxLayout *lenBox;
+	QHBoxLayout *spcBtnBox;
 	QVBoxLayout *vBox;
 
 	static constexpr char spcs[] = "`~!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
+
+	static constexpr bool defaultSpc[32] = {
+	//  `  ~  !  @  #  $  %  ^
+		0, 1, 1, 1, 0, 0, 1, 1, 
+	//  &  *  (  )  -  _  =  +
+		0, 0, 0, 0, 0, 1, 1, 1,
+	//  [  {  ]  }  \  |  ;  :
+		1, 1, 1, 1, 0, 0, 0, 1,
+	//  '  "  ,  <  .  >  /  ?
+		0, 0, 1, 0, 0, 0, 0, 1
+	};
+
+	/**
+	 * @brief	Check if at least one special character is selected
+	 * @return	true if at least one is checked
+	 */
+	bool hasSpecialSelected() const;
 };

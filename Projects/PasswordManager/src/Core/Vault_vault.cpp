@@ -13,7 +13,7 @@ int Vault::newVault(const QString &path) {
 	/* Generate initial data */
 
 	srcSize = COUNT_SIZE;
-	dstSize = MAGIC_SIZE + SALT_SIZE + IV_SIZE + TAG_SIZE;
+	dstSize = MAGIC_SIZE + SALT_SIZE + IV_SIZE + srcSize + TAG_SIZE;
 
 	srcBuff = new uint8_t[srcSize]{};
 	dstBuff = new uint8_t[dstSize]{};

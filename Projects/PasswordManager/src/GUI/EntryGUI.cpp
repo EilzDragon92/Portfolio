@@ -15,12 +15,16 @@ EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 	lenLabel = new QLabel("Length: 16");
 	siteLine = new QLineEdit;
 	accLine = new QLineEdit;
+	checkAllBtn = new QPushButton("Check All");
+	uncheckAllBtn = new QPushButton("Uncheck All");
+	resetBtn = new QPushButton("Reset to Default");
 	genBtn = new QPushButton("Generate");
 	okBtn = new QPushButton("OK");
 	lenSlider = new QSlider(Qt::Horizontal);
 	cancelBtn = new QPushButton("Cancel");
 	btnBox = new QHBoxLayout;
 	lenBox = new QHBoxLayout;
+	spcBtnBox = new QHBoxLayout;
 	vBox = new QVBoxLayout;
 
 
@@ -47,13 +51,24 @@ EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 		QString label = QString(spcs[i]);
 
 		spcChecks[i] = new QCheckBox(label);
-		spcChecks[i]->setChecked(true);
+		spcChecks[i]->setChecked(defaultSpc[i]);
 
 		spcGrid->addWidget(spcChecks[i], i / 8, i % 8);
 	}
 
 	spcGrid->setSpacing(5);
 	spcGrid->setContentsMargins(0, 0, 0, 0);
+
+
+	/* Configure special character control buttons */
+
+	spcBtnBox->addWidget(checkAllBtn);
+	spcBtnBox->addWidget(uncheckAllBtn);
+	spcBtnBox->addWidget(resetBtn);
+	spcBtnBox->addStretch();
+
+	spcBtnBox->setSpacing(10);
+	spcBtnBox->setContentsMargins(0, 0, 0, 0);
 
 
 	/* Put OK, Cancel, and error message in the same line */
@@ -74,6 +89,7 @@ EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 	vBox->addWidget(pwLine);
 	vBox->addLayout(lenBox);
 	vBox->addLayout(spcGrid);
+	vBox->addLayout(spcBtnBox);
 	vBox->addWidget(errMsg);
 	vBox->addLayout(btnBox);
 
@@ -85,9 +101,12 @@ EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 
 	/* Connect functions to buttons */
 
+	connect(checkAllBtn, &QPushButton::clicked, this, &EntryGUI::onCheckAllClicked);
+	connect(uncheckAllBtn, &QPushButton::clicked, this, &EntryGUI::onUncheckAllClicked);
+	connect(resetBtn, &QPushButton::clicked, this, &EntryGUI::onResetClicked);
 	connect(okBtn, &QPushButton::clicked, this, &EntryGUI::onOKClicked);
 	connect(cancelBtn, &QPushButton::clicked, this, &QDialog::reject);
-	connect(genBtn, &QPushButton::clicked, this, &EntryGUI::generateRequested);
+	connect(genBtn, &QPushButton::clicked, this, &EntryGUI::onGenerateClicked);
 
 	connect(lenSlider, &QSlider::valueChanged, this, [this](int val) {
 		lenLabel->setText(QString("Length: %1").arg(val));
@@ -162,4 +181,35 @@ void EntryGUI::onOKClicked() {
 	pwLine->setPassword(tmp);
 
 	accept();
+}
+
+void EntryGUI::onGenerateClicked() {
+	if (!hasSpecialSelected()) {
+		errMsg->setText("No special characters selected");
+		return;
+	}
+
+	errMsg->clear();
+
+	emit generateRequested();
+}
+
+void EntryGUI::onCheckAllClicked() {
+	for (int i = 0; i < 32; i++) spcChecks[i]->setChecked(true);
+}
+
+void EntryGUI::onUncheckAllClicked() {
+	for (int i = 0; i < 32; i++) spcChecks[i]->setChecked(false);
+}
+
+void EntryGUI::onResetClicked() {
+	for (int i = 0; i < 32; i++) spcChecks[i]->setChecked(defaultSpc[i]);
+}
+
+bool EntryGUI::hasSpecialSelected() const {
+	for (int i = 0; i < 32; i++) {
+		if (spcChecks[i]->isChecked()) return true;
+	}
+
+	return false;
 }

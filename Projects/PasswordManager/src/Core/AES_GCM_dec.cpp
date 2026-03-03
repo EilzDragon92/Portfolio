@@ -104,14 +104,14 @@ int AES_GCM::decryptBuff() {
 
 	if (EVP_DecryptUpdate(ctx, dst, &res, src + srcCrs, len) != 1) {
 		// LCOV_EXCL_START
-		reportError("[Crypto] Encryption failed - Cannot encrypt buffer\n");
+		reportError("[Crypto] Decryption failed - Cannot decrypt buffer\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
 	if (res != len) {
 		// LCOV_EXCL_START
-		reportError("[Crypto] Encryption failed - Cannot encrypt buffer\n");
+		reportError("[Crypto] Decryption failed - Cannot decrypt buffer\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
@@ -127,7 +127,7 @@ int AES_GCM::decryptFinal() {
 
 	if (EVP_DecryptFinal_ex(ctx, final, &finalLen) != 1) {
 		// LCOV_EXCL_START
-		reportError("[Crypto] Finalization failed - Cannot finalize encryption\n");
+		reportError("[Crypto] Finalization failed - Cannot finalize decryption\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}

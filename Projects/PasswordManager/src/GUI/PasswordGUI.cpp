@@ -9,7 +9,8 @@
 PasswordGUI::PasswordGUI(QWidget *parent) : QWidget(parent) {
 	/* Create layouts and components */
 
-	pwLine = new PWLineEdit; 
+	pwLine = new PWLineEdit;
+	pathLabel = new QLabel;
 	errMsg = new QLabel;
 	backBtn = new QPushButton("Back");
 	confirmBtn = new QPushButton("Confirm");

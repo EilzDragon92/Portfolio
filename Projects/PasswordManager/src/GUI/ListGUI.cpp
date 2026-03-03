@@ -84,7 +84,7 @@ void ListGUI::loadEntries(const std::vector<std::pair<std::string, std::string>>
 
 		table->insertRow(row);
 		table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(entries[i].first)));
-		table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(entries[i].second)));
+		table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(entries[i].second)));
 	}
 
 	errMsg->clear();
