@@ -78,6 +78,13 @@ public:
 	}
 
 	/**
+	 * @brief	Constant-time comparison with another password
+	 * @param	other	Password to compare
+	 * @return	true if equal
+	 */
+	bool compare(const Password &other) const;
+
+	/**
 	 * @brief   Check the password data is empty
 	 * @return	true if empty
 	 */

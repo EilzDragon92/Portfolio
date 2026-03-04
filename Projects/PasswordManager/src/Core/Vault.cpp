@@ -94,10 +94,6 @@ int Vault::genPW(Password &dst, std::vector<bool> &spcList, int pwSize) {
 	return 0;
 }
 
-void Vault::setPW(Password &pw) {
-	this->pw = pw;
-}
-
 void Vault::clear() {
 	if (file) {
 		fclose(file);

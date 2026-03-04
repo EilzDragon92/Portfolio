@@ -6,6 +6,16 @@
 
 #include "Utils/Password.h"
 
+bool Password::compare(const Password &other) const {
+	if (size != other.size) return false;
+
+	volatile uint8_t diff = 0;
+
+	for (size_t i = 0; i < size; i++) diff |= static_cast<uint8_t>(data[i]) ^ static_cast<uint8_t>(other.data[i]);
+
+	return diff == 0;
+}
+
 bool Password::isEmpty() const {
 	return size == 0;
 }

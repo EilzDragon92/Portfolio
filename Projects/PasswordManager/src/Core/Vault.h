@@ -10,10 +10,10 @@
 #include "Core/AES_GCM.h"
 #include "Core/Entry.h"
 
- /**
-  * @class	Vault
-  * @brief	Manages password vaults
-  */
+/**
+ * @class	Vault
+ * @brief	Manages password vaults
+ */
 class Vault {
 public:
 	/* ==================================================
@@ -32,7 +32,7 @@ public:
 
 
 	/* ==================================================
-	 * Vault file management functions
+	 * Vault management functions
 	 * ================================================== */
 
 	/**
@@ -55,6 +55,22 @@ public:
 	 * @return	0 on success, 1 on failure
 	 */
 	int saveVault(const QString &path);
+
+	/**
+	 * @brief	Change the master password and re-encrypt vault
+	 * @param	curPW	Current password for verification
+	 * @param	newPW	New password
+	 * @param	path	Vault file path
+	 * @return	0 on success, 1 on wrong password, 2 on save failure
+	 */
+	int changePW(const Password &curPW, const Password &newPW, const QString &path);
+
+
+	/**
+	 * @brief	Set the master password of vault
+	 * @param	pw	Master password
+	 */
+	void setPW(Password &pw);
 
 
 	/* ==================================================
@@ -120,12 +136,6 @@ public:
 	 * @return	0 on success, 1 on failure
 	 */
 	int genPW(Password &dst, std::vector<bool> &spcList, int size);
-
-	/**
-	 * @brief	Set the master password
-	 * @param	pw	Master password
-	 */
-	void setPW(Password &pw);
 
 
 	/* ==================================================

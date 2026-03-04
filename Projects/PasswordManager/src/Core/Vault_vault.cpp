@@ -183,3 +183,31 @@ int Vault::saveVault(const QString &path) {
 
 	return 0;
 }
+
+int Vault::changePW(const Password &curPW, const Password &newPW, const QString &path) {
+	/* Verify current password with constant-time comparison */
+
+	if (pw.compare(curPW)) {
+		reportError("Current password is incorrect");
+		return 1;
+	}
+
+
+	/* Set new password */
+
+	pw.setData(newPW);
+
+
+	/* Re-encrypt and save vault */
+
+	if (saveVault(path)) {
+		reportError("Failed to save vault");
+		return 2;
+	}
+
+	return 0;
+}
+
+void Vault::setPW(Password &pw) {
+	this->pw = pw;
+}

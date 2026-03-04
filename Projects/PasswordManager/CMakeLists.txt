@@ -30,6 +30,7 @@ set(LIB_SOURCES
     src/Core/Vault.cpp
     src/Core/Vault_entry.cpp
     src/Core/Vault_vault.cpp
+    src/GUI/ChangePWGUI.cpp
     src/GUI/EntryGUI.cpp
     src/GUI/ListGUI.cpp
     src/GUI/LoginGUI.cpp
@@ -45,6 +46,7 @@ set(HEADERS
     src/Core/AES_GCM.h
     src/Core/Entry.h
     src/Core/Vault.h
+    src/GUI/ChangePWGUI.h
     src/GUI/EntryGUI.h
     src/GUI/ListGUI.h
     src/GUI/LoginGUI.h

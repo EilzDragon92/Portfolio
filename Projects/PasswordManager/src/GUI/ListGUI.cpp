@@ -9,15 +9,17 @@
 ListGUI::ListGUI(QWidget *parent) : QWidget(parent) {
 	/* Create layouts and components */
 	
-	errMsg = new QLabel;
+	errMsg = new QLabel();
 	searchLine = new QLineEdit;
 	addBtn = new QPushButton("Add");
 	editBtn = new QPushButton("Edit");
 	deleteBtn = new QPushButton("Delete");
-	copyPWBtn = new QPushButton("Copy PW");
+	copyPWBtn = new QPushButton("Copy Password");
 	saveBtn = new QPushButton("Save");
+	changePWBtn = new QPushButton("Change Master Password");
 	table = new QTableWidget;
-	btnBox = new QHBoxLayout;
+	entryBtns = new QHBoxLayout;
+	vaultBtns = new QHBoxLayout;
 	vBox = new QVBoxLayout;
 
 
@@ -39,25 +41,36 @@ ListGUI::ListGUI(QWidget *parent) : QWidget(parent) {
 	table->verticalHeader()->setVisible(false);
 
 
-	/* Put buttons and error message in the same line */
+	/* Put add, edit, delete, copy password buttons in the same line */
 
-	btnBox->addWidget(addBtn);
-	btnBox->addWidget(editBtn);
-	btnBox->addWidget(deleteBtn);
-	btnBox->addWidget(copyPWBtn);
-	btnBox->addWidget(saveBtn);
-	btnBox->addWidget(errMsg);
-	btnBox->addStretch();
+	entryBtns->addWidget(addBtn);
+	entryBtns->addWidget(editBtn);
+	entryBtns->addWidget(deleteBtn);
+	entryBtns->addWidget(copyPWBtn);
+	entryBtns->addStretch();
 
-	btnBox->setSpacing(10);
-	btnBox->setContentsMargins(0, 0, 0, 0);
+	entryBtns->setSpacing(10);
+	entryBtns->setContentsMargins(0, 0, 0, 0);
+
+
+	/* Put save, change master password buttons in the same line */
+
+	vaultBtns->addWidget(saveBtn);
+	vaultBtns->addWidget(changePWBtn);
+	vaultBtns->addStretch();
+
+	vaultBtns->setSpacing(10);
+	vaultBtns->setContentsMargins(0, 0, 0, 0);
 
 
 	/* Configure main layout */
 
 	vBox->addWidget(searchLine);
 	vBox->addWidget(table);
-	vBox->addLayout(btnBox);
+	vBox->addWidget(errMsg);
+	vBox->addLayout(entryBtns);
+	vBox->addLayout(vaultBtns);
+
 	vBox->setSpacing(10);
 	vBox->setContentsMargins(10, 10, 10, 10);
 
@@ -71,6 +84,7 @@ ListGUI::ListGUI(QWidget *parent) : QWidget(parent) {
 	connect(deleteBtn, &QPushButton::clicked, this, &ListGUI::onDeleteClicked);
 	connect(copyPWBtn, &QPushButton::clicked, this, &ListGUI::onCopyPWClicked);
 	connect(saveBtn, &QPushButton::clicked, this, &ListGUI::saveRequested);
+	connect(changePWBtn, &QPushButton::clicked, this, &ListGUI::changePWRequested);
 	connect(searchLine, &QLineEdit::textChanged, this, &ListGUI::onSearchChanged);
 }
 

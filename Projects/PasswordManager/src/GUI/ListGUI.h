@@ -66,6 +66,12 @@ signals:
 	 */
 	void saveRequested();
 
+
+	/**
+	 * @brief	Signal when change password button is clicked
+	 */
+	void changePWRequested();
+
 private slots:
 	/**
 	 * @brief	Handle add button click
@@ -96,13 +102,9 @@ private slots:
 private:
 	QLabel *errMsg;
 	QLineEdit *searchLine;
-	QPushButton *addBtn;
-	QPushButton *editBtn;
-	QPushButton *deleteBtn;
-	QPushButton *copyPWBtn;
-	QPushButton *saveBtn;
+	QPushButton *addBtn, *editBtn, *deleteBtn, *copyPWBtn, *saveBtn, *changePWBtn;
 	QTableWidget *table;
-	QHBoxLayout *btnBox;
+	QHBoxLayout *entryBtns, *vaultBtns;
 	QVBoxLayout *vBox;
 
 	/**

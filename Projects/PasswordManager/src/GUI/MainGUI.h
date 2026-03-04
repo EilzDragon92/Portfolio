@@ -7,6 +7,7 @@
 #pragma once
 
 #include "Core/Vault.h"
+#include "GUI/ChangePWGUI.h"
 #include "GUI/EntryGUI.h"
 #include "GUI/ListGUI.h"
 #include "GUI/LoginGUI.h"
@@ -79,7 +80,13 @@ private slots:
 	 */
 	void onSaveRequested();
 
+	/**
+	 * @brief	Process change master password request
+	 */
+	void onChangePWRequested();
+
 private:
+	ChangePWGUI *changePWGUI;
 	EntryGUI *entryGUI;
 	ListGUI *listGUI;
 	LoginGUI *loginGUI;

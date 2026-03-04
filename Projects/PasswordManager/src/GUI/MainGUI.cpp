@@ -9,10 +9,11 @@
 MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
 	/* Create layouts and components */
 
+	changePWGUI = new ChangePWGUI(this);
+	entryGUI = new EntryGUI(this);
+	listGUI = new ListGUI(this);
 	loginGUI = new LoginGUI(this);
 	pwGUI = new PasswordGUI(this);
-	listGUI = new ListGUI(this);
-	entryGUI = new EntryGUI(this);
 	stack = new QStackedWidget(this);
 	vBox = new QVBoxLayout(this);
 
@@ -46,6 +47,7 @@ MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
 	connect(listGUI, &ListGUI::editRequested, this, &MainGUI::onEditRequested);
 	connect(listGUI, &ListGUI::deleteRequested, this, &MainGUI::onDeleteRequested);
 	connect(listGUI, &ListGUI::saveRequested, this, &MainGUI::onSaveRequested);
+	connect(listGUI, &ListGUI::changePWRequested, this, &MainGUI::onChangePWRequested);
 
 
 	/* Connect entry dialog signals */
@@ -185,6 +187,27 @@ void MainGUI::onSaveRequested() {
 	}
 
 	listGUI->setErrMsg("Saved");
+}
+
+void MainGUI::onChangePWRequested() {
+	changePWGUI->reset();
+
+	if (changePWGUI->exec() == QDialog::Accepted) {
+		ChangePWInput input = changePWGUI->getInput();
+		int res = vault.changePW(input.curPW, input.newPW, vaultPath);
+
+		if (res == 1) {
+			listGUI->setErrMsg("Current password is incorrect");
+			return;
+		}
+
+		if (res == 2) {
+			listGUI->setErrMsg("Failed to save vault");
+			return;
+		}
+
+		listGUI->setErrMsg("Password changed");
+	}
 }
 
 void MainGUI::refreshList() {
