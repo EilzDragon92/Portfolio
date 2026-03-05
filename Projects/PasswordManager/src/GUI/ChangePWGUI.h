@@ -11,15 +11,6 @@
 #include "Utils/Password.h"
 
 /**
- * @struct	ChangePWInput
- * @brief	Container for change password input parameters
- */
-struct ChangePWInput {
-	Password curPW;
-	Password newPW;
-};
-
-/**
  * @class	ChangePWGUI
  * @brief	Dialog for changing the master password
  */
@@ -34,15 +25,15 @@ public:
 	explicit ChangePWGUI(QWidget *parent = nullptr);
 
 	/**
-	 * @brief	Reset all input fields
-	 */
-	void reset();
-
-	/**
 	 * @brief	Get the change password input from the dialog
 	 * @return	Change password input parameters
 	 */
-	ChangePWInput getInput();
+	void getInput(Password &curPw, Password &newPw);
+
+	/**
+	 * @brief	Reset all input fields
+	 */
+	void reset();
 
 	/**
 	 * @brief	Display error message

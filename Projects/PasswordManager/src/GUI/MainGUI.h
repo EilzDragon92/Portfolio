@@ -71,11 +71,6 @@ private slots:
 	void onDeleteRequested(const std::string &site, const std::string &acc);
 
 	/**
-	 * @brief	Process password generation request
-	 */
-	void onGenerateRequested();
-
-	/**
 	 * @brief	Process vault save request
 	 */
 	void onSaveRequested();

@@ -141,22 +141,6 @@ Entry EntryGUI::getInput() {
 	return entry;
 }
 
-void EntryGUI::setPassword(const Password &pw) {
-	pwLine->setPassword(pw);
-}
-
-std::vector<bool> EntryGUI::getSpecialsList() {
-	std::vector<bool> list(32);
-
-	for (int i = 0; i < 32; i++) list[i] = spcChecks[i]->isChecked();
-
-	return list;
-}
-
-int EntryGUI::getPasswordSize() {
-	return lenSlider->value();
-}
-
 void EntryGUI::onOKClicked() {
 	errMsg->clear();
 
@@ -191,7 +175,16 @@ void EntryGUI::onGenerateClicked() {
 
 	errMsg->clear();
 
-	emit generateRequested();
+	std::vector<bool> spcList = getSpecialsList();
+	int size = lenSlider->value();
+	Password generated;
+
+	if (genPW(generated, spcList, size)) {
+		errMsg->setText("Failed to generate password");
+		return;
+	}
+
+	pwLine->setPassword(generated);
 }
 
 void EntryGUI::onCheckAllClicked() {
@@ -206,10 +199,80 @@ void EntryGUI::onResetClicked() {
 	for (int i = 0; i < 32; i++) spcChecks[i]->setChecked(defaultSpc[i]);
 }
 
+std::vector<bool> EntryGUI::getSpecialsList() {
+	std::vector<bool> list(32);
+
+	for (int i = 0; i < 32; i++) list[i] = spcChecks[i]->isChecked();
+
+	return list;
+}
+
 bool EntryGUI::hasSpecialSelected() const {
 	for (int i = 0; i < 32; i++) {
 		if (spcChecks[i]->isChecked()) return true;
 	}
 
 	return false;
+}
+
+int EntryGUI::genPW(Password &dst, std::vector<bool> &spcList, int pwSize) {
+	std::string pool;
+	const char lower[] = "abcdefghijklmnopqrstuvwxyz";
+	const char upper[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	const char num[] = "0123456789";
+	char *res;
+	int poolSize;
+
+
+	/* Check the list size is valid */
+
+	if (spcList.size() != 32) return 1;
+
+
+	/* Check the password size is valid */
+
+	if (pwSize < 8) return 1;
+
+
+	/* Add characters to pool */
+
+	pool += lower;
+	pool += upper;
+	pool += num;
+
+	for (int i = 0; i < 32; i++) if (spcList[i]) pool += spcs[i];
+
+	poolSize = pool.size();
+
+
+	/* Check at least one special character is selected */
+
+	if (poolSize <= 62) return 1;
+
+
+	/* Generate password */
+
+	res = new char[pwSize] {};
+
+	res[0] = lower[RandomRange(0, 25)];
+	res[1] = upper[RandomRange(0, 25)];
+	res[2] = num[RandomRange(0, 9)];
+	res[3] = pool[RandomRange(62, poolSize - 1)];
+
+	for (int i = 4; i < pwSize; i++) res[i] = pool[RandomRange(0, poolSize - 1)];
+
+	Shuffle(reinterpret_cast<uint8_t *>(res), pwSize);
+
+	dst.setData(res, pwSize);
+
+
+	/* Cleanup */
+
+	Wipe(pool.data(), pool.size());
+	Wipe(res, pwSize);
+
+	delete[] res;
+
+
+	return 0;
 }

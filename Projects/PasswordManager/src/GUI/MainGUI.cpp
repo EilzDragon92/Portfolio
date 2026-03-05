@@ -48,11 +48,6 @@ MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
 	connect(listGUI, &ListGUI::deleteRequested, this, &MainGUI::onDeleteRequested);
 	connect(listGUI, &ListGUI::saveRequested, this, &MainGUI::onSaveRequested);
 	connect(listGUI, &ListGUI::changePWRequested, this, &MainGUI::onChangePWRequested);
-
-
-	/* Connect entry dialog signals */
-
-	connect(entryGUI, &EntryGUI::generateRequested, this, &MainGUI::onGenerateRequested);
 }
 
 MainGUI::~MainGUI() {
@@ -168,18 +163,6 @@ void MainGUI::onDeleteRequested(const std::string &site, const std::string &acc)
 	refreshList();
 }
 
-void MainGUI::onGenerateRequested() {
-	std::vector<bool> spcList = entryGUI->getSpecialsList();
-	int size = entryGUI->getPasswordSize();
-	Password generated;
-
-	if (vault.genPW(generated, spcList, size)) {
-		return;
-	}
-
-	entryGUI->setPassword(generated);
-}
-
 void MainGUI::onSaveRequested() {
 	if (vault.saveVault(vaultPath)) {
 		listGUI->setErrMsg("Failed to save vault");
@@ -193,8 +176,11 @@ void MainGUI::onChangePWRequested() {
 	changePWGUI->reset();
 
 	if (changePWGUI->exec() == QDialog::Accepted) {
-		ChangePWInput input = changePWGUI->getInput();
-		int res = vault.changePW(input.curPW, input.newPW, vaultPath);
+		Password curPW, newPW;
+
+		changePWGUI->getInput(curPW, newPW);
+
+		int res = vault.changePW(curPW, newPW, vaultPath);
 
 		if (res == 1) {
 			listGUI->setErrMsg("Current password is incorrect");

@@ -58,20 +58,16 @@ ChangePWGUI::ChangePWGUI(QWidget *parent) : QDialog(parent) {
 	connect(cancelBtn, &QPushButton::clicked, this, &QDialog::reject);
 }
 
+void ChangePWGUI::getInput(Password &curPW, Password &newPW) {
+	curPWLine->extract(curPW);
+	newPWLine->extract(newPW);
+}
+
 void ChangePWGUI::reset() {
 	curPWLine->clear();
 	newPWLine->clear();
 	confirmPWLine->clear();
 	errMsg->clear();
-}
-
-ChangePWInput ChangePWGUI::getInput() {
-	ChangePWInput input;
-
-	curPWLine->extract(input.curPW);
-	newPWLine->extract(input.newPW);
-
-	return input;
 }
 
 void ChangePWGUI::setErrMsg(const QString &msg) {

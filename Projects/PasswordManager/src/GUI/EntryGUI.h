@@ -44,30 +44,6 @@ public:
 	 */
 	Entry getInput();
 
-	/**
-	 * @brief	Set the generated password to the password field
-	 * @param	pw	Generated password
-	 */
-	void setPassword(const Password &pw);
-
-	/**
-	 * @brief	Get the special character selection list
-	 * @return	Special character selection list
-	 */
-	std::vector<bool> getSpecialsList();
-
-	/**
-	 * @brief	Get the password length
-	 * @return	Password length
-	 */
-	int getPasswordSize();
-
-signals:
-	/**
-	 * @brief	Signal when password generation is requested
-	 */
-	void generateRequested();
-
 private slots:
 	/**
 	 * @brief	Validate input and accept dialog
@@ -128,8 +104,26 @@ private:
 	};
 
 	/**
+	 * @brief	Get the special character selection list
+	 * @return	Special character selection list
+	 */
+	std::vector<bool> getSpecialsList();
+
+	/**
 	 * @brief	Check if at least one special character is selected
 	 * @return	true if at least one is checked
 	 */
 	bool hasSpecialSelected() const;
+
+	/**
+	 * @brief	Generate a random password
+	 *
+	 * Generate a random password including at least one each of
+	 * uppercase, lowercase, number, and special character
+	 * @param	dst		Destination password
+	 * @param	spcList	List of specials to be used
+	 * @param	size	Destination password size
+	 * @return	0 on success, 1 on failure
+	 */
+	int genPW(Password &dst, std::vector<bool> &spcList, int size);
 };

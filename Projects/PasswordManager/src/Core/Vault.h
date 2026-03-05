@@ -125,20 +125,6 @@ public:
 
 
 	/* ==================================================
-	 * Password functions
-	 * ================================================== */
-
-	/**
-	 * @brief	Generate a random password including at least one each of uppercase, lowercase, number, and special
-	 * @param	dst		Destination password
-	 * @param	vec		List of specials to be used
-	 * @param	size	Destination password size
-	 * @return	0 on success, 1 on failure
-	 */
-	int genPW(Password &dst, std::vector<bool> &spcList, int size);
-
-
-	/* ==================================================
 	 * Callback functions
 	 * ================================================== */
 
