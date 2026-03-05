@@ -47,6 +47,7 @@ MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
 	connect(listGUI, &ListGUI::editRequested, this, &MainGUI::onEditRequested);
 	connect(listGUI, &ListGUI::deleteRequested, this, &MainGUI::onDeleteRequested);
 	connect(listGUI, &ListGUI::saveRequested, this, &MainGUI::onSaveRequested);
+	connect(listGUI, &ListGUI::closeRequested, this, &MainGUI::onCloseRequested);
 	connect(listGUI, &ListGUI::changePWRequested, this, &MainGUI::onChangePWRequested);
 }
 
@@ -170,6 +171,13 @@ void MainGUI::onSaveRequested() {
 	}
 
 	listGUI->setErrMsg("Saved");
+}
+
+void MainGUI::onCloseRequested() {
+	vault.closeVault();
+	vaultPath.clear();
+
+	stack->setCurrentWidget(loginGUI);
 }
 
 void MainGUI::onChangePWRequested() {

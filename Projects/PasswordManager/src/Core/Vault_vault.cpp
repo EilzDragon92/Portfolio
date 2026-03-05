@@ -184,6 +184,12 @@ int Vault::saveVault(const QString &path) {
 	return 0;
 }
 
+void Vault::closeVault() {
+	entrySet.clear();
+	pw.clean();
+	clear();
+}
+
 int Vault::changePW(const Password &curPW, const Password &newPW, const QString &path) {
 	/* Verify current password with constant-time comparison */
 

@@ -75,6 +75,11 @@ private slots:
 	 */
 	void onSaveRequested();
 
+	/** 
+	 * @brief	Process vault close request
+	 */
+	void onCloseRequested();
+
 	/**
 	 * @brief	Process change master password request
 	 */

@@ -16,6 +16,7 @@ ListGUI::ListGUI(QWidget *parent) : QWidget(parent) {
 	deleteBtn = new QPushButton("Delete");
 	copyPWBtn = new QPushButton("Copy Password");
 	saveBtn = new QPushButton("Save");
+	closeBtn = new QPushButton("Close");
 	changePWBtn = new QPushButton("Change Master Password");
 	table = new QTableWidget;
 	entryBtns = new QHBoxLayout;
@@ -56,6 +57,7 @@ ListGUI::ListGUI(QWidget *parent) : QWidget(parent) {
 	/* Put save, change master password buttons in the same line */
 
 	vaultBtns->addWidget(saveBtn);
+	vaultBtns->addWidget(closeBtn);
 	vaultBtns->addWidget(changePWBtn);
 	vaultBtns->addStretch();
 
@@ -84,6 +86,7 @@ ListGUI::ListGUI(QWidget *parent) : QWidget(parent) {
 	connect(deleteBtn, &QPushButton::clicked, this, &ListGUI::onDeleteClicked);
 	connect(copyPWBtn, &QPushButton::clicked, this, &ListGUI::onCopyPWClicked);
 	connect(saveBtn, &QPushButton::clicked, this, &ListGUI::saveRequested);
+	connect(closeBtn, &QPushButton::clicked, this, &ListGUI::closeRequested);
 	connect(changePWBtn, &QPushButton::clicked, this, &ListGUI::changePWRequested);
 	connect(searchLine, &QLineEdit::textChanged, this, &ListGUI::onSearchChanged);
 }

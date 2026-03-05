@@ -57,6 +57,11 @@ public:
 	int saveVault(const QString &path);
 
 	/**
+	 * @brief	Close the vault and wipe all data
+	 */
+	void closeVault();
+
+	/**
 	 * @brief	Change the master password and re-encrypt vault
 	 * @param	curPW	Current password for verification
 	 * @param	newPW	New password
@@ -64,7 +69,6 @@ public:
 	 * @return	0 on success, 1 on wrong password, 2 on save failure
 	 */
 	int changePW(const Password &curPW, const Password &newPW, const QString &path);
-
 
 	/**
 	 * @brief	Set the master password of vault

@@ -115,12 +115,12 @@ public:
 	 */
 	void setData(const char *str, size_t len);
 
-private:
-	char *data = nullptr;
-	size_t size = 0;
-
 	/**
 	 * @brief   Securely wipe password data
 	 */
 	void clean();
+
+private:
+	char *data = nullptr;
+	size_t size = 0;
 };
