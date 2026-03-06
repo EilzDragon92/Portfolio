@@ -138,10 +138,25 @@ public:
 	 */
 	using ErrorCallback = std::function<void(const char *errMsg)>;
 
+	/**
+	 * @brief	Set error callback function
+	 * @param	ecb		Error callback function
+	 */
+	void setErrorCb(ErrorCallback ecb) {
+		this->ecb = ecb;
+	}
+
+	/**
+	 * @brief	Get the last error message
+	 * @return	Last error message
+	 */
+	const std::string &getLastError() const;
+
 private:
 	AES_GCM aes;
 	Password pw;
 	std::set<Entry, EntryCmp> entrySet;
+	std::string lastError;
 
 	ErrorCallback ecb = nullptr;
 

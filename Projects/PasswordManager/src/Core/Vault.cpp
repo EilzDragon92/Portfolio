@@ -7,7 +7,9 @@
 #include "Core/Vault.h"
 
 Vault::Vault() {
-	;
+	aes.setErrorCb([this](const char *msg) {
+		lastError = msg;
+	});
 }
 
 Vault::~Vault() {
@@ -16,6 +18,10 @@ Vault::~Vault() {
 
 const std::set<Entry, EntryCmp> &Vault::getEntries() const {
 	return entrySet;
+}
+
+const std::string &Vault::getLastError() const {
+	return lastError;
 }
 
 int Vault::getEntryCount() const {
@@ -45,7 +51,10 @@ void Vault::clear() {
 }
 
 void Vault::reportError(const char *msg) {
-	if (ecb) ecb(msg);
+	if (lastError.empty())  lastError = msg;
+	else					lastError = std::string(msg) + "\n" + lastError;
+
+	if (ecb) ecb(lastError.c_str());
 
 	clear();
 }

@@ -32,6 +32,25 @@ public:
 	 */
 	~MainGUI();
 
+
+	/* ==================================================
+	 * Callback functions
+	 * ================================================== */
+
+	/**
+	 * @brief	Callback function for error reporting
+	 * @param	errMsg	Error message string
+	 */
+	using ErrorCallback = std::function<void(const char *errMsg)>;
+
+	/**
+	 * @brief	Set error callback function
+	 * @param	ecb		Error callback function
+	 */
+	void setErrorCb(ErrorCallback ecb) {
+		this->ecb = ecb;
+	}
+
 private slots:
 	/**
 	 * @brief	Switch to password input screen
@@ -86,6 +105,8 @@ private slots:
 	void onChangePWRequested();
 
 private:
+	ErrorCallback ecb = nullptr;
+
 	ChangePWGUI *changePWGUI;
 	EntryGUI *entryGUI;
 	ListGUI *listGUI;
@@ -96,8 +117,9 @@ private:
 	QVBoxLayout *vBox;
 	Vault vault;
 
-	std::string editSite;	// Original site for edit mode
-	std::string editAcc;	// Original account for edit mode
+	std::string lastError;
+	std::string origSite;
+	std::string origAcc;
 	bool isEditMode = false;
 
 	/**

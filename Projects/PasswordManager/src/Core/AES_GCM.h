@@ -10,11 +10,9 @@
 
 class AES_GCM {
 public:
-	/**
-	 * @brief	Callback function for error reporting
-	 * @param	errMsg	Error message string
-	 */
-	using ErrorCallback = std::function<void(const char *errMsg)>;
+	/* ==================================================
+	 * Constructor, destructor, operators
+	 * ================================================== */
 
 	/**
 	 * @brief	Default constructor of AES_GCM class
@@ -30,6 +28,11 @@ public:
 	AES_GCM &operator=(const AES_GCM &) = delete;	// Delete copy assignment operator
 	AES_GCM(AES_GCM &&) = delete;					// Delete move constructor
 	AES_GCM &operator=(AES_GCM &&) = delete;		// Delete move assignment operator
+
+
+	/* ==================================================
+	 * Interface functions
+	 * ================================================== */
 
 	/**
 	  * @brief		Decrypt a buffer
@@ -52,6 +55,25 @@ public:
 	  * @return		0 on success, 1 on failure
 	  */
 	int encrypt(uint8_t *src, uint8_t *dst, size_t size, const char *pw, size_t plen);
+
+
+	/* ==================================================
+	 * Callback functions
+	 * ================================================== */
+
+	/**
+	 * @brief	Callback function for error reporting
+	 * @param	errMsg	Error message string
+	 */
+	using ErrorCallback = std::function<void(const char *errMsg)>;
+
+	/**
+	 * @brief	Set error callback function
+	 * @param	ecb		Error callback function
+	 */
+	void setErrorCb(ErrorCallback ecb) {
+		this->ecb = ecb;
+	}
 
 private:
 	EVP_CIPHER_CTX *ctx = nullptr;	// OpenSSL encryption/decryption context

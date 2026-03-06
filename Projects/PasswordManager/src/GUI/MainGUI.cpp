@@ -74,15 +74,11 @@ void MainGUI::onLoginRequested(const LoginInput &input) {
 
 	/* Create or open vault */
 
-	if (input.mode == 0) {
-		res = vault.newVault(input.path);
-	}
-	else {
-		res = vault.openVault(input.path);
-	}
+	if (input.mode == 0) res = vault.newVault(input.path);
+	else				 res = vault.openVault(input.path);
 
 	if (res) {
-		pwGUI->setErrMsg("Failed to access vault");
+		pwGUI->setErrMsg(QString::fromStdString(lastError));
 		return;
 	}
 
@@ -119,8 +115,8 @@ void MainGUI::onAddRequested() {
 
 void MainGUI::onEditRequested(const std::string &site, const std::string &acc) {
 	isEditMode = true;
-	editSite = site;
-	editAcc = acc;
+	origSite = site;
+	origAcc = acc;
 
 
 	/* Find the entry to get its password */
@@ -139,7 +135,7 @@ void MainGUI::onEditRequested(const std::string &site, const std::string &acc) {
 
 	if (entryGUI->exec() == QDialog::Accepted) {
 		Entry entry = entryGUI->getInput();
-		int res = vault.updateEntry(editSite, editAcc, entry.site, entry.acc, entry.pw);
+		int res = vault.updateEntry(origSite, origAcc, entry.site, entry.acc, entry.pw);
 
 		if (res == 1) {
 			listGUI->setErrMsg("Original entry not found");
@@ -166,7 +162,7 @@ void MainGUI::onDeleteRequested(const std::string &site, const std::string &acc)
 
 void MainGUI::onSaveRequested() {
 	if (vault.saveVault(vaultPath)) {
-		listGUI->setErrMsg("Failed to save vault");
+		pwGUI->setErrMsg(QString::fromStdString(lastError));
 		return;
 	}
 
@@ -191,12 +187,12 @@ void MainGUI::onChangePWRequested() {
 		int res = vault.changePW(curPW, newPW, vaultPath);
 
 		if (res == 1) {
-			listGUI->setErrMsg("Current password is incorrect");
+			pwGUI->setErrMsg(QString::fromStdString(lastError));
 			return;
 		}
 
 		if (res == 2) {
-			listGUI->setErrMsg("Failed to save vault");
+			pwGUI->setErrMsg(QString::fromStdString(lastError));
 			return;
 		}
 

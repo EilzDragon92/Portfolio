@@ -9,6 +9,8 @@
 int Vault::newVault(const QString &path) {
 	int entryCnt = 0;
 
+	lastError.clear();
+
 
 	/* Generate initial data */
 
@@ -52,6 +54,8 @@ int Vault::newVault(const QString &path) {
 
 int Vault::openVault(const QString &path) {
 	int cur = 0, entryCnt = 0;
+
+	lastError.clear();
 
 
 	/* Open file pointer */
@@ -127,6 +131,8 @@ int Vault::saveVault(const QString &path) {
 	int srcCur = 0, dstCur = 0;
 	int entryCnt = static_cast<int>(entrySet.size());
 
+	lastError.clear();
+
 
 	/* Calculate vault size */
 
@@ -191,9 +197,12 @@ void Vault::closeVault() {
 }
 
 int Vault::changePW(const Password &curPW, const Password &newPW, const QString &path) {
+	lastError.clear();
+
+
 	/* Verify current password with constant-time comparison */
 
-	if (pw.compare(curPW)) {
+	if (!pw.compare(curPW)) {
 		reportError("Current password is incorrect");
 		return 1;
 	}
