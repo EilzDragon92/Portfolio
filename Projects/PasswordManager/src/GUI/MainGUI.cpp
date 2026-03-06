@@ -49,6 +49,13 @@ MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
 	connect(listGUI, &ListGUI::saveRequested, this, &MainGUI::onSaveRequested);
 	connect(listGUI, &ListGUI::closeRequested, this, &MainGUI::onCloseRequested);
 	connect(listGUI, &ListGUI::changePWRequested, this, &MainGUI::onChangePWRequested);
+
+
+	/* Set error callback */
+
+	vault.setErrorCb([this](const char *msg) {
+		lastError = msg;
+	});
 }
 
 MainGUI::~MainGUI() {

@@ -27,7 +27,7 @@ int Vault::newVault(const QString &path) {
 	/* Encrypt */
 
 	if (aes.encrypt(srcBuff, dstBuff + MAGIC_SIZE, srcSize, pw.getData(), pw.getSize())) {
-		reportError("Encryption failed");
+		reportError("[Crypto] Encryption failed - Cannot encrypt vault data\n");
 		return 1;
 	}
 
@@ -37,12 +37,12 @@ int Vault::newVault(const QString &path) {
 	OpenFile(&file, path, "wb");
 
 	if (file == nullptr) {
-		reportError("Failed to open file");
+		reportError("[File] Open failed - Cannot create vault file\n");
 		return 1;
 	}
 
 	if (fwrite(dstBuff, sizeof(uint8_t), dstSize, file) != dstSize) {
-		reportError("ERROR: Failed to write file");
+		reportError("[File] Write failed - Cannot write vault file\n");
 		return 1;
 	}
 
@@ -63,7 +63,7 @@ int Vault::openVault(const QString &path) {
 	OpenFile(&file, path, "rb");
 
 	if (file == nullptr) {
-		reportError("Failed to open file");
+		reportError("[File] Open failed - Cannot open vault file\n");
 		return 1;
 	}
 
@@ -73,7 +73,7 @@ int Vault::openVault(const QString &path) {
 	srcSize = GetFileSize(file);
 
 	if (srcSize == -1) {
-		reportError("Failed to read file size");
+		reportError("[File] Size check failed - Cannot read vault file size\n");
 		return 1;
 	}
 
@@ -83,7 +83,7 @@ int Vault::openVault(const QString &path) {
 	srcBuff = new uint8_t[srcSize]{};
 
 	if (fread(srcBuff, sizeof(uint8_t), srcSize, file) != srcSize) {
-		reportError("Failed to read file");
+		reportError("[File] Read failed - Cannot read vault file data\n");
 		return 1;
 	}
 
@@ -91,7 +91,7 @@ int Vault::openVault(const QString &path) {
 	/* Check magic number */
 
 	if (memcmp(srcBuff, &magicNum, MAGIC_SIZE) != 0) {
-		reportError("Magic number mismatch");
+		reportError("[File] Validation failed - Invalid vault file format\n");
 		return 1;
 	}
 
@@ -103,7 +103,7 @@ int Vault::openVault(const QString &path) {
 	dstBuff = new uint8_t[dstSize]{};
 
 	if (aes.decrypt(srcBuff + MAGIC_SIZE, dstBuff, srcSize - MAGIC_SIZE, pw.getData(), pw.getSize())) {
-		reportError("Decryption failed");
+		reportError("[Auth] Decryption failed - Invalid password or corrupted vault\n");
 		return 1;
 	}
 
@@ -163,7 +163,7 @@ int Vault::saveVault(const QString &path) {
 	/* Encrypt */
 
 	if (aes.encrypt(srcBuff, dstBuff + dstCur, srcSize, pw.getData(), pw.getSize())) {
-		reportError("Encryption failed");
+		reportError("[Crypto] Encryption failed - Cannot encrypt vault data\n");
 		return 1;
 	}
 
@@ -175,12 +175,12 @@ int Vault::saveVault(const QString &path) {
 	OpenFile(&file, path, "wb");
 
 	if (file == nullptr) {
-		reportError("Failed to open file");
+		reportError("[File] Open failed - Cannot open vault file for writing\n");
 		return 1;
 	}
 
 	if (fwrite(dstBuff, sizeof(uint8_t), dstSize, file) != dstSize) {
-		reportError("ERROR: Failed to write file");
+		reportError("[File] Write failed - Cannot write vault file\n");
 		return 1;
 	}
 
@@ -203,7 +203,7 @@ int Vault::changePW(const Password &curPW, const Password &newPW, const QString 
 	/* Verify current password with constant-time comparison */
 
 	if (!pw.compare(curPW)) {
-		reportError("Current password is incorrect");
+		reportError("[Auth] Verification failed - Current password is incorrect\n");
 		return 1;
 	}
 
@@ -215,10 +215,8 @@ int Vault::changePW(const Password &curPW, const Password &newPW, const QString 
 
 	/* Re-encrypt and save vault */
 
-	if (saveVault(path)) {
-		reportError("Failed to save vault");
-		return 2;
-	}
+	if (saveVault(path)) return 2;
+
 
 	return 0;
 }

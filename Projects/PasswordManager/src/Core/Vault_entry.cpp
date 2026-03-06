@@ -11,7 +11,12 @@ int Vault::createEntry(const std::string &site, const std::string &acc, const Pa
 
 	auto res = entrySet.insert(newEntry);
 
-	return res.second ? 0 : 1;
+	if (!res.second) {
+		lastError = "[Entry] Insert failed - Entry already exists\n";
+		return 1;
+	}
+
+	return 0;
 }
 
 int Vault::updateEntry(const std::string &oldSite, const std::string &oldAcc, 
@@ -22,7 +27,10 @@ int Vault::updateEntry(const std::string &oldSite, const std::string &oldAcc,
 
 	auto oldIt = entrySet.find(oldEntry);
 
-	if (oldIt == entrySet.end()) return 1;
+	if (oldIt == entrySet.end()) {
+		lastError = "[Entry] Update failed - Original entry not found\n";
+		return 1;
+	}
 
 
 	/* Check new entry data conflicts with existing entry */
@@ -31,13 +39,21 @@ int Vault::updateEntry(const std::string &oldSite, const std::string &oldAcc,
 
 	auto newIt = entrySet.find(newEntry);
 
-	if (newIt != entrySet.end() && newIt != oldIt) return 2;
+	if (newIt != entrySet.end() && newIt != oldIt) {
+		lastError = "[Entry] Update failed - Entry already exists\n";
+		return 2;
+	}
 
 	entrySet.erase(oldIt);
 
 	auto res = entrySet.insert(newEntry);
 
-	return res.second ? 0 : 1;
+	if (!res.second) {
+		lastError = "[Entry] Update failed - Cannot insert entry\n";
+		return 1;
+	}
+
+	return 0;
 }
 
 int Vault::deleteEntry(const std::string &site, const std::string &acc) {
@@ -45,7 +61,10 @@ int Vault::deleteEntry(const std::string &site, const std::string &acc) {
 
 	auto it = entrySet.find(tar);
 
-	if (it == entrySet.end()) return 1;
+	if (it == entrySet.end()) {
+		lastError = "[Entry] Delete failed - Entry not found\n";
+		return 1;
+	}
 
 	entrySet.erase(it);
 
