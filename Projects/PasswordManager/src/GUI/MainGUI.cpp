@@ -46,6 +46,7 @@ MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
 	connect(listGUI, &ListGUI::addRequested, this, &MainGUI::onAddRequested);
 	connect(listGUI, &ListGUI::editRequested, this, &MainGUI::onEditRequested);
 	connect(listGUI, &ListGUI::deleteRequested, this, &MainGUI::onDeleteRequested);
+	connect(listGUI, &ListGUI::copyPWRequested, this, &MainGUI::onCopyPWRequested);
 	connect(listGUI, &ListGUI::saveRequested, this, &MainGUI::onSaveRequested);
 	connect(listGUI, &ListGUI::closeRequested, this, &MainGUI::onCloseRequested);
 	connect(listGUI, &ListGUI::changePWRequested, this, &MainGUI::onChangePWRequested);
@@ -55,6 +56,13 @@ MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
 
 	vault.setErrorCb([this](const char *msg) {
 		lastError = msg;
+	});
+
+
+	/* Set verify callback for password change */
+
+	changePWGUI->setVerifyCb([this](const Password &curPW) -> bool {
+		return vault.verifyPW(curPW);
 	});
 }
 
@@ -167,6 +175,42 @@ void MainGUI::onDeleteRequested(const std::string &site, const std::string &acc)
 	refreshList();
 }
 
+void MainGUI::onCopyPWRequested(const std::string &site, const std::string &acc) {
+	Entry target = { site, acc };
+	const auto &entries = vault.getEntries();
+	auto it = entries.find(target);
+
+	if (it == entries.end()) {
+		listGUI->setErrMsg("Entry not found");
+		return;
+	}
+
+
+	/* Copy password to clipboard */
+
+	QClipboard *board = QGuiApplication::clipboard();
+
+	board->setText(QString::fromUtf8(it->pw.getData(), static_cast<int>(it->pw.getSize())));
+
+	listGUI->setErrMsg("Password copied (clears in 30s)");
+
+
+	/* Auto-clear clipboard after 30 seconds */
+
+	if (timer)	timer->stop();
+	else		timer = new QTimer(this);
+
+	connect(timer, &QTimer::timeout, this, [this, board]() {
+		board->clear();
+		listGUI->setErrMsg("Clipboard cleared");
+		timer->deleteLater();
+		timer = nullptr;
+	});
+
+	timer->setSingleShot(true);
+	timer->start(30000);
+}
+
 void MainGUI::onSaveRequested() {
 	if (vault.saveVault(vaultPath)) {
 		pwGUI->setErrMsg(QString::fromStdString(lastError));
@@ -191,15 +235,8 @@ void MainGUI::onChangePWRequested() {
 
 		changePWGUI->getInput(curPW, newPW);
 
-		int res = vault.changePW(curPW, newPW, vaultPath);
-
-		if (res == 1) {
-			pwGUI->setErrMsg(QString::fromStdString(lastError));
-			return;
-		}
-
-		if (res == 2) {
-			pwGUI->setErrMsg(QString::fromStdString(lastError));
+		if (vault.changePW(newPW, vaultPath)) {
+			listGUI->setErrMsg("Failed to save vault");
 			return;
 		}
 

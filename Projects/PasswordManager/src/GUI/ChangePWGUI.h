@@ -41,6 +41,24 @@ public:
 	 */
 	void setErrMsg(const QString &msg);
 
+
+	/* ==================================================
+	 * Callback functions
+	 * ================================================== */
+
+	/**
+	 * @brief	Callback function for verifying current password
+	 * @param	curPW	Current password to verify
+	 * @return	true if password is correct
+	 */
+	using VerifyCallback = std::function<bool(const Password &curPW)>;
+
+	/**
+	 * @brief	Set verify callback function
+	 * @param	vcb		Verify callback function
+	 */
+	void setVerifyCb(VerifyCallback vcb);
+
 private slots:
 	/**
 	 * @brief	Validate input and accept dialog
@@ -53,4 +71,6 @@ private:
 	QPushButton *okBtn, *cancelBtn;
 	QHBoxLayout *btnBox;
 	QVBoxLayout *vBox;
+
+	VerifyCallback vcb = nullptr;
 };

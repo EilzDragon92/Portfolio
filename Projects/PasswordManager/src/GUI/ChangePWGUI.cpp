@@ -16,7 +16,7 @@ ChangePWGUI::ChangePWGUI(QWidget *parent) : QDialog(parent) {
 	newLabel = new QLabel("New Password:");
 	confirmLabel = new QLabel("Confirm New Password:");
 	errMsg = new QLabel;
-	okBtn = new QPushButton("OK");
+	okBtn = new QPushButton("Ok");
 	cancelBtn = new QPushButton("Cancel");
 	btnBox = new QHBoxLayout;
 	vBox = new QVBoxLayout;
@@ -74,6 +74,10 @@ void ChangePWGUI::setErrMsg(const QString &msg) {
 	errMsg->setText(msg);
 }
 
+void ChangePWGUI::setVerifyCb(VerifyCallback vcb) {
+	this->vcb = vcb;
+}
+
 void ChangePWGUI::onOKClicked() {
 	errMsg->clear();
 
@@ -108,7 +112,7 @@ void ChangePWGUI::onOKClicked() {
 	/* Validate new password matches confirmation */
 
 	if (newPW.getSize() != confirmPW.getSize() || !newPW.compare(confirmPW)) {
-		errMsg->setText("Passwords do not match");
+		errMsg->setText("New and comfirm password do not match");
 		return;
 	}
 
@@ -116,7 +120,18 @@ void ChangePWGUI::onOKClicked() {
 	/* Validate new password differs from current */
 
 	if (newPW.getSize() == curPW.getSize() && newPW.compare(curPW)) {
-		errMsg->setText("Old and new passwords are same");
+		errMsg->setText("Old and new password are the same");
+		return;
+	}
+
+
+	/* Verify current password via callback */
+
+	if (vcb && !vcb(curPW)) {
+		errMsg->setText("Current password is incorrect");
+		curPWLine->clear();
+		newPWLine->clear();
+		confirmPWLine->clear();
 		return;
 	}
 

@@ -53,8 +53,8 @@ int Vault::newVault(const QString &path) {
 }
 
 int Vault::openVault(const QString &path) {
+	size_t cur = 0;
 	uint32_t entryCnt = 0;
-	int cur = 0;
 
 	lastError.clear();
 
@@ -114,7 +114,7 @@ int Vault::openVault(const QString &path) {
 	memcpy(&entryCnt, dstBuff, COUNT_SIZE);
 	cur += COUNT_SIZE;
 
-	for (int i = 0; i < entryCnt; i++) {
+	for (uint32_t i = 0; i < entryCnt; i++) {
 		Entry entry;
 
 		cur += entry.deser(dstBuff + cur);
@@ -129,8 +129,8 @@ int Vault::openVault(const QString &path) {
 }
 
 int Vault::saveVault(const QString &path) {
+	size_t srcCur = 0, dstCur = 0;
 	uint32_t entryCnt = static_cast<uint32_t>(entrySet.size());
-	int srcCur = 0, dstCur = 0;
 
 	lastError.clear();
 
@@ -197,27 +197,16 @@ void Vault::closeVault() {
 	clear();
 }
 
-int Vault::changePW(const Password &curPW, const Password &newPW, const QString &path) {
+bool Vault::verifyPW(const Password &curPW) const {
+	return pw.compare(curPW);
+}
+
+int Vault::changePW(const Password &newPW, const QString &path) {
 	lastError.clear();
-
-
-	/* Verify current password with constant-time comparison */
-
-	if (!pw.compare(curPW)) {
-		reportError("[Auth] Verification failed - Current password is incorrect\n");
-		return 1;
-	}
-
-
-	/* Set new password */
 
 	pw.setData(newPW);
 
-
-	/* Re-encrypt and save vault */
-
-	if (saveVault(path)) return 2;
-
+	if (saveVault(path)) return 1;
 
 	return 0;
 }

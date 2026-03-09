@@ -92,11 +92,11 @@ ListGUI::ListGUI(QWidget *parent) : QWidget(parent) {
 }
 
 void ListGUI::loadEntries(const std::vector<std::pair<std::string, std::string>> &entries) {
-	int size = entries.size();
+	size_t size = entries.size();
 
 	table->setRowCount(0);
 
-	for (int i = 0; i < size; i++) {
+	for (size_t i = 0; i < size; i++) {
 		int row = table->rowCount();
 
 		table->insertRow(row);

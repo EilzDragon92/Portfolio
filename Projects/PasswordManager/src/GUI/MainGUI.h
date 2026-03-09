@@ -90,6 +90,13 @@ private slots:
 	void onDeleteRequested(const std::string &site, const std::string &acc);
 
 	/**
+	 * @brief	Process copy password request
+	 * @param	site	Site of entry to copy password from
+	 * @param	acc		Account of entry to copy password from
+	 */
+	void onCopyPWRequested(const std::string &site, const std::string &acc);
+
+	/**
 	 * @brief	Process vault save request
 	 */
 	void onSaveRequested();
@@ -105,8 +112,6 @@ private slots:
 	void onChangePWRequested();
 
 private:
-	ErrorCallback ecb = nullptr;
-
 	ChangePWGUI *changePWGUI;
 	EntryGUI *entryGUI;
 	ListGUI *listGUI;
@@ -114,6 +119,7 @@ private:
 	PasswordGUI *pwGUI;
 	QStackedWidget *stack;
 	QString vaultPath;
+	QTimer *timer = nullptr;
 	QVBoxLayout *vBox;
 	Vault vault;
 
@@ -121,6 +127,8 @@ private:
 	std::string origSite;
 	std::string origAcc;
 	bool isEditMode = false;
+
+	ErrorCallback ecb = nullptr;
 
 	/**
 	 * @brief	Refresh list GUI

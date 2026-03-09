@@ -18,6 +18,7 @@
 #include <QApplication>
 #include <QBoxLayout>
 #include <QCheckbox>
+#include <QClipboard>
 #include <QFileDialog>
 #include <QHeaderView>
 #include <QLabel>
@@ -28,6 +29,7 @@
 #include <QStackedWidget>
 #include <QString>
 #include <QTableWidget>
+#include <QTimer>
 #include <QWidget>
 
 

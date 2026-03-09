@@ -32,7 +32,7 @@ public:
 
 
 	/* ==================================================
-	 * Vault management functions
+	 * Vault file functions
 	 * ================================================== */
 
 	/**
@@ -61,14 +61,25 @@ public:
 	 */
 	void closeVault();
 
+
+	/* ==================================================
+	 * Vault password functions
+	 * ================================================== */
+
+	/**
+	 * @brief	Verify the master password
+	 * @param	curPW	Password to verify
+	 * @return	true if password is correct
+	 */
+	bool verifyPW(const Password &curPW) const;
+
 	/**
 	 * @brief	Change the master password and re-encrypt vault
-	 * @param	curPW	Current password for verification
 	 * @param	newPW	New password
 	 * @param	path	Vault file path
-	 * @return	0 on success, 1 on wrong password, 2 on save failure
+	 * @return	0 on success, 1 on save failure
 	 */
-	int changePW(const Password &curPW, const Password &newPW, const QString &path);
+	int changePW(const Password &newPW, const QString &path);
 
 	/**
 	 * @brief	Set the master password of vault

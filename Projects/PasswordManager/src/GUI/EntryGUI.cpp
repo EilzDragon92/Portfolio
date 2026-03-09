@@ -19,7 +19,7 @@ EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 	uncheckAllBtn = new QPushButton("Uncheck All");
 	resetBtn = new QPushButton("Reset to Default");
 	genBtn = new QPushButton("Generate");
-	okBtn = new QPushButton("OK");
+	okBtn = new QPushButton("Ok");
 	lenSlider = new QSlider(Qt::Horizontal);
 	cancelBtn = new QPushButton("Cancel");
 	btnBox = new QHBoxLayout;
@@ -217,11 +217,11 @@ bool EntryGUI::hasSpecialSelected() const {
 
 int EntryGUI::genPW(Password &dst, std::vector<bool> &spcList, int pwSize) {
 	std::string pool;
+	size_t poolSize;
 	const char lower[] = "abcdefghijklmnopqrstuvwxyz";
 	const char upper[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	const char num[] = "0123456789";
 	char *res;
-	int poolSize;
 
 
 	/* Check the list size is valid */
@@ -257,9 +257,9 @@ int EntryGUI::genPW(Password &dst, std::vector<bool> &spcList, int pwSize) {
 	res[0] = lower[RandomRange(0, 25)];
 	res[1] = upper[RandomRange(0, 25)];
 	res[2] = num[RandomRange(0, 9)];
-	res[3] = pool[RandomRange(62, poolSize - 1)];
+	res[3] = pool[RandomRange(62, static_cast<uint32_t>(poolSize) - 1)];
 
-	for (int i = 4; i < pwSize; i++) res[i] = pool[RandomRange(0, poolSize - 1)];
+	for (int i = 4; i < pwSize; i++) res[i] = pool[RandomRange(0, static_cast<uint32_t>(poolSize) - 1)];
 
 	Shuffle(reinterpret_cast<uint8_t *>(res), pwSize);
 
