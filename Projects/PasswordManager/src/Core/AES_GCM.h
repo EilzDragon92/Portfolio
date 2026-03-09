@@ -87,9 +87,9 @@ private:
 	uint8_t *src;	// Source buffer
 	uint8_t *dst;	// Destination buffer
 
-	int srcCrs = 0; // Current read position in buffer
-	int dstCrs = 0; // Current write position in buffer
-	int size = 0;	// Source buffer size
+	size_t srcCrs = 0;	// Current read position in buffer
+	size_t dstCrs = 0;	// Current write position in buffer
+	size_t size = 0;	// Source buffer size
 
 
 	/* ==================================================

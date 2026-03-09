@@ -67,9 +67,9 @@
 #define IV_SIZE 12		/// Initial vector size in bytes
 #define TAG_SIZE 16		/// Authentication tag size in bytes
 
-#define MAGIC_NUM 0x63a5baf3	/// Magic number to distinguish vault file
-#define MAGIC_SIZE 4			/// Magic number size
-#define COUNT_SIZE sizeof(int)	/// Entry count field size
+#define MAGIC_NUM 0x63a5baf3			/// Magic number to distinguish vault file
+#define MAGIC_SIZE 4					/// Magic number size
+#define COUNT_SIZE sizeof(uint32_t)		/// Entry count field size
 
 /**
  * @brief	Get the size of a file in bytes

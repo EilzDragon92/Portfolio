@@ -7,7 +7,7 @@
 #include "Core/Vault.h"
 
 int Vault::newVault(const QString &path) {
-	int entryCnt = 0;
+	uint32_t entryCnt = 0;
 
 	lastError.clear();
 
@@ -53,7 +53,8 @@ int Vault::newVault(const QString &path) {
 }
 
 int Vault::openVault(const QString &path) {
-	int cur = 0, entryCnt = 0;
+	uint32_t entryCnt = 0;
+	int cur = 0;
 
 	lastError.clear();
 
@@ -128,8 +129,8 @@ int Vault::openVault(const QString &path) {
 }
 
 int Vault::saveVault(const QString &path) {
+	uint32_t entryCnt = static_cast<uint32_t>(entrySet.size());
 	int srcCur = 0, dstCur = 0;
-	int entryCnt = static_cast<int>(entrySet.size());
 
 	lastError.clear();
 
