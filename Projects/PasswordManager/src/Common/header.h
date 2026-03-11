@@ -120,6 +120,13 @@ int GetProcNum();
 int Random(uint8_t *dst, size_t size);
 
 /**
+ * @brief	Delete a file
+ * @param	path	File path
+ * @return	0 on success, non-zero on failure
+ */
+int RemoveFile(const QString &path);
+
+/**
  * @brief	Lock memory space so that it cannot be swapped
  * @param	buff	Buffer to lock
  * @param	size	Buffer size in bytes

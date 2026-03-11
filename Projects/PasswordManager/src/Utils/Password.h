@@ -82,7 +82,7 @@ public:
 	 * @param	other	Password to compare
 	 * @return	true if equal
 	 */
-	bool compare(const Password &other) const;
+	bool equal(const Password &other) const;
 
 	/**
 	 * @brief   Check the password data is empty

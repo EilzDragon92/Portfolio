@@ -28,8 +28,8 @@ set(LIB_SOURCES
     src/Core/AES_GCM_enc.cpp
     src/Core/Entry.cpp
     src/Core/Vault.cpp
+    src/Core/Vault_file.cpp
     src/Core/Vault_entry.cpp
-    src/Core/Vault_vault.cpp
     src/GUI/ChangePWGUI.cpp
     src/GUI/EntryGUI.cpp
     src/GUI/ListGUI.cpp
@@ -77,3 +77,25 @@ endif()
 
 add_executable(${PROJECT_NAME} src/Common/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE PasswordManager-lib)
+
+enable_testing()
+
+set(TEST_SOURCES
+    src/Tests/AES_GCM_Test.cpp
+    src/Tests/EntryTest.cpp
+    src/Tests/PasswordTest.cpp
+    src/Tests/UtilsTest.cpp
+    src/Tests/VaultEntryTest.cpp
+    src/Tests/VaultFileTest.cpp
+)
+
+add_executable(PasswordManager-tests ${TEST_SOURCES})
+
+target_link_libraries(PasswordManager-tests PRIVATE
+    PasswordManager-lib
+    GTest::gtest
+    GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(PasswordManager-tests)

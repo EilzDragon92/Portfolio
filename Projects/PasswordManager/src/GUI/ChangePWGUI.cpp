@@ -111,7 +111,7 @@ void ChangePWGUI::onOKClicked() {
 
 	/* Validate new password matches confirmation */
 
-	if (newPW.getSize() != confirmPW.getSize() || !newPW.compare(confirmPW)) {
+	if (newPW.getSize() != confirmPW.getSize() || !newPW.equal(confirmPW)) {
 		errMsg->setText("New and comfirm password do not match");
 		return;
 	}
@@ -119,7 +119,7 @@ void ChangePWGUI::onOKClicked() {
 
 	/* Validate new password differs from current */
 
-	if (newPW.getSize() == curPW.getSize() && newPW.compare(curPW)) {
+	if (newPW.getSize() == curPW.getSize() && newPW.equal(curPW)) {
 		errMsg->setText("Old and new password are the same");
 		return;
 	}

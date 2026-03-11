@@ -90,6 +90,20 @@ int Random(uint8_t *dst, size_t size) {
 #endif
 }
 
+int RemoveFile(const QString &path) {
+#ifdef _WIN32
+    std::wstring wpath = path.toStdWString();
+
+    return _wunlink(wpath.c_str());
+
+#else
+    QByteArray qpath = path.toUtf8();
+
+    return unlink(qpath.constData());
+
+#endif
+}
+
 void Lock(void *buff, size_t size) {
 #ifdef _WIN32
     VirtualLock(buff, size);

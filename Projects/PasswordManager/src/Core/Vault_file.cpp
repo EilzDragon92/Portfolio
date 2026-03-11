@@ -198,7 +198,7 @@ void Vault::closeVault() {
 }
 
 bool Vault::verifyPW(const Password &curPW) const {
-	return pw.compare(curPW);
+	return pw.equal(curPW);
 }
 
 int Vault::changePW(const Password &newPW, const QString &path) {

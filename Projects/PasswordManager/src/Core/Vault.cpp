@@ -51,8 +51,7 @@ void Vault::clear() {
 }
 
 void Vault::reportError(const char *msg) {
-	if (lastError.empty())  lastError = msg;
-	else					lastError = std::string(msg) + lastError;
+	lastError = msg;
 
 	if (ecb) ecb(lastError.c_str());
 

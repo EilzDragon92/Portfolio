@@ -6,7 +6,7 @@
 
 #include "Utils/Password.h"
 
-bool Password::compare(const Password &other) const {
+bool Password::equal(const Password &other) const {
 	if (size != other.size) return false;
 
 	volatile uint8_t diff = 0;

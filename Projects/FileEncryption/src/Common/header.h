@@ -87,7 +87,7 @@ bool FileExists(const QString &path);
  * @param	key		Output buffer for key
  * @return	0 on success, non-zero on failure
  */
-int Argon2id(uint8_t salt[], const char pw[], size_t plen, uint8_t key[]);
+int Argon2id(uint8_t *salt, const char *pw, size_t plen, uint8_t *key);
 
 /**
  * @brief	Get the number of processors available

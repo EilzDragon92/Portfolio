@@ -105,6 +105,7 @@ void MainGUI::onLoginRequested(const LoginInput &input) {
 	refreshList();
 
 	stack->setCurrentWidget(listGUI);
+	resize(300, 300);
 }
 
 void MainGUI::onBackToLogin() {
@@ -225,6 +226,7 @@ void MainGUI::onCloseRequested() {
 	vaultPath.clear();
 
 	stack->setCurrentWidget(loginGUI);
+	resize(300, 150);
 }
 
 void MainGUI::onChangePWRequested() {
