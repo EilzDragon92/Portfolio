@@ -24,15 +24,16 @@ public:
     explicit PWLineEdit(QWidget *parent = nullptr);
 
     /**
+     * @brief   Extract data from the input line to Password class
+     * @param   pw  Destination
+     * @return  0 on success, 1 on failure (exceeds MAX_SIZE)
+     */
+    int extract(Password &pw);
+
+    /**
      * @brief   Clear the input field
      */
     void clear();
-
-    /**
-     * @brief   Extract data from the input line to Password class
-     * @param   pw  Destination
-     */
-    void extract(Password &pw);
 
     /**
      * @brief	Set password data to the input field

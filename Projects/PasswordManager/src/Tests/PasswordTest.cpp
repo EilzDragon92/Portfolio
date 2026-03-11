@@ -303,3 +303,30 @@ TEST(PasswordTest, CleanEmpty) {
 
     EXPECT_TRUE(pw.isEmpty());
 }
+
+
+/* ==================================================
+ * MAX_SIZE Test
+ * ================================================== */
+
+/**
+ * @brief   Verify setData succeeds at exactly MAX_SIZE
+ */
+TEST(PasswordTest, SetDataMaxSize) {
+    Password pw;
+    std::string data(MAX_PWSIZE, 'a');
+
+    EXPECT_EQ(pw.setData(data.c_str(), data.size()), 0);
+    EXPECT_EQ(pw.getSize(), MAX_PWSIZE);
+}
+
+/**
+ * @brief   Verify setData rejects data exceeding MAX_SIZE
+ */
+TEST(PasswordTest, SetDataExceedsMaxSize) {
+    Password pw;
+    std::string data(MAX_PWSIZE + 1, 'a');
+
+    EXPECT_EQ(pw.setData(data.c_str(), data.size()), 1);
+    EXPECT_TRUE(pw.isEmpty());
+}

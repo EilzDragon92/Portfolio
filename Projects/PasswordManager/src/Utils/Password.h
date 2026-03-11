@@ -8,10 +8,10 @@
 
 #include "Common/header.h"
 
- /**
-  * @class	Password
-  * @brief	RAII class that securely handles password
-  */
+/**
+ * @class	Password
+ * @brief	RAII class that securely handles password
+ */
 class Password {
 public:
 	/**
@@ -106,14 +106,14 @@ public:
 	 * @brief   Set password data
 	 * @param	pw	Source
 	 */
-	void setData(const Password &pw);
+	int setData(const Password &pw);
 
 	/**
 	 * @brief   Set password data
 	 * @param	str		Source
 	 * @param	len		Password length
 	 */
-	void setData(const char *str, size_t len);
+	int setData(const char *str, size_t len);
 
 	/**
 	 * @brief   Securely wipe password data

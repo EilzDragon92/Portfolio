@@ -34,7 +34,7 @@ struct Entry {
     /**
      * @brief   Deserialize entry from buffer
      * @param   src     Source buffer
-     * @return  Number of bytes read
+     * @return  Number of bytes read, or 0 on failure
      */
     size_t deser(const uint8_t *src);
 };

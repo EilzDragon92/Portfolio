@@ -1,6 +1,6 @@
 /**
- * @file	Vault.cpp
- * @brief	Implementation of vault file management functions of Vault class
+ * @file	Vault_file.cpp
+ * @brief	Implementation of file management functions of Vault class
  * @author	EilzDragon92
  */
 
@@ -117,7 +117,14 @@ int Vault::openVault(const QString &path) {
 	for (uint32_t i = 0; i < entryCnt; i++) {
 		Entry entry;
 
-		cur += entry.deser(dstBuff + cur);
+		size_t bytes = entry.deser(dstBuff + cur);
+
+		if (bytes == 0) {
+			reportError("[Data] Deserialization failed - Invalid entry data\n");
+			return 1;
+		}
+
+		cur += bytes;
 
 		entrySet.insert(std::move(entry));
 	}
@@ -204,7 +211,10 @@ bool Vault::verifyPW(const Password &curPW) const {
 int Vault::changePW(const Password &newPW, const QString &path) {
 	lastError.clear();
 
-	pw.setData(newPW);
+	if (pw.setData(newPW)) {
+		reportError("[Auth] Password change failed - Password exceeds maximum length (32 characters)\n");
+		return 1;
+	}
 
 	if (saveVault(path)) return 1;
 

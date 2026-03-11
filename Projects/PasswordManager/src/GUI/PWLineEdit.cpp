@@ -41,21 +41,23 @@ PWLineEdit::PWLineEdit(QWidget *parent) : QWidget(parent) {
     setLayout(hBox);
 }
 
-void PWLineEdit::clear() {
-    pwLine->clear();
-}
-
-void PWLineEdit::extract(Password &pw) {
+int PWLineEdit::extract(Password &pw) {
     QByteArray data = pwLine->text().toUtf8();
-    int size = data.size();
+    int size = data.size(), res;
 
     Lock(data.data(), size);
 
-    pw.setData(data.constData(), size);
+    res = pw.setData(data.constData(), size);
 
     Wipe(data.data(), size);
     Unlock(data.data(), size);
 
+    pwLine->clear();
+
+    return res;
+}
+
+void PWLineEdit::clear() {
     pwLine->clear();
 }
 

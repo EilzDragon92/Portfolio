@@ -36,7 +36,7 @@ EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 
 	/* Configure password length slider */
 
-	lenSlider->setRange(8, 32);
+	lenSlider->setRange(8, MAX_PWSIZE);
 	lenSlider->setValue(16);
 
 	lenBox->addWidget(lenLabel);
@@ -155,7 +155,11 @@ void EntryGUI::onOKClicked() {
 	}
 
 	Password tmp;
-	pwLine->extract(tmp);
+
+	if (pwLine->extract(tmp)) {
+		errMsg->setText("Password exceeds maximum length (32 characters)");
+		return;
+	}
 
 	if (tmp.isEmpty()) {
 		errMsg->setText("Password is not input");
@@ -221,7 +225,8 @@ int EntryGUI::genPW(Password &dst, std::vector<bool> &spcList, int pwSize) {
 	const char lower[] = "abcdefghijklmnopqrstuvwxyz";
 	const char upper[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	const char num[] = "0123456789";
-	char *res;
+	char *pw;
+	int res = 0;
 
 
 	/* Check the list size is valid */
@@ -252,27 +257,27 @@ int EntryGUI::genPW(Password &dst, std::vector<bool> &spcList, int pwSize) {
 
 	/* Generate password */
 
-	res = new char[pwSize] {};
+	pw = new char[pwSize] {};
 
-	res[0] = lower[RandomRange(0, 25)];
-	res[1] = upper[RandomRange(0, 25)];
-	res[2] = num[RandomRange(0, 9)];
-	res[3] = pool[RandomRange(62, static_cast<uint32_t>(poolSize) - 1)];
+	pw[0] = lower[RandomRange(0, 25)];
+	pw[1] = upper[RandomRange(0, 25)];
+	pw[2] = num[RandomRange(0, 9)];
+	pw[3] = pool[RandomRange(62, static_cast<uint32_t>(poolSize) - 1)];
 
-	for (int i = 4; i < pwSize; i++) res[i] = pool[RandomRange(0, static_cast<uint32_t>(poolSize) - 1)];
+	for (int i = 4; i < pwSize; i++) pw[i] = pool[RandomRange(0, static_cast<uint32_t>(poolSize) - 1)];
 
-	Shuffle(reinterpret_cast<uint8_t *>(res), pwSize);
+	Shuffle(reinterpret_cast<uint8_t *>(pw), pwSize);
 
-	dst.setData(res, pwSize);
+	res = dst.setData(pw, pwSize);
 
 
 	/* Cleanup */
 
 	Wipe(pool.data(), pool.size());
-	Wipe(res, pwSize);
+	Wipe(pw, pwSize);
 
-	delete[] res;
+	delete[] pw;
 
 
-	return 0;
+	return res;
 }

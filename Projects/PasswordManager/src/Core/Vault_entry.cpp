@@ -1,5 +1,5 @@
 /**
- * @file	Vault.cpp
+ * @file	Vault_entry.cpp
  * @brief	Implementation of entry management functions of Vault class
  * @author	EilzDragon92
  */

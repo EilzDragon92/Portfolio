@@ -7,11 +7,15 @@
 #include "Utils/Password.h"
 
 bool Password::equal(const Password &other) const {
-	if (size != other.size) return false;
+	volatile uint8_t diff = (size != other.size) ? 1 : 0;
+	size_t minSize = (size < other.size) ? size : other.size;
 
-	volatile uint8_t diff = 0;
+	for (size_t i = 0; i < MAX_PWSIZE; i++) {
+		uint8_t a = (i >= minSize) ? 0 : static_cast<uint8_t>(data[i]);
+		uint8_t b = (i >= minSize) ? 0 : static_cast<uint8_t>(other.data[i]);
 
-	for (size_t i = 0; i < size; i++) diff |= static_cast<uint8_t>(data[i]) ^ static_cast<uint8_t>(other.data[i]);
+		diff |= a ^ b;
+	}
 
 	return diff == 0;
 }
@@ -28,11 +32,13 @@ size_t Password::getSize() const {
 	return size;
 }
 
-void Password::setData(const Password &pw) {
-	setData(pw.getData(), pw.getSize());
+int Password::setData(const Password &pw) {
+	return setData(pw.getData(), pw.getSize());
 }
 
-void Password::setData(const char *str, size_t len) {
+int Password::setData(const char *str, size_t len) {
+	if (len > MAX_PWSIZE) return 1;
+
 	clean();
 
 	if (str) {
@@ -44,6 +50,8 @@ void Password::setData(const char *str, size_t len) {
 
 		data[size] = '\0';
 	}
+
+	return 0;
 }
 
 void Password::clean() {

@@ -79,7 +79,7 @@ size_t Entry::deser(const uint8_t *src) {
     memcpy(&size, src + cur, sizeof(uint32_t));
     cur += sizeof(uint32_t);
 
-    pw.setData(reinterpret_cast<const char *>(src + cur), size);
+    if (pw.setData(reinterpret_cast<const char *>(src + cur), size)) return 0;
     cur += size;
 
 

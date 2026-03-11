@@ -73,6 +73,8 @@
 #define MAGIC_SIZE 4					/// Magic number size
 #define COUNT_SIZE sizeof(uint32_t)		/// Entry count field size
 
+#define MAX_PWSIZE 32	// Maximum length of password
+
 /**
  * @brief	Get the size of a file in bytes
  * @param	file	File pointer in read binary mode

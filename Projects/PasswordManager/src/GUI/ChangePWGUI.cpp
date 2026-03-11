@@ -87,8 +87,16 @@ void ChangePWGUI::onOKClicked() {
 	Password curPW, newPW, confirmPW;
 
 	curPWLine->extract(curPW);
-	newPWLine->extract(newPW);
-	confirmPWLine->extract(confirmPW);
+
+	if (newPWLine->extract(newPW)) {
+		errMsg->setText("Password exceeds maximum length (32 characters)");
+		return;
+	}
+
+	if (confirmPWLine->extract(confirmPW)) {
+		errMsg->setText("Password exceeds maximum length (32 characters)");
+		return;
+	}
 
 
 	/* Validate all fields are filled */
@@ -112,7 +120,7 @@ void ChangePWGUI::onOKClicked() {
 	/* Validate new password matches confirmation */
 
 	if (newPW.getSize() != confirmPW.getSize() || !newPW.equal(confirmPW)) {
-		errMsg->setText("New and comfirm password do not match");
+		errMsg->setText("New and confirm password do not match");
 		return;
 	}
 

@@ -74,7 +74,10 @@ void PasswordGUI::onConfirmClicked() {
 
 	LoginInput input;
 
-	pwLine->extract(input.pw);
+	if (pwLine->extract(input.pw)) {
+		errMsg->setText("Password exceeds maximum length (32 characters)");
+		return;
+	}
 
 	if (input.pw.isEmpty()) {
 		errMsg->setText("Password is not input");
