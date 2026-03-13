@@ -127,5 +127,5 @@ private:
 	 * @param	size	Destination password size
 	 * @return	0 on success, 1 on failure
 	 */
-	int genPW(Password &dst, std::vector<bool> &spcList, int size);
+	int genPW(Password &dst, const std::vector<bool> &spcList, int size);
 };

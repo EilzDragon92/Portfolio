@@ -237,7 +237,7 @@ bool EntryGUI::hasSpecialSelected() const {
 	return false;
 }
 
-int EntryGUI::genPW(Password &dst, std::vector<bool> &spcList, int pwSize) {
+int EntryGUI::genPW(Password &dst, const std::vector<bool> &spcList, int pwSize) {
 	std::string pool;
 	size_t poolSize;
 	const char lower[] = "abcdefghijklmnopqrstuvwxyz";
