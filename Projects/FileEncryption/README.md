@@ -38,10 +38,10 @@ This is the GUI, password-based file encryption/decryption tool using AES-256-GC
 ### 2-2. Security Considerations
 
 * Keys are locked in memory using `VirtualLock`/`mlock` to prevent swapping to disk
-* RAII class for secure password handling ensures data wipe on error or cancellation
+* RAII class for secure password handling, which ensures data wipe on error or cancellation
 * Salt and IV are newly and randomly generated each time using OS-provided CSPRNG (`BCryptGenRandom`/`getrandom`)
 * Sensitive data (passwords, keys, buffers) are ensured to be wiped using `SecureZeroMemory`/`explicit_bzero`
-* Tampered ciphertext files are rejected before any decrypted data output
+* Tampered or corrupted files are rejected before any decrypted data output
 
 ## 3. Specifications
 
@@ -64,7 +64,7 @@ This is the GUI, password-based file encryption/decryption tool using AES-256-GC
 ### 3-1. Encrypted File Format
 
 ```
-Salt (16 bytes) │ IV (12 bytes) │ Encrypted Data │ Tag (16 bytes)
+Salt (16 Bytes) │ IV (12 Bytes) │ Encrypted Data │ Tag (16 Bytes)
 ```
 
 ### 3-2. Source Code Architecture
@@ -81,10 +81,10 @@ Source
 │   └── Worker.h/cpp       # Asynchronous worker thread
 ├── GUI
 │   ├── MainGUI.h/cpp      # Main workflow controller
-│   ├── InputGUI.h/cpp     # User input GUI
-│   ├── ProgressGUI.h/cpp  # Progress tracking GUI
-│   ├── ModeButton.h/cpp   # Encrypt/Decrypt mode selection component
-│   └── PWLineEdit.h/cpp   # Password input component
+│   ├── InputGUI.h/cpp     # Source, destination, and password input
+│   ├── ProgressGUI.h/cpp  # Progress tracking
+│   ├── ModeButton.h/cpp   # Encrypt/Decrypt mode selection widget
+│   └── PWLineEdit.h/cpp   # Password input widget
 └── Utils
     ├── Password.h/cpp     # Secure password container
     └── library.cpp        # Utility functions
@@ -116,7 +116,7 @@ Source
 ### 4-2. Build
 
 **Windows:**
-```bash
+```cmd
 # Install dependencies
 vcpkg install openssl:x64-windows argon2:x64-windows gtest:x64-windows
 
@@ -174,7 +174,7 @@ cmake --build build
 ### 5-2. Running Tests
 
 **Windows:**
-```bash
+```cmd
 cd Projects/FileEncryption
 ctest --test-dir build -C Release --output-on-failure
 ```

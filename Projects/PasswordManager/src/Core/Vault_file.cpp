@@ -78,6 +78,11 @@ int Vault::openVault(const QString &path) {
 		return 1;
 	}
 
+	if (srcSize > MAX_SIZE) {
+		reportError("[File] Validation failed - File should be at most 64 GiB\n");
+		return 1;
+	}
+
 
 	/* Read vault */
 
@@ -175,8 +180,6 @@ int Vault::saveVault(const QString &path) {
 		return 1;
 	}
 
-	dstCur += SALT_SIZE + IV_SIZE + srcSize + TAG_SIZE;
-
 
 	/* Save vault */
 
@@ -221,6 +224,6 @@ int Vault::changePW(const Password &newPW, const QString &path) {
 	return 0;
 }
 
-void Vault::setPW(Password &pw) {
+void Vault::setPW(const Password &pw) {
 	this->pw = pw;
 }

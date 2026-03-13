@@ -85,7 +85,7 @@ public:
 	 * @brief	Set the master password of vault
 	 * @param	pw	Master password
 	 */
-	void setPW(Password &pw);
+	void setPW(const Password &pw);
 
 
 	/* ==================================================

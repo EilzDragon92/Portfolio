@@ -12,5 +12,6 @@ ignore:
   - "Projects/FileEncryption/src/Core/Worker.h"
   - "Projects/FileEncryption/src/GUI/"
   - "Projects/FileEncryption/src/Tests/"
-  - "Projects/PasswordManager/"
-
+  - "Projects/PasswordManager/src/Common/main.cpp"
+  - "Projects/PasswordManager/src/GUI/"
+  - "Projects/PasswordManager/src/Tests/"

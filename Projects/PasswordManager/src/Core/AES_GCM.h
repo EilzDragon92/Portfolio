@@ -84,8 +84,8 @@ private:
 	uint8_t key[KEY_SIZE];		// Key derived from password
 	uint8_t salt[SALT_SIZE];	// Key derivation salt
 
-	uint8_t *src;	// Source buffer
-	uint8_t *dst;	// Destination buffer
+	uint8_t *src = nullptr;		// Source buffer
+	uint8_t *dst = nullptr;		// Destination buffer
 
 	size_t srcCrs = 0;	// Current read position in buffer
 	size_t dstCrs = 0;	// Current write position in buffer
@@ -97,7 +97,7 @@ private:
 	 * ================================================== */
 
 	/**
-	 * @brief	Intialize decryption context
+	 * @brief	Initialize decryption context
 	 * @param	pw		Password
 	 * @param	plen	Password length
 	 * @return	0 on success, 1 on failure
@@ -117,7 +117,7 @@ private:
 	int decryptBuff();
 
 	/**
-	 * @brief	Finialize decryption
+	 * @brief	Finalize decryption
 	 * @return	0 on success, 1 on failure
 	 */
 	int decryptFinal();
@@ -128,7 +128,7 @@ private:
 	 * ================================================== */
 
 	/**
-	 * @brief	Intialize encryption context
+	 * @brief	Initialize encryption context
 	 * @param	pw		Password
 	 * @param	plen	Password length
 	 * @return	0 on success, 1 on failure
@@ -142,7 +142,7 @@ private:
 	int encryptBuff();
 
 	/**
-	 * @brief	Finialize encryption
+	 * @brief	Finalize encryption
 	 * @return	0 on success, 1 on failure
 	 */
 	int encryptFinal();

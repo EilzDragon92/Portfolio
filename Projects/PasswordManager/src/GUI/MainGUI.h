@@ -123,6 +123,8 @@ private:
 	QVBoxLayout *vBox;
 	Vault vault;
 
+	int countdown = 0;
+
 	std::string lastError;
 	std::string origSite;
 	std::string origAcc;

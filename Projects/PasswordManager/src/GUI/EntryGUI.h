@@ -109,6 +109,8 @@ private:
 	 */
 	std::vector<bool> getSpecialsList();
 
+	bool hasSpecial(const Password &pw) const;
+
 	/**
 	 * @brief	Check if at least one special character is selected
 	 * @return	true if at least one is checked

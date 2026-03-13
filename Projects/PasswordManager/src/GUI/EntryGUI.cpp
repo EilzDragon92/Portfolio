@@ -166,6 +166,11 @@ void EntryGUI::onOKClicked() {
 		return;
 	}
 
+	if (!hasSpecial(tmp)) {
+		errMsg->setText("Password must contain at least one special character");
+		return;
+	}
+
 	pwLine->setPassword(tmp);
 
 	accept();
@@ -209,6 +214,19 @@ std::vector<bool> EntryGUI::getSpecialsList() {
 	for (int i = 0; i < 32; i++) list[i] = spcChecks[i]->isChecked();
 
 	return list;
+}
+
+bool EntryGUI::hasSpecial(const Password &pw) const {
+	const char *data = pw.getData();
+	size_t size = pw.getSize();
+
+	if (!data || size == 0) return false;
+
+	for (size_t i = 0; i < size; i++) {
+		for (int j = 0; j < 32; j++) if (data[i] == spcs[j]) return true;
+	}
+
+	return false;
 }
 
 bool EntryGUI::hasSpecialSelected() const {

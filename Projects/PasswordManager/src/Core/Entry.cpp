@@ -12,40 +12,40 @@ size_t Entry::size() const {
 
 size_t Entry::ser(uint8_t *dst) const {
     size_t cur = 0;
-    uint32_t size;
+    uint32_t tmp;
 
 
     /* Write site */
 
-    size = static_cast<uint32_t>(site.size());
+    tmp = static_cast<uint32_t>(site.size());
 
-    memcpy(dst + cur, &size, sizeof(uint32_t));
+    memcpy(dst + cur, &tmp, sizeof(uint32_t));
     cur += sizeof(uint32_t);
 
-    memcpy(dst + cur, site.data(), size);
-    cur += size;
+    memcpy(dst + cur, site.data(), tmp);
+    cur += tmp;
 
 
     /* Write account */
 
-    size = static_cast<uint32_t>(acc.size());
+    tmp = static_cast<uint32_t>(acc.size());
 
-    memcpy(dst + cur, &size, sizeof(uint32_t));
+    memcpy(dst + cur, &tmp, sizeof(uint32_t));
     cur += sizeof(uint32_t);
 
-    memcpy(dst + cur, acc.data(), size);
-    cur += size;
+    memcpy(dst + cur, acc.data(), tmp);
+    cur += tmp;
 
 
     /* Write password */
 
-    size = static_cast<uint32_t>(pw.getSize());
+    tmp = static_cast<uint32_t>(pw.getSize());
 
-    memcpy(dst + cur, &size, sizeof(uint32_t));
+    memcpy(dst + cur, &tmp, sizeof(uint32_t));
     cur += sizeof(uint32_t);
 
-    memcpy(dst + cur, pw.getData(), size);
-    cur += size;
+    memcpy(dst + cur, pw.getData(), tmp);
+    cur += tmp;
 
 
     return cur;
@@ -53,34 +53,34 @@ size_t Entry::ser(uint8_t *dst) const {
 
 size_t Entry::deser(const uint8_t *src) {
     size_t cur = 0;
-    uint32_t size;
+    uint32_t tmp;
 
 
     /* Read site */
 
-    memcpy(&size, src + cur, sizeof(uint32_t));
+    memcpy(&tmp, src + cur, sizeof(uint32_t));
     cur += sizeof(uint32_t);
 
-    site.assign(reinterpret_cast<const char *>(src + cur), size);
-    cur += size;
+    site.assign(reinterpret_cast<const char *>(src + cur), tmp);
+    cur += tmp;
 
 
     /* Read account */
 
-    memcpy(&size, src + cur, sizeof(uint32_t));
+    memcpy(&tmp, src + cur, sizeof(uint32_t));
     cur += sizeof(uint32_t);
 
-    acc.assign(reinterpret_cast<const char *>(src + cur), size);
-    cur += size;
+    acc.assign(reinterpret_cast<const char *>(src + cur), tmp);
+    cur += tmp;
 
 
     /* Read password */
 
-    memcpy(&size, src + cur, sizeof(uint32_t));
+    memcpy(&tmp, src + cur, sizeof(uint32_t));
     cur += sizeof(uint32_t);
 
-    if (pw.setData(reinterpret_cast<const char *>(src + cur), size)) return 0;
-    cur += size;
+    if (pw.setData(reinterpret_cast<const char *>(src + cur), tmp)) return 0;
+    cur += tmp;
 
 
     return cur;

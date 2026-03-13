@@ -17,7 +17,7 @@
 /* Qt framework */
 #include <QApplication>
 #include <QBoxLayout>
-#include <QCheckbox>
+#include <QCheckBox>
 #include <QClipboard>
 #include <QFileDialog>
 #include <QHeaderView>
@@ -25,7 +25,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QScreen>
-#include <QSpinbox>
+#include <QSpinBox>
 #include <QStackedWidget>
 #include <QString>
 #include <QTableWidget>
@@ -64,10 +64,10 @@
 #define TIME_COST 4				/// Argon2id time cost 
 
 #define BLOCK_SIZE 16	/// AES-GCM block size in bytes
-#define BUFF_NUM 2		/// Number of buffers for swapping
-#define BUFF_SIZE 4096	/// Buffer size in blocks
 #define IV_SIZE 12		/// Initial vector size in bytes
 #define TAG_SIZE 16		/// Authentication tag size in bytes
+
+#define MAX_SIZE 64ULL * (1024 * 1024 * 1024)	/// Maximum vault file size (64 GiB)
 
 #define MAGIC_NUM 0x63a5baf3			/// Magic number to distinguish vault file
 #define MAGIC_SIZE 4					/// Magic number size

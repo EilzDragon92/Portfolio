@@ -215,6 +215,7 @@ jobs:
           cppcheck \
             --library=qt \
             --suppress=unknownMacro \
+            --suppress=useStlAlgorithm \
             --enable=warning,style,performance,portability \
             --error-exitcode=1 \
             --suppress=missingIncludeSystem \

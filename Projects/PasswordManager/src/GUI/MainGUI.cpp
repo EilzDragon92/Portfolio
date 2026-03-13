@@ -190,26 +190,41 @@ void MainGUI::onCopyPWRequested(const std::string &site, const std::string &acc)
 	/* Copy password to clipboard */
 
 	QClipboard *board = QGuiApplication::clipboard();
-
+	
 	board->setText(QString::fromUtf8(it->pw.getData(), static_cast<int>(it->pw.getSize())));
-
-	listGUI->setErrMsg("Password copied (clears in 30s)");
 
 
 	/* Auto-clear clipboard after 30 seconds */
 
-	if (timer)	timer->stop();
-	else		timer = new QTimer(this);
+	countdown = 30;
+
+	listGUI->setErrMsg("Password copied (clears after 30s)");
+
+	if (timer) {
+		timer->stop();
+		timer->disconnect();
+	}
+	else {
+		timer = new QTimer(this);
+	}
 
 	connect(timer, &QTimer::timeout, this, [this, board]() {
-		board->clear();
-		listGUI->setErrMsg("Clipboard cleared");
-		timer->deleteLater();
-		timer = nullptr;
-	});
+		countdown--;
 
-	timer->setSingleShot(true);
-	timer->start(30000);
+		if (countdown > 0) {
+			listGUI->setErrMsg(QString("Password copied (clears after %1s)").arg(countdown));
+		}
+		else {
+			timer->stop();
+			board->clear();
+			listGUI->setErrMsg("Clipboard cleared");
+			timer->deleteLater();
+			timer = nullptr;
+		}
+		});
+
+	timer->setSingleShot(false);
+	timer->start(1000);
 }
 
 void MainGUI::onSaveRequested() {
