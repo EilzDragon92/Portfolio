@@ -37,13 +37,17 @@ int Vault::newVault(const QString &path) {
 	OpenFile(&file, path, "wb");
 
 	if (file == nullptr) {
+		// LCOV_EXCL_START
 		reportError("[File] Open failed - Cannot create vault file\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	if (fwrite(dstBuff, sizeof(uint8_t), dstSize, file) != dstSize) {
+		// LCOV_EXCL_START
 		reportError("[File] Write failed - Cannot write vault file\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 
@@ -64,8 +68,10 @@ int Vault::openVault(const QString &path) {
 	OpenFile(&file, path, "rb");
 
 	if (file == nullptr) {
+		// LCOV_EXCL_START
 		reportError("[File] Open failed - Cannot open vault file\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 
@@ -74,8 +80,10 @@ int Vault::openVault(const QString &path) {
 	srcSize = GetFileSize(file);
 
 	if (srcSize == -1) {
+		// LCOV_EXCL_START
 		reportError("[File] Size check failed - Cannot read vault file size\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	if (srcSize > MAX_SIZE) {
@@ -89,8 +97,10 @@ int Vault::openVault(const QString &path) {
 	srcBuff = new uint8_t[srcSize]{};
 
 	if (fread(srcBuff, sizeof(uint8_t), srcSize, file) != srcSize) {
+		// LCOV_EXCL_START
 		reportError("[File] Read failed - Cannot read vault file data\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 
@@ -122,7 +132,7 @@ int Vault::openVault(const QString &path) {
 	for (uint32_t i = 0; i < entryCnt; i++) {
 		Entry entry;
 
-		size_t bytes = entry.deser(dstBuff + cur);
+		size_t bytes = entry.deser(dstBuff + cur, dstSize - cur);
 
 		if (bytes == 0) {
 			reportError("[Data] Deserialization failed - Invalid entry data\n");
@@ -186,13 +196,17 @@ int Vault::saveVault(const QString &path) {
 	OpenFile(&file, path, "wb");
 
 	if (file == nullptr) {
+		// LCOV_EXCL_START
 		reportError("[File] Open failed - Cannot open vault file for writing\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 	if (fwrite(dstBuff, sizeof(uint8_t), dstSize, file) != dstSize) {
+		// LCOV_EXCL_START
 		reportError("[File] Write failed - Cannot write vault file\n");
 		return 1;
+		// LCOV_EXCL_STOP
 	}
 
 

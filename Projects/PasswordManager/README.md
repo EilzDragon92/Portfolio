@@ -78,7 +78,7 @@ Entry Count (4 Bytes) | Entries
 
 **Entry Format:** 
 ```
-Site Name Length (4 Bytes) | Site Name | Account Length (4 Bytes) | Account | Account Length | Password Length (4 Bytes) | Password Length
+Site Name Length (4 Bytes) | Site Name | Account Length (4 Bytes) | Account | Password Length (4 Bytes) | Password
 ```
 
 **Entry Example:** 
