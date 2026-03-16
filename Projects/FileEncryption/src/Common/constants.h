@@ -7,6 +7,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 
 inline constexpr double kFontScale	= 1.2;	/// GUI font scale
 
