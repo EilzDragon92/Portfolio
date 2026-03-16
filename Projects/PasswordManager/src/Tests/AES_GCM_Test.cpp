@@ -4,10 +4,8 @@
  * @author  EilzDragon92
  */
 
-#include <gtest/gtest.h>
-#include "Common/header.h"
 #include "Core/AES_GCM.h"
-
+#include <gtest/gtest.h>
 
 /* ==================================================
  * Encryption/Decryption Tests
@@ -24,7 +22,7 @@ TEST(AES_GCM_Test, EncryptDecryptBasic) {
 
     size_t dsize = strlen(data);
     size_t psize = strlen(pw);
-    size_t encSize = SALT_SIZE + IV_SIZE + dsize + TAG_SIZE;
+    size_t encSize = kSaltSize + kIVSize + dsize + kTagSize;
 
     std::vector<uint8_t> src(dsize);
     std::vector<uint8_t> enc(encSize);
@@ -59,7 +57,7 @@ TEST(AES_GCM_Test, EncryptProducesDifferentOutput) {
 
     size_t dsize = strlen(data);
     size_t psize = strlen(pw);
-    size_t encSize = SALT_SIZE + IV_SIZE + dsize + TAG_SIZE;
+    size_t encSize = kSaltSize + kIVSize + dsize + kTagSize;
 
     std::vector<uint8_t> src(dsize);
     std::vector<uint8_t> enc0(encSize);
@@ -86,7 +84,7 @@ TEST(AES_GCM_Test, DecryptWrongPassword) {
     size_t dsize = strlen(data);
     size_t psize0 = strlen(pw0);
     size_t psize1 = strlen(pw1);
-    size_t encSize = SALT_SIZE + IV_SIZE + dsize + TAG_SIZE;
+    size_t encSize = kSaltSize + kIVSize + dsize + kTagSize;
 
     std::vector<uint8_t> src(dsize);
     std::vector<uint8_t> enc(encSize);
@@ -112,7 +110,7 @@ TEST(AES_GCM_Test, TamperedCiphertext) {
 
     size_t dsize = strlen(data);
     size_t psize = strlen(pw);
-    size_t encSize = SALT_SIZE + IV_SIZE + dsize + TAG_SIZE;
+    size_t encSize = kSaltSize + kIVSize + dsize + kTagSize;
 
     std::vector<uint8_t> src(dsize);
     std::vector<uint8_t> enc(encSize);
@@ -125,7 +123,7 @@ TEST(AES_GCM_Test, TamperedCiphertext) {
 
     /* Tamper with encrypted data */
 
-    enc[SALT_SIZE + IV_SIZE] ^= 0x01;
+    enc[kSaltSize + kIVSize] ^= 0x01;
 
     int res = aes.decrypt(enc.data(), dec.data(), encSize, pw, psize);
 
@@ -143,7 +141,7 @@ TEST(AES_GCM_Test, TamperedTag) {
 
     size_t dsize = strlen(data);
     size_t psize = strlen(pw);
-    size_t encSize = SALT_SIZE + IV_SIZE + dsize + TAG_SIZE;
+    size_t encSize = kSaltSize + kIVSize + dsize + kTagSize;
 
     std::vector<uint8_t> src(dsize);
     std::vector<uint8_t> enc(encSize);
@@ -178,7 +176,7 @@ TEST(AES_GCM_Test, SingleByte) {
 
     size_t psize = strlen(pw);
     size_t dsize = 1;
-    size_t encSize = SALT_SIZE + IV_SIZE + dsize + TAG_SIZE;
+    size_t encSize = kSaltSize + kIVSize + dsize + kTagSize;
 
     uint8_t src = 0x00;
     std::vector<uint8_t> enc(encSize);
@@ -210,7 +208,7 @@ TEST(AES_GCM_Test, LargeData) {
 
     size_t psize = strlen(pw);
     size_t dsize = 1024 * 1024; // 1 MiB
-    size_t encSize = SALT_SIZE + IV_SIZE + dsize + TAG_SIZE;
+    size_t encSize = kSaltSize + kIVSize + dsize + kTagSize;
 
     std::vector<uint8_t> src(dsize, 0x00);
     std::vector<uint8_t> enc(encSize);
@@ -251,7 +249,7 @@ TEST(AES_GCM_Test, ErrorCallback) {
     size_t dsize = strlen(data);
     size_t psize0 = strlen(pw0);
     size_t psize1 = strlen(pw1);
-    size_t encSize = SALT_SIZE + IV_SIZE + dsize + TAG_SIZE;
+    size_t encSize = kSaltSize + kIVSize + dsize + kTagSize;
 
     std::vector<uint8_t> src(dsize);
     std::vector<uint8_t> enc(encSize);

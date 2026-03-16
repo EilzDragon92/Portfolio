@@ -6,10 +6,20 @@
 
 #pragma once
 
-#include "Common/header.h"
 #include "Core/Entry.h"
 #include "GUI/PWLineEdit.h"
 #include "Utils/Password.h"
+#include <QCheckBox>
+#include <QDialog>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSlider>
+#include <QVBoxLayout>
+#include <QWidget>
+#include <string>
+#include <vector>
 
 /**
  * @class	EntryGUI
@@ -74,20 +84,11 @@ private:
 	PWLineEdit *pwLine; 
 	QCheckBox *spcChecks[32];
 	QGridLayout *spcGrid;
-	QLabel *errMsg;
-	QLabel *lenLabel;
-	QLineEdit *siteLine;
-	QLineEdit *accLine;
-	QPushButton *checkAllBtn;
-	QPushButton *uncheckAllBtn;
-	QPushButton *resetBtn;
-	QPushButton *genBtn;
-	QPushButton *okBtn;
-	QPushButton *cancelBtn;
+	QLabel *errMsg, *lenLabel;
+	QLineEdit *siteLine, *accLine;
+	QPushButton *checkAllBtn, *uncheckAllBtn, *resetBtn, *genBtn, *okBtn, *cancelBtn;
 	QSlider *lenSlider;
-	QHBoxLayout *btnBox;
-	QHBoxLayout *lenBox;
-	QHBoxLayout *spcBtnBox;
+	QHBoxLayout *btnBox, *lenBox, *spcBtnBox;
 	QVBoxLayout *vBox;
 
 	static constexpr char spcs[] = "`~!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";

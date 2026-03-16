@@ -4,9 +4,9 @@
  * @author  EilzDragon92
  */
 
+#include "Utils/library.h"
+#include <QString>
 #include <gtest/gtest.h>
-#include "Common/header.h"
-
 
 /* ==================================================
  * GetFileSize Test
@@ -142,62 +142,62 @@ TEST_F(FileExistsTest, AfterDeletion) {
  * @brief   Verify Argon2id derives same key for same input
  */
 TEST(Argon2idTest, SameInput) {
-    uint8_t salt[SALT_SIZE], key0[KEY_SIZE], key1[KEY_SIZE];
+    uint8_t salt[kSaltSize], key0[kKeySize], key1[kKeySize];
     const char *pw = "password";
     size_t size = strlen(pw);
 
-    for (int i = 0; i < SALT_SIZE; i++) salt[i] = i;
+    for (int i = 0; i < kSaltSize; i++) salt[i] = i;
 
     EXPECT_EQ(Argon2id(salt, pw, size, key0), 0);
     EXPECT_EQ(Argon2id(salt, pw, size, key1), 0);
 
-    EXPECT_EQ(memcmp(key0, key1, KEY_SIZE), 0);
+    EXPECT_EQ(memcmp(key0, key1, kKeySize), 0);
 }
 
 /**
  * @brief   Verify different passwords produce different keys
  */
 TEST(Argon2idTest, DifferentPW) {
-    uint8_t salt[SALT_SIZE], key0[KEY_SIZE], key1[KEY_SIZE];
+    uint8_t salt[kSaltSize], key0[kKeySize], key1[kKeySize];
     const char *pw0 = "password";
     const char *pw1 = "asdf1234";
     size_t size0 = strlen(pw0);
     size_t size1 = strlen(pw1);
 
-    for (int i = 0; i < SALT_SIZE; i++) salt[i] = i;
+    for (int i = 0; i < kSaltSize; i++) salt[i] = i;
 
     Argon2id(salt, pw0, size0, key0);
     Argon2id(salt, pw1, size1, key1);
 
-    EXPECT_NE(memcmp(key0, key1, KEY_SIZE), 0);
+    EXPECT_NE(memcmp(key0, key1, kKeySize), 0);
 }
 
 /**
  * @brief   Verify different salts produce different keys
  */
 TEST(Argon2idTest, DifferentSalt) {
-    uint8_t salt0[SALT_SIZE], salt1[SALT_SIZE];
-    uint8_t key0[KEY_SIZE], key1[KEY_SIZE];
+    uint8_t salt0[kSaltSize], salt1[kSaltSize];
+    uint8_t key0[kKeySize], key1[kKeySize];
     const char *pw = "password";
     size_t size = strlen(pw);
 
-    for (int i = 0; i < SALT_SIZE; i++) salt0[i] = i;
-    for (int i = 0; i < SALT_SIZE; i++) salt1[i] = i + 16;
+    for (int i = 0; i < kSaltSize; i++) salt0[i] = i;
+    for (int i = 0; i < kSaltSize; i++) salt1[i] = i + 16;
 
     Argon2id(salt0, pw, size, key0);
     Argon2id(salt1, pw, size, key1);
 
-    EXPECT_NE(memcmp(key0, key1, KEY_SIZE), 0);
+    EXPECT_NE(memcmp(key0, key1, kKeySize), 0);
 }
 
 /**
  * @brief   Verify Argon2id works with empty password
  */
 TEST(Argon2Test, EmptyPassword) {
-    uint8_t salt[SALT_SIZE];
-    uint8_t key[KEY_SIZE];
+    uint8_t salt[kSaltSize];
+    uint8_t key[kKeySize];
 
-    for (int i = 0; i < SALT_SIZE; i++) salt[i] = i;
+    for (int i = 0; i < kSaltSize; i++) salt[i] = i;
 
     EXPECT_EQ(Argon2id(salt, "", 0, key), 0);
 }

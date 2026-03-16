@@ -5,6 +5,7 @@
  */
 
 #include "Core/Vault.h"
+#include "Utils/library.h"
 
 int Vault::newVault(const QString &path) {
 	uint32_t entryCnt = 0;
@@ -14,19 +15,19 @@ int Vault::newVault(const QString &path) {
 
 	/* Generate initial data */
 
-	srcSize = COUNT_SIZE;
-	dstSize = MAGIC_SIZE + SALT_SIZE + IV_SIZE + srcSize + TAG_SIZE;
+	srcSize = kCountSize;
+	dstSize = kMagicSize + kSaltSize + kIVSize + srcSize + kTagSize;
 
 	srcBuff = new uint8_t[srcSize]{};
 	dstBuff = new uint8_t[dstSize]{};
 
-	memcpy(srcBuff, &entryCnt, COUNT_SIZE);
-	memcpy(dstBuff, &magicNum, MAGIC_SIZE);
+	memcpy(srcBuff, &entryCnt, kCountSize);
+	memcpy(dstBuff, &magicNum, kMagicSize);
 
 
 	/* Encrypt */
 
-	if (aes.encrypt(srcBuff, dstBuff + MAGIC_SIZE, srcSize, pw.getData(), pw.getSize())) {
+	if (aes.encrypt(srcBuff, dstBuff + kMagicSize, srcSize, pw.getData(), pw.getSize())) {
 		reportError("[Crypto] Encryption failed - Cannot encrypt vault data\n");
 		return 1;
 	}
@@ -86,13 +87,13 @@ int Vault::openVault(const QString &path) {
 		// LCOV_EXCL_STOP
 	}
 
-	if (srcSize < MIN_SIZE) {
+	if (srcSize < kMinSize) {
 		reportError("[File] Validation failed - File is too small to be a valid vault\n");
 		return 1;
 	}
 
 
-	if (srcSize > MAX_SIZE) {
+	if (srcSize > kMaxSize) {
 		reportError("[File] Validation failed - File exceeds maximum size (2 GiB)\n");
 		return 1;
 	}
@@ -112,7 +113,7 @@ int Vault::openVault(const QString &path) {
 
 	/* Check magic number */
 
-	if (memcmp(srcBuff, &magicNum, MAGIC_SIZE) != 0) {
+	if (memcmp(srcBuff, &magicNum, kMagicSize) != 0) {
 		reportError("[File] Validation failed - Invalid vault file format\n");
 		return 1;
 	}
@@ -120,11 +121,11 @@ int Vault::openVault(const QString &path) {
 
 	/* Decrypt */
 
-	dstSize = srcSize - (MAGIC_SIZE + SALT_SIZE + IV_SIZE + TAG_SIZE);
+	dstSize = srcSize - (kMagicSize + kSaltSize + kIVSize + kTagSize);
 
 	dstBuff = new uint8_t[dstSize]{};
 
-	if (aes.decrypt(srcBuff + MAGIC_SIZE, dstBuff, srcSize - MAGIC_SIZE, pw.getData(), pw.getSize())) {
+	if (aes.decrypt(srcBuff + kMagicSize, dstBuff, srcSize - kMagicSize, pw.getData(), pw.getSize())) {
 		reportError("[Auth] Decryption failed - Invalid password or corrupted vault\n");
 		return 1;
 	}
@@ -132,8 +133,8 @@ int Vault::openVault(const QString &path) {
 
 	/* Deserialize */
 
-	memcpy(&entryCnt, dstBuff, COUNT_SIZE);
-	cur += COUNT_SIZE;
+	memcpy(&entryCnt, dstBuff, kCountSize);
+	cur += kCountSize;
 
 	for (uint32_t i = 0; i < entryCnt; i++) {
 		Entry entry;
@@ -169,7 +170,7 @@ int Vault::saveVault(const QString &path) {
 
 	for (auto it = entrySet.begin(); it != entrySet.end(); it++) srcSize += it->size();
 
-	dstSize = MAGIC_SIZE + SALT_SIZE + IV_SIZE + srcSize + TAG_SIZE;
+	dstSize = kMagicSize + kSaltSize + kIVSize + srcSize + kTagSize;
 
 	srcBuff = new uint8_t[srcSize]{};
 	dstBuff = new uint8_t[dstSize]{};
@@ -185,8 +186,8 @@ int Vault::saveVault(const QString &path) {
 
 	for (auto it = entrySet.begin(); it != entrySet.end(); it++) srcCur += it->ser(srcBuff + srcCur);
 
-	memcpy(dstBuff + dstCur, &magicNum, MAGIC_SIZE);
-	dstCur += MAGIC_SIZE;
+	memcpy(dstBuff + dstCur, &magicNum, kMagicSize);
+	dstCur += kMagicSize;
 
 
 	/* Encrypt */

@@ -5,6 +5,7 @@
  */
 
 #include "GUI/LoginGUI.h"
+#include <QFileDialog>
 
 LoginGUI::LoginGUI(QWidget *parent) : QWidget(parent) {
 	/* Create layout and components */

@@ -4,9 +4,9 @@
  * @author  EilzDragon92
  */
 
-#include <gtest/gtest.h>
+#include "Common/constants.h"
 #include "Utils/Password.h"
-
+#include <gtest/gtest.h>
 
 /* ==================================================
  * Construction and Initialization Test
@@ -314,10 +314,10 @@ TEST(PasswordTest, CleanEmpty) {
  */
 TEST(PasswordTest, SetDataMaxSize) {
     Password pw;
-    std::string data(MAX_PWLEN, 'a');
+    std::string data(kMaxPWLen, 'a');
 
     EXPECT_EQ(pw.setData(data.c_str(), data.size()), 0);
-    EXPECT_EQ(pw.getSize(), MAX_PWLEN);
+    EXPECT_EQ(pw.getSize(), kMaxPWLen);
 }
 
 /**
@@ -325,7 +325,7 @@ TEST(PasswordTest, SetDataMaxSize) {
  */
 TEST(PasswordTest, SetDataExceedsMaxSize) {
     Password pw;
-    std::string data(MAX_PWLEN + 1, 'a');
+    std::string data(kMaxPWLen + 1, 'a');
 
     EXPECT_EQ(pw.setData(data.c_str(), data.size()), 1);
     EXPECT_TRUE(pw.isEmpty());

@@ -13,6 +13,13 @@
 #include "GUI/LoginGUI.h"
 #include "GUI/PasswordGUI.h"
 
+#include <QStackedWidget>
+#include <QString>
+#include <QTimer>
+#include <QVBoxLayout>
+#include <QWidget>
+#include <string>
+
 /**
  * @class	MainGUI
  * @brief	Main GUI class that orchestrates entire workflow

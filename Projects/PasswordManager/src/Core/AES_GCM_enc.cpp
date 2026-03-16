@@ -5,6 +5,7 @@
  */
 
 #include "Core/AES_GCM.h"
+#include "Utils/library.h"
 
 int AES_GCM::encrypt(uint8_t *src, uint8_t *dst, size_t size, const char *pw, size_t plen) {
 	this->src = src, this->dst = dst, this->size = size;
@@ -32,14 +33,14 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 
 	/* Generate salt and IV */
 
-	if (Random(salt, SALT_SIZE)) {
+	if (Random(salt, kSaltSize)) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Random failed - Cannot generate salt\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	if (Random(iv, IV_SIZE)) {
+	if (Random(iv, kIVSize)) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Random failed - Cannot generate initial vector\n");
 		return 1;
@@ -73,7 +74,7 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 		// LCOV_EXCL_STOP
 	}
 
-	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IV_SIZE, NULL) != 1) {
+	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, kIVSize, NULL) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Initialization failed - Cannot set initial vector size\n");
 		return 1;
@@ -90,11 +91,11 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 
 	/* Write salt and IV */
 
-	memcpy(dst + dstCrs, salt, SALT_SIZE);
-	dstCrs += SALT_SIZE;
+	memcpy(dst + dstCrs, salt, kSaltSize);
+	dstCrs += kSaltSize;
 
-	memcpy(dst + dstCrs, iv, IV_SIZE);
-	dstCrs += IV_SIZE;
+	memcpy(dst + dstCrs, iv, kIVSize);
+	dstCrs += kIVSize;
 
 
 	return 0;
@@ -123,7 +124,7 @@ int AES_GCM::encryptBuff() {
 }
 
 int AES_GCM::encryptFinal() {
-	uint8_t final[BLOCK_SIZE];
+	uint8_t final[kBlockSize];
 	int finalLen;
 
 	if (EVP_EncryptFinal_ex(ctx, final, &finalLen) != 1) {
@@ -142,17 +143,17 @@ int AES_GCM::encryptFinal() {
 }
 
 int AES_GCM::encryptTag() {
-	uint8_t tag[TAG_SIZE];
+	uint8_t tag[kTagSize];
 
-	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, TAG_SIZE, tag) != 1) {
+	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, kTagSize, tag) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Tag Error - Cannot get authentication tag\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	memcpy(dst + dstCrs, tag, TAG_SIZE);
-	dstCrs += TAG_SIZE;
+	memcpy(dst + dstCrs, tag, kTagSize);
+	dstCrs += kTagSize;
 
 	return 0;
 }

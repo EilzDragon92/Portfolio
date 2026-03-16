@@ -5,6 +5,7 @@
  */
 
 #include "GUI/ListGUI.h"
+#include <QHeaderView>
 
 ListGUI::ListGUI(QWidget *parent) : QWidget(parent) {
 	/* Create layouts and components */

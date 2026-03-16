@@ -6,13 +6,15 @@
 
 #pragma once
 
-#include "Common/header.h"
 #include "Utils/Password.h"
+#include <cstdint>
+#include <cstddef>
+#include <string>
 
- /**
-  * @struct     Entry
-  * @brief      Password entry
-  */
+/**
+ * @struct     Entry
+ * @brief      Password entry
+ */
 struct Entry {
     std::string site;
     std::string acc;

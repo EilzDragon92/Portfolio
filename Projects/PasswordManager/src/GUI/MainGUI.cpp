@@ -5,6 +5,8 @@
  */
 
 #include "GUI/MainGUI.h"
+#include <QClipboard>
+#include <QGuiApplication>
 
 MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
 	/* Create layouts and components */

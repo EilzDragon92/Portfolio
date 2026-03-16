@@ -5,6 +5,7 @@
  */
 
 #include "GUI/PWLineEdit.h"
+#include "Utils/library.h"
 
 PWLineEdit::PWLineEdit(QWidget *parent) : QWidget(parent) {
     /* Create layout and components */
@@ -17,13 +18,13 @@ PWLineEdit::PWLineEdit(QWidget *parent) : QWidget(parent) {
     /* Configure input line */
 
     pwLine->setPlaceholderText("Password");
-    pwLine->setMaxLength(MAX_PWLEN);
+    pwLine->setMaxLength(kMaxPWLen);
     pwLine->setEchoMode(QLineEdit::Password);
 
 
     /* Configure masking toggle button */
 
-    maskBtn->setFixedSize(static_cast<int>(45 * FONT_SCALE), static_cast<int>(pwLine->sizeHint().height() * FONT_SCALE));
+    maskBtn->setFixedSize(static_cast<int>(45 * kFontScale), static_cast<int>(pwLine->sizeHint().height() * kFontScale));
 
 
     /* Configure layout */

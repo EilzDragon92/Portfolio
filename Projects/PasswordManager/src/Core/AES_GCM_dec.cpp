@@ -5,6 +5,7 @@
  */
 
 #include "Core/AES_GCM.h"
+#include "Utils/library.h"
 
 int AES_GCM::decrypt(uint8_t *src, uint8_t *dst, size_t size, const char *pw, size_t plen) {
 	this->src = src, this->dst = dst, this->size = size;
@@ -32,11 +33,11 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 
 	/* Read salt and IV */
 
-	memcpy(salt, src + srcCrs, SALT_SIZE);
-	srcCrs += SALT_SIZE;
+	memcpy(salt, src + srcCrs, kSaltSize);
+	srcCrs += kSaltSize;
 
-	memcpy(iv, src + srcCrs, IV_SIZE);
-	srcCrs += IV_SIZE;
+	memcpy(iv, src + srcCrs, kIVSize);
+	srcCrs += kIVSize;
 
 
 	/* Derive key from password */
@@ -65,7 +66,7 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 		// LCOV_EXCL_STOP
 	}
 
-	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IV_SIZE, NULL) != 1) {
+	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, kIVSize, NULL) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Initialization failed - Cannot set initial vector size\n");
 		return 1;
@@ -84,11 +85,11 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 }
 
 int AES_GCM::decryptTag() {
-	uint8_t tag[TAG_SIZE];
+	uint8_t tag[kTagSize];
 
-	memcpy(tag, src + size - TAG_SIZE, TAG_SIZE);
+	memcpy(tag, src + size - kTagSize, kTagSize);
 
-	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, TAG_SIZE, tag) != 1) {
+	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, kTagSize, tag) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Tag failed - Cannot set authentication tag\n");
 		return 1;
@@ -99,7 +100,7 @@ int AES_GCM::decryptTag() {
 }
 
 int AES_GCM::decryptBuff() {
-	int len = size - SALT_SIZE - IV_SIZE - TAG_SIZE;
+	int len = size - kSaltSize - kIVSize - kTagSize;
 	int res;
 
 	if (EVP_DecryptUpdate(ctx, dst, &res, src + srcCrs, len) != 1) {
@@ -122,7 +123,7 @@ int AES_GCM::decryptBuff() {
 }
 
 int AES_GCM::decryptFinal() {
-	uint8_t final[BLOCK_SIZE];
+	uint8_t final[kBlockSize];
 	int finalLen;
 
 	if (EVP_DecryptFinal_ex(ctx, final, &finalLen) != 1) {

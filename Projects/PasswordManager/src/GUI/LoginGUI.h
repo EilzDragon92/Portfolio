@@ -6,12 +6,15 @@
 
 #pragma once
 
-#include "Common/header.h"
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QString>
+#include <QWidget>
 
- /**
-  * @class	LoginGUI
-  * @brief	Login window for vault file selection
-  */
+/**
+ * @class	LoginGUI
+ * @brief	Login window for vault file selection
+ */
 class LoginGUI : public QWidget {
 	Q_OBJECT
 

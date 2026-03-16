@@ -5,20 +5,23 @@
  */
 
 #include "Core/AES_GCM.h"
+#include "Utils/library.h"
+#include <cstring>
+#include <openssl/err.h>
 
 AES_GCM::AES_GCM() {
-	memset(iv, 0, sizeof(uint8_t) * IV_SIZE);
-	memset(salt, 0, sizeof(uint8_t) * SALT_SIZE);
+	memset(iv, 0, sizeof(uint8_t) * kIVSize);
+	memset(salt, 0, sizeof(uint8_t) * kSaltSize);
 
-	Lock(key, KEY_SIZE);
+	Lock(key, kKeySize);
 }
 
 AES_GCM::~AES_GCM() {
-	Wipe(iv, sizeof(uint8_t) * IV_SIZE);
-	Wipe(key, sizeof(uint8_t) * KEY_SIZE);
-	Wipe(salt, sizeof(uint8_t) * SALT_SIZE);
+	Wipe(iv, sizeof(uint8_t) * kIVSize);
+	Wipe(key, sizeof(uint8_t) * kKeySize);
+	Wipe(salt, sizeof(uint8_t) * kSaltSize);
 
-	Unlock(key, KEY_SIZE);
+	Unlock(key, kKeySize);
 
 	if (ctx) {
 		EVP_CIPHER_CTX_free(ctx);

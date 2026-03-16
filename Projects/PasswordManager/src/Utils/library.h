@@ -1,82 +1,15 @@
-﻿/**
- * @file	header.h
- * @brief	Common header file for includes, macros, utility function declarations
+/**
+ * @file	library.h
+ * @brief	Declaration of utility functions
  * @author	EilzDragon92
  */
 
 #pragma once
 
-/* Container */
-#include <set>
-
-/* Cryptography */
-#include <argon2.h>
-#include <openssl/err.h>
-#include <openssl/evp.h>
-
-/* Qt framework */
-#include <QApplication>
-#include <QBoxLayout>
-#include <QCheckBox>
-#include <QClipboard>
-#include <QFileDialog>
-#include <QHeaderView>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QScreen>
-#include <QSpinBox>
-#include <QStackedWidget>
-#include <QString>
-#include <QTableWidget>
-#include <QTimer>
-#include <QWidget>
-
-
-/* System */
+#include "Common/constants.h"
 #include <cstdio>
-#include <filesystem>
 
-/* String */
-#include <cstring>
-#include <string>
-
-/* OS-specific libraries */
-#ifdef _WIN32
-	#pragma comment(lib, "bcrypt.lib")
-	#include <windows.h>
-	#include <bcrypt.h>
-
-#else
-	#include <cerrno>
-	#include <sys/mman.h>
-	#include <sys/random.h>
-	#include <thread>
-	#include <unistd.h>
-
-#endif
-
-#define FONT_SCALE 1.2	/// GUI font scale
-
-#define KEY_SIZE 32				/// AES-GCM key size in bytes
-#define SALT_SIZE 16			/// Argon2id salt size in bytes
-#define MEM_COST (512 * 1024)	/// Argon2id memory cost in KiB
-#define TIME_COST 4				/// Argon2id time cost 
-
-#define BLOCK_SIZE 16	/// AES-GCM block size in bytes
-#define IV_SIZE 12		/// Initial vector size in bytes
-#define TAG_SIZE 16		/// Authentication tag size in bytes
-
-#define MAGIC_NUM 0x63a5baf3			/// Magic number to distinguish vault file
-#define MAGIC_SIZE 4					/// Magic number size
-#define COUNT_SIZE sizeof(uint32_t)		/// Entry count field size
-
-#define MIN_SIZE (MAGIC_SIZE + SALT_SIZE + IV_SIZE + COUNT_SIZE + TAG_SIZE)		/// Mininum vault file size
-#define MAX_SIZE 2ULL * (1024 * 1024 * 1024)									/// Maximum vault file size (2 GiB)
-
-#define MAX_SITELEN 256		/// Maximum length of site name
-#define MAX_ACCLEN 256		/// Maximum length of account
-#define MAX_PWLEN 256		/// Maximum length of password
+class QString;
 
 /**
  * @brief	Get the size of a file in bytes

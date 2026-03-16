@@ -6,9 +6,12 @@
 
 #pragma once
 
-#include "Common/header.h"
+#include "Common/constants.h"
 #include "Core/AES_GCM.h"
 #include "Core/Entry.h"
+#include <QString>
+#include <set>
+#include <string>
 
 /**
  * @class	Vault
@@ -174,7 +177,7 @@ private:
 	FILE *file = nullptr;
 	uint8_t *srcBuff = nullptr, *dstBuff = nullptr;
 	int64_t srcSize = 0, dstSize = 0;
-	uint32_t magicNum = MAGIC_NUM;
+	uint32_t magicNum = kMagicNum;
 
 
 	/* ==================================================

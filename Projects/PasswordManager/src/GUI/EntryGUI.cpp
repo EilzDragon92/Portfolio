@@ -4,7 +4,9 @@
  * @author	EilzDragon92
  */
 
+#include "Common/constants.h"
 #include "GUI/EntryGUI.h"
+#include "Utils/library.h"
 
 EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 	/* Create layouts and components */
@@ -31,9 +33,9 @@ EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 	/* Configure input lines */
 
 	siteLine->setPlaceholderText("Site");
-	siteLine->setMaxLength(MAX_SITELEN);
+	siteLine->setMaxLength(kMaxSiteLen);
 	accLine->setPlaceholderText("Account");
-	accLine->setMaxLength(MAX_ACCLEN);
+	accLine->setMaxLength(kMaxAccLen);
 
 
 	/* Configure password length slider */

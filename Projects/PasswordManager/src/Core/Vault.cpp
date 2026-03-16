@@ -5,6 +5,7 @@
  */
 
 #include "Core/Vault.h"
+#include "Utils/library.h"
 
 Vault::Vault() {
 	aes.setErrorCb([this](const char *msg) {

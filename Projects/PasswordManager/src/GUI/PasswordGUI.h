@@ -6,16 +6,21 @@
 
 #pragma once
 
-#include "Common/header.h"
 #include "GUI/PWLineEdit.h"
 #include "Utils/Password.h"
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QString>
+#include <QVBoxLayout>
+#include <QWidget>
 
- /**
-  * @struct	LoginInput
-  * @brief	Container for login input parameters
-  */
+/**
+ * @struct	LoginInput
+ * @brief	Container for login input parameters
+ */
 struct LoginInput {
-	int mode = -1;		// 0: new, 1: open
+	int mode = -1;	// 0: new, 1: open
 	QString path;
 	Password pw;
 };

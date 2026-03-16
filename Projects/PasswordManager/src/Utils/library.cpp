@@ -4,7 +4,23 @@
  * @author	EilzDragon92
  */
 
-#include "Common/header.h"
+#include "Utils/library.h"
+#include <QString>
+#include <argon2.h>
+#include <filesystem>
+
+#ifdef _WIN32
+    #include <windows.h>
+    #include <bcrypt.h>
+
+#else
+    #include <cerrno>
+    #include <sys/mman.h>
+    #include <sys/random.h>
+    #include <thread>
+    #include <unistd.h>
+
+#endif
 
 int64_t GetFileSize(FILE *file) {
     int64_t size;
@@ -48,7 +64,7 @@ bool FileExists(const QString &path) {
 }
 
 int Argon2id(uint8_t salt[], const char pw[], size_t plen, uint8_t key[]) {
-    return argon2id_hash_raw(TIME_COST, MEM_COST, GetProcNum(), pw, plen, salt, SALT_SIZE, key, KEY_SIZE);
+    return argon2id_hash_raw(kTimeCost, kMemCost, GetProcNum(), pw, plen, salt, kSaltSize, key, kKeySize);
 }
 
 int GetProcNum() {

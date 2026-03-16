@@ -4,8 +4,12 @@
  * @author	EilzDragon92
  */
 
-#include "Common/header.h"
 #include "GUI/MainGUI.h"
+#include <QApplication>
+#include <QFont>
+#include <QRect>
+#include <QScreen>
+#include <QSize>
 
 int ShowGUI(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -15,7 +19,7 @@ int ShowGUI(int argc, char *argv[]) {
     /* Configure font size */
 
     QFont font;
-    font.setPointSizeF(font.pointSizeF() * FONT_SCALE);
+    font.setPointSizeF(font.pointSizeF() * kFontScale);
     QApplication::setFont(font);
 
 

@@ -4,9 +4,9 @@
  * @author  EilzDragon92
  */
 
-#include <gtest/gtest.h>
 #include "Core/Vault.h"
-
+#include "Utils/library.h"
+#include <gtest/gtest.h>
 
 /**
  * @class   VaultFileTest
@@ -137,7 +137,7 @@ TEST_F(VaultFileTest, OpenNonExistent) {
  */
 TEST_F(VaultFileTest, OpenCorruptedFile) {
     FILE *file = nullptr;
-    std::vector<uint8_t> vec(MAGIC_SIZE, 0x00);
+    std::vector<uint8_t> vec(kMagicSize, 0x00);
 
     OpenFile(&file, path, "wb");
 

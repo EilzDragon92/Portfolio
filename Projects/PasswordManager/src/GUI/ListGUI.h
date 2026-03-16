@@ -6,7 +6,15 @@
 
 #pragma once
 
-#include "Common/header.h"
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QTableWidget>
+#include <QVBoxLayout>
+#include <QString>
+#include <QWidget>
+#include <vector>
 
 /**
  * @class	ListGUI

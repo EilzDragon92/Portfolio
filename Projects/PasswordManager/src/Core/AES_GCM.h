@@ -6,7 +6,9 @@
 
 #pragma once
 
-#include "Common/header.h"
+#include "Common/constants.h"
+#include <future>
+#include <openssl/evp.h>
 
 class AES_GCM {
 public:
@@ -80,9 +82,9 @@ private:
 
 	ErrorCallback ecb = nullptr;	// Error reporting callback function
 
-	uint8_t iv[IV_SIZE];		// Initial vector
-	uint8_t key[KEY_SIZE];		// Key derived from password
-	uint8_t salt[SALT_SIZE];	// Key derivation salt
+	uint8_t iv[kIVSize];		// Initial vector
+	uint8_t key[kKeySize];		// Key derived from password
+	uint8_t salt[kSaltSize];	// Key derivation salt
 
 	uint8_t *src = nullptr;		// Source buffer
 	uint8_t *dst = nullptr;		// Destination buffer

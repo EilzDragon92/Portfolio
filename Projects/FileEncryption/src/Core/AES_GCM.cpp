@@ -9,6 +9,7 @@
 
 #include "Core/AES_GCM.h"
 #include "Utils/library.h"
+#include <cstring>
 #include <openssl/err.h>
 
 AES_GCM::AES_GCM() {
