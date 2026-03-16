@@ -5,6 +5,7 @@
  */
 
 #include "Core/AES_GCM.h"
+#include "Utils/library.h"
 
 int AES_GCM::decrypt(FILE *src, FILE *dst, const char *pw, size_t plen) {
 	this->src = src;
@@ -47,26 +48,26 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 		// LCOV_EXCL_STOP
 	}
 
-	if (size < SALT_SIZE + IV_SIZE + TAG_SIZE) {
+	if (size < kSaltSize + kIVSize + kTagSize) {
 		// LCOV_EXCL_START
 		reportError("[File] Validation failed - File should be at least 44 bytes\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	size -= SALT_SIZE + IV_SIZE + TAG_SIZE;
+	size -= kSaltSize + kIVSize + kTagSize;
 
 
 	/* Read salt and IV */
 
-	if (fread(salt, sizeof(uint8_t), SALT_SIZE, src) != SALT_SIZE) {
+	if (fread(salt, sizeof(uint8_t), kSaltSize, src) != kSaltSize) {
 		// LCOV_EXCL_START
 		reportError("[File] Read failed - Cannot read salt from source file header\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	if (fread(iv, sizeof(uint8_t), IV_SIZE, src) != IV_SIZE) {
+	if (fread(iv, sizeof(uint8_t), kIVSize, src) != kIVSize) {
 		// LCOV_EXCL_START
 		reportError("[File] Read failed - Cannot read initial vector from source file header\n");
 		return 1;
@@ -100,7 +101,7 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 		// LCOV_EXCL_STOP
 	}
 
-	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IV_SIZE, NULL) != 1) {
+	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, kIVSize, NULL) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Initialization failed - Cannot set initial vector size\n");
 		return 1;
@@ -119,30 +120,30 @@ int AES_GCM::decryptInit(const char *pw, size_t plen) {
 }
 
 int AES_GCM::decryptTag() {
-	uint8_t tag[TAG_SIZE];
+	uint8_t tag[kTagSize];
 
-	if (Seek(src, -TAG_SIZE, SEEK_END)) {
+	if (Seek(src, -kTagSize, SEEK_END)) {
 		// LCOV_EXCL_START
 		reportError("[File] Seek failed - Cannot move file pointer to authentication tag\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	if (fread(tag, sizeof(uint8_t), TAG_SIZE, src) != TAG_SIZE) {
+	if (fread(tag, sizeof(uint8_t), kTagSize, src) != kTagSize) {
 		// LCOV_EXCL_START
 		reportError("[File] Read failed - Cannot read authentication tag\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, TAG_SIZE, tag) != 1) {
+	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, kTagSize, tag) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Tag failed - Cannot set authentication tag\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	if (Seek(src, SALT_SIZE + IV_SIZE, SEEK_SET)) {
+	if (Seek(src, kSaltSize + kIVSize, SEEK_SET)) {
 		// LCOV_EXCL_START
 		reportError("[File] Seek failed - Cannot move file pointer to data\n");
 		return 1;
@@ -175,7 +176,7 @@ int AES_GCM::decryptBuff(void *src, void *dst, int srcLen) {
 int AES_GCM::decryptBatch() {
 	int cur = 0;
 
-	while (prog + BUFF_SIZE * BLOCK_SIZE <= size) {
+	while (prog + kBuffSize * kBlockSize <= size) {
 		/* Wait for the previous write to finish */
 
 		if (writing && writeRes.get() != 0) return 1;
@@ -183,18 +184,18 @@ int AES_GCM::decryptBatch() {
 		
 		/* Read in main thread */
 
-		if (readFile(buff[cur], BUFF_SIZE * BLOCK_SIZE)) return 1;
+		if (readFile(buff[cur], kBuffSize * kBlockSize)) return 1;
 
 
 		/* Decrypt in main thread */
 
-		if (decryptBuff(buff[cur], buff[cur], BUFF_SIZE * BLOCK_SIZE)) return 1;
+		if (decryptBuff(buff[cur], buff[cur], kBuffSize * kBlockSize)) return 1;
 
 
 		/* Asynchronous write in another thread */
 
 		writeRes = std::async(std::launch::async, [this, cur]() {
-			return writeFile(buff[cur], BUFF_SIZE * BLOCK_SIZE);
+			return writeFile(buff[cur], kBuffSize * kBlockSize);
 		});
 
 		writing = true;
@@ -207,7 +208,7 @@ int AES_GCM::decryptBatch() {
 
 		/* Update progress */
 
-		prog += BUFF_SIZE * BLOCK_SIZE;
+		prog += kBuffSize * kBlockSize;
 
 		if (reportProgress()) {
 			writeRes.wait();
@@ -227,25 +228,25 @@ int AES_GCM::decryptBatch() {
 }
 
 int AES_GCM::decryptRemain() {
-	int crs = 0, rem = size % (BUFF_SIZE * BLOCK_SIZE);
+	int crs = 0, rem = size % (kBuffSize * kBlockSize);
 
 	if (readFile(buff[0], rem)) return 1;
 
 
 	/* Decrypt remaining full blocks */
 
-	while (prog + BLOCK_SIZE <= size) {
-		if (decryptBuff(buff[0][crs], buff[0][crs], BLOCK_SIZE)) return 1;
+	while (prog + kBlockSize <= size) {
+		if (decryptBuff(buff[0][crs], buff[0][crs], kBlockSize)) return 1;
 
 		crs++;
 
-		prog += BLOCK_SIZE;
+		prog += kBlockSize;
 	}
 
 
 	/* Decrypt remaining partial block */
 
-	rem = size % BLOCK_SIZE;
+	rem = size % kBlockSize;
 
 	if (rem) {
 		if (decryptBuff(buff[0][crs], buff[0][crs], rem)) return 1;
@@ -253,7 +254,7 @@ int AES_GCM::decryptRemain() {
 		prog += rem;
 	}
 
-	if (writeFile(buff[0], BLOCK_SIZE * crs + rem)) return 1;
+	if (writeFile(buff[0], kBlockSize * crs + rem)) return 1;
 
 
 	if (reportProgress()) return 1;
@@ -262,7 +263,7 @@ int AES_GCM::decryptRemain() {
 }
 
 int AES_GCM::decryptFinal() {
-	uint8_t final[BLOCK_SIZE];
+	uint8_t final[kBlockSize];
 	int finalLen;
 
 	if (EVP_DecryptFinal_ex(ctx, final, &finalLen) != 1) {

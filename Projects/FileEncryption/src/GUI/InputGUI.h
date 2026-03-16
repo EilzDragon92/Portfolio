@@ -6,10 +6,16 @@
 
 #pragma once
 
-#include "Common/header.h"
 #include "GUI/ModeButton.h"
 #include "GUI/PWLineEdit.h"
 #include "Utils/Password.h"
+
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QWidget>
 
 /**
   * @struct     UserInput

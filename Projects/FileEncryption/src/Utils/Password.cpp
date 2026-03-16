@@ -4,7 +4,9 @@
  * @author	EilzDragon92
  */
 
+#include "Utils/library.h"
 #include "Utils/Password.h"
+#include <cstring>
 
 bool Password::isEmpty() const {
 	return size == 0;

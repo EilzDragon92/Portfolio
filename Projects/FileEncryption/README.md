@@ -139,7 +139,9 @@ cmake --build build
 
 ### 4-3. Usage
 
-![Screenshot](Screenshot.png)
+![InputGUI](InputGUI.png)
+
+![ProgressGUI](ProgressGUI.png)
 
 1. Run the executable `FileEncryption.exe` or `FileEncryption`
 2. Select mode

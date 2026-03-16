@@ -1,69 +1,15 @@
 /**
- * @file	header.h
- * @brief	Common header file for includes, macros, utility function declarations
+ * @file	library.h
+ * @brief	Declaration of utility functions
  * @author	EilzDragon92
  */
 
 #pragma once
 
-/* Cryptography */
-#include <argon2.h>
-#include <openssl/err.h>
-#include <openssl/evp.h>
-
-/* Qt framework */
-#include <QApplication>
-#include <QBoxLayout>
-#include <QButtonGroup>
-#include <QFileInfo>
-#include <QLabel>
-#include <QLineEdit>
-#include <QProgressBar>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QScreen>
-#include <QStackedWidget>
-#include <QThread>
-#include <QWidget>
-
-/* System */
+#include "Common/constants.h"
 #include <cstdio>
-#include <filesystem>
-#include <future>
 
-/* String */
-#include <cstring>
-#include <string>
-
-/* OS-specific libraries */
-#ifdef _WIN32
-	#pragma comment(lib, "bcrypt.lib")
-	#include <windows.h>
-	#include <bcrypt.h>
-
-#else
-	#include <cerrno>
-	#include <sys/mman.h>
-	#include <sys/random.h>
-	#include <thread>
-	#include <unistd.h>
-
-#endif
-
-#define FONT_SCALE 1.2	/// GUI font scale
-
-#define KEY_SIZE 32				/// AES-GCM key size in bytes
-#define SALT_SIZE 16			/// Argon2id salt size in bytes
-#define MEM_COST (512 * 1024)	/// Argon2id memory cost in KiB
-#define TIME_COST 4				/// Argon2id time cost 
-
-#define BLOCK_SIZE 16	/// AES-GCM block size in bytes
-#define BUFF_NUM 2		/// Number of buffers for swapping
-#define BUFF_SIZE 4096	/// Buffer size in blocks
-#define IV_SIZE 12		/// Initial vector size in bytes
-#define TAG_SIZE 16		/// Authentication tag size in bytes
-
-#define MAX_SIZE 64ULL * (1024 * 1024 * 1024)	/// Maximum source file size that can be processed
+class QString;
 
 /**
  * @brief	Get the size of a file in bytes

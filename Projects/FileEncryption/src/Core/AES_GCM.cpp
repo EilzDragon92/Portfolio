@@ -8,26 +8,28 @@
  */
 
 #include "Core/AES_GCM.h"
+#include "Utils/library.h"
+#include <openssl/err.h>
 
 AES_GCM::AES_GCM() {
-	for (int i = 0; i < BUFF_NUM; i++) memset(buff[i], 0, sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
+	for (int i = 0; i < kBuffNum; i++) memset(buff[i], 0, sizeof(uint8_t) * kBuffSize * kBlockSize);
 
-	memset(iv, 0, sizeof(uint8_t) * IV_SIZE);
-	memset(salt, 0, sizeof(uint8_t) * SALT_SIZE);
+	memset(iv, 0, sizeof(uint8_t) * kIVSize);
+	memset(salt, 0, sizeof(uint8_t) * kSaltSize);
 
-	Lock(key, KEY_SIZE);
+	Lock(key, kKeySize);
 }
 
 AES_GCM::~AES_GCM() {
 	if (writeRes.valid()) writeRes.wait();
 
-	for (int i = 0; i < BUFF_NUM; i++) Wipe(buff[i], sizeof(uint8_t) * BUFF_SIZE * BLOCK_SIZE);
+	for (int i = 0; i < kBuffNum; i++) Wipe(buff[i], sizeof(uint8_t) * kBuffSize * kBlockSize);
 
-	Wipe(iv, sizeof(uint8_t) * IV_SIZE);
-	Wipe(key, sizeof(uint8_t) * KEY_SIZE);
-	Wipe(salt, sizeof(uint8_t) * SALT_SIZE);
+	Wipe(iv, sizeof(uint8_t) * kIVSize);
+	Wipe(key, sizeof(uint8_t) * kKeySize);
+	Wipe(salt, sizeof(uint8_t) * kSaltSize);
 
-	Unlock(key, KEY_SIZE);
+	Unlock(key, kKeySize);
 
 	if (ctx) {
 		EVP_CIPHER_CTX_free(ctx);

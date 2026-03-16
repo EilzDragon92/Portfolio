@@ -4,9 +4,10 @@
  * @author  EilzDragon92
  */
 
-#include <gtest/gtest.h>
-#include "Common/header.h"
 #include "Core/AES_GCM.h"
+#include "Utils/library.h"
+#include <QString>
+#include <gtest/gtest.h>
 
 
 /**
@@ -204,7 +205,7 @@ TEST_F(AES_GCM_Test, TamperedCipherFails) {
     
     read(encPath, copy);
 
-    copy[SALT_SIZE + IV_SIZE] ^= 0xFF;
+    copy[kSaltSize + kIVSize] ^= 0xFF;
 
     create(encPath, copy, copy.size());
 
@@ -283,7 +284,7 @@ TEST_F(AES_GCM_Test, ExactBuffSizeFile) {
     FILE *src = nullptr, *dst = nullptr;
     std::vector<uint8_t> orig, copy;
     const char *pw = "password";
-    int dsize = BLOCK_SIZE * BUFF_SIZE;
+    int dsize = kBlockSize * kBuffSize;
     int psize = strlen(pw);
     int res;
 
@@ -386,7 +387,7 @@ TEST_F(AES_GCM_Test, ProgressCallback) {
     FILE *src = nullptr, *dst = nullptr;
     std::vector<uint8_t> orig;
     const char *pw = "password";
-    int dsize = BLOCK_SIZE * BUFF_SIZE * 10;
+    int dsize = kBlockSize * kBuffSize * 10;
     int psize = strlen(pw);
     int cnt = 0, last = -1;
 
@@ -475,7 +476,7 @@ TEST_F(AES_GCM_Test, Cancellation) {
     FILE *src = nullptr, *dst = nullptr;
     std::vector<uint8_t> orig;
     const char *pw = "password";
-    int dsize = BLOCK_SIZE * BUFF_SIZE * 10;
+    int dsize = kBlockSize * kBuffSize * 10;
     int psize = strlen(pw);
     int cnt = 0, res;
 

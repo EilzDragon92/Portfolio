@@ -4,8 +4,8 @@
  * @author  EilzDragon92
  */
 
-#include <gtest/gtest.h>
 #include "Utils/Password.h"
+#include <gtest/gtest.h>
 
 
 /* ==================================================

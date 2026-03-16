@@ -6,8 +6,6 @@
 
 #pragma once
 
-#include "Common/header.h"
-
 /**
  * @class	Password
  * @brief	RAII class that securely handles password

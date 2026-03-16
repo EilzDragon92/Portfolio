@@ -9,6 +9,10 @@
 #include "Core/Worker.h"
 #include "GUI/InputGUI.h"
 #include "GUI/ProgressGUI.h"
+#include <QStackedWidget>
+#include <QThread>
+#include <QVBoxLayout>
+#include <QWidget>
 
 /**
  * @class   MainGUI

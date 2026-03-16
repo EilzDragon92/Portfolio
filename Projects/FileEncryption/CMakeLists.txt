@@ -46,7 +46,7 @@ set(LIB_SOURCES
 )
 
 set(HEADERS
-    src/Common/header.h
+    src/Common/constants.h
     src/Core/AES_GCM.h
     src/Core/Worker.h
     src/GUI/MainGUI.h
@@ -54,6 +54,7 @@ set(HEADERS
     src/GUI/ProgressGUI.h
     src/GUI/ModeButton.h
     src/GUI/PWLineEdit.h
+    src/Utils/library.h
     src/Utils/Password.h
 )
 

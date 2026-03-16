@@ -9,6 +9,9 @@
 #include "Core/AES_GCM.h"
 #include "Utils/Password.h"
 
+#include <QObject>
+#include <QString>
+
 /**
  * @class	Worker
  * @brief	Worker class for asynchronous encryption/decryption

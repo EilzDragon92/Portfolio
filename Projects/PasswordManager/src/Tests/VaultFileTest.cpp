@@ -137,7 +137,7 @@ TEST_F(VaultFileTest, OpenNonExistent) {
  */
 TEST_F(VaultFileTest, OpenCorruptedFile) {
     FILE *file = nullptr;
-    std::vector<uint8_t> vec(8, 0x00);
+    std::vector<uint8_t> vec(MAGIC_SIZE, 0x00);
 
     OpenFile(&file, path, "wb");
 

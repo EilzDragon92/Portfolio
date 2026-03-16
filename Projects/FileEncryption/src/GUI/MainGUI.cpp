@@ -5,6 +5,8 @@
  */
 
 #include "GUI/MainGUI.h"
+#include "Utils/library.h"
+#include <QFileInfo>
 
 MainGUI::MainGUI(QWidget *parent) : QWidget(parent) {
     /* Create layouts and components */

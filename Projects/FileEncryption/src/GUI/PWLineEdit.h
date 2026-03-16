@@ -6,13 +6,16 @@
 
 #pragma once
 
-#include "Common/header.h"
 #include "Utils/Password.h"
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QWidget>
 
- /**
-  * @class   PWLineEdit
-  * @brief   Password input window with show/hide toggle
-  */
+/**
+ * @class   PWLineEdit
+ * @brief   Password input window with show/hide toggle
+ */
 class PWLineEdit : public QWidget {
     Q_OBJECT
 

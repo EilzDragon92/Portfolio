@@ -48,10 +48,6 @@ This is the GUI-based password manager tool using AES-256-GCM.
 
 ## 3. Specifications
 
-* **Maximum Vault File Size:** 2 GiB
-
-* **Maximum Password Size:** 256 characters
-
 * **AES-256-GCM**
 	* **IV Size:** 96 bits (recommended for AES-256-GCM)
 	* **Key Size:** 256 bits (using AES-256)
@@ -63,6 +59,15 @@ This is the GUI-based password manager tool using AES-256-GCM.
 	* **Time Cost:** 4 iterations
 	* **Parallelism:** All available CPU cores
 	* **Salt Size:** 128 bits
+
+* **Entry**
+	* **Maximum Site Name Length:** 256 characters
+	* **Maximum Account Length:** 256 characters
+	* **Maximum Password Length:** 256 characters
+
+* **Vault**
+	* **Maximum Vault File Size:** 2 GiB
+	* **Maximum Master Password Length:** 256 Characters
 
 ### 3-1. Vault File Format
 
@@ -164,6 +169,16 @@ cmake --build build
 ```
 
 ### 4-3. Usage
+
+![LoginGUI](LoginGUI.png)
+
+![PasswordGUI](PasswordGUI.png)
+
+![ListGUI](ListGUI.png)
+
+![EntryGUI](EntryGUI.png)
+
+![ChangePWGUI](ChangePWGUI.png)
 
 1. Run the executable `PasswordManager.exe` or `PasswordManager`
 2. Create a new vault or open an existing vault

@@ -10,7 +10,9 @@
 
 #pragma once
 
-#include "Common/header.h"
+#include "Common/constants.h"
+#include <future>
+#include <openssl/evp.h>
 
 /**
  * @class	AES_GCM
@@ -108,10 +110,10 @@ private:
 	int64_t size = 0;	// Source file size
 	uint64_t prog = 0;	// Current progress
 
-	uint8_t buff[BUFF_NUM][BUFF_SIZE][BLOCK_SIZE];	// Buffer
-	uint8_t iv[IV_SIZE];							// Initial vector
-	uint8_t key[KEY_SIZE];							// Key derived from password
-	uint8_t salt[SALT_SIZE];						// Key derivation salt
+	uint8_t buff[kBuffNum][kBuffSize][kBlockSize];	// Buffer
+	uint8_t iv[kIVSize];							// Initial vector
+	uint8_t key[kKeySize];							// Key derived from password
+	uint8_t salt[kSaltSize];						// Key derivation salt
 
 	std::atomic<bool> cancelled{ false };	// Is the program cancelled?
 	std::future<int> writeRes;				// Asynchronous write result

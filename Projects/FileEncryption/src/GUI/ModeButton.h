@@ -6,7 +6,10 @@
 
 #pragma once
 
-#include "Common/header.h"
+#include <QButtonGroup>
+#include <QHBoxLayout>
+#include <QRadioButton>
+#include <QWidget>
 
 /**
  * @class   ModeButton

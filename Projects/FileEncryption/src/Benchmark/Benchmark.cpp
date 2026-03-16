@@ -4,9 +4,10 @@
  * @author  EilzDragon92
  */
 
-#include <benchmark/benchmark.h>
 #include "Core/AES_GCM.h"
-#include "Common/header.h"
+#include "Utils/library.h"
+#include <QString>
+#include <benchmark/benchmark.h>
 
 #define FILE_SIZE 4LL * 1024 * 1024 * 1024
 
@@ -114,11 +115,11 @@ BENCHMARK_DEFINE_F(Benchmark, Decrypt)(benchmark::State &state) {
  * @brief   Argon2id benchmark
  */
 static void BM_Argon2id(benchmark::State &state) {
-    uint8_t salt[SALT_SIZE], key[KEY_SIZE];
+    uint8_t salt[kSaltSize], key[kKeySize];
     const char *pw = "password";
     int psize = strlen(pw);
 
-    for (int i = 0; i < SALT_SIZE; i++) salt[i] = i;
+    for (int i = 0; i < kSaltSize; i++) salt[i] = i;
 
     for (auto _ : state) Argon2id(salt, pw, psize, key);
 }

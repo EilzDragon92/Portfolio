@@ -5,6 +5,7 @@
  */
 
 #include "Core/AES_GCM.h"
+#include "Utils/library.h"
 
 int AES_GCM::encrypt(FILE *src, FILE *dst, const char *pw, size_t plen) {
 	this->src = src;
@@ -47,7 +48,7 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 		// LCOV_EXCL_STOP
 	}
 
-	if (size > MAX_SIZE) {
+	if (size > kMaxSize) {
 		// LCOV_EXCL_START
 		reportError("[File] Validation failed - File should be at most 64 GiB\n");
 		return 1;
@@ -57,14 +58,14 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 
 	/* Generate salt and IV */
 
-	if (Random(salt, SALT_SIZE)) {
+	if (Random(salt, kSaltSize)) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Random failed - Cannot generate salt\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	if (Random(iv, IV_SIZE)) {
+	if (Random(iv, kIVSize)) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Random failed - Cannot generate initial vector\n");
 		return 1;
@@ -98,7 +99,7 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 		// LCOV_EXCL_STOP
 	}
 
-	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IV_SIZE, NULL) != 1) {
+	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, kIVSize, NULL) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Initialization failed - Cannot set initial vector size\n");
 		return 1;
@@ -115,14 +116,14 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 
 	/* Write salt and IV */
 
-	if (fwrite(salt, sizeof(uint8_t), SALT_SIZE, dst) != SALT_SIZE) {
+	if (fwrite(salt, sizeof(uint8_t), kSaltSize, dst) != kSaltSize) {
 		// LCOV_EXCL_START
 		reportError("[File] Write failed - Cannot write salt to destination file header\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	if (fwrite(iv, sizeof(uint8_t), IV_SIZE, dst) != IV_SIZE) {
+	if (fwrite(iv, sizeof(uint8_t), kIVSize, dst) != kIVSize) {
 		// LCOV_EXCL_START
 		reportError("[File] Write failed - Cannot write initial vector to destination file header\n");
 		return 1;
@@ -156,7 +157,7 @@ int AES_GCM::encryptBuff(void *src, void *dst, int srcLen) {
 int AES_GCM::encryptBatch() {
 	int cur = 0;
 
-	while (prog + BUFF_SIZE * BLOCK_SIZE <= size) {
+	while (prog + kBuffSize * kBlockSize <= size) {
 		/* Wait for the previous write to finish */
 
 		if (writing && writeRes.get() != 0) return 1;
@@ -164,18 +165,18 @@ int AES_GCM::encryptBatch() {
 
 		/* Read in main thread */
 
-		if (readFile(buff[cur], BUFF_SIZE * BLOCK_SIZE)) return 1;
+		if (readFile(buff[cur], kBuffSize * kBlockSize)) return 1;
 
 
 		/* Encrypt in main thread */
 
-		if (encryptBuff(buff[cur], buff[cur], BUFF_SIZE * BLOCK_SIZE)) return 1;
+		if (encryptBuff(buff[cur], buff[cur], kBuffSize * kBlockSize)) return 1;
 
 
 		/* Asynchronous write in another thread */
 
 		writeRes = std::async(std::launch::async, [this, cur]() {
-			return writeFile(buff[cur], BUFF_SIZE * BLOCK_SIZE);
+			return writeFile(buff[cur], kBuffSize * kBlockSize);
 		});
 
 		writing = true;
@@ -188,7 +189,7 @@ int AES_GCM::encryptBatch() {
 
 		/* Update progress */
 
-		prog += BUFF_SIZE * BLOCK_SIZE;
+		prog += kBuffSize * kBlockSize;
 
 		if (reportProgress()) {
 			writeRes.wait();
@@ -209,25 +210,25 @@ int AES_GCM::encryptBatch() {
 }
 
 int AES_GCM::encryptRemain() {
-	int crs = 0, rem = size % (BUFF_SIZE * BLOCK_SIZE);
+	int crs = 0, rem = size % (kBuffSize * kBlockSize);
 
 	if (readFile(buff[0], rem)) return 1;
 
 
 	/* Encrypt remaining full blocks */
 
-	while (prog + BLOCK_SIZE <= size) {
-		if (encryptBuff(buff[0][crs], buff[0][crs], BLOCK_SIZE)) return 1;
+	while (prog + kBlockSize <= size) {
+		if (encryptBuff(buff[0][crs], buff[0][crs], kBlockSize)) return 1;
 
 		crs++;
 
-		prog += BLOCK_SIZE;
+		prog += kBlockSize;
 	}
 
 
 	/* Encrypt remaining partial block */
 
-	rem = size % BLOCK_SIZE;
+	rem = size % kBlockSize;
 
 	if (rem) {
 		if (encryptBuff(buff[0][crs], buff[0][crs], rem)) return 1;
@@ -235,7 +236,7 @@ int AES_GCM::encryptRemain() {
 		prog += rem;
 	}
 
-	if (writeFile(buff[0], BLOCK_SIZE * crs + rem)) return 1;
+	if (writeFile(buff[0], kBlockSize * crs + rem)) return 1;
 
 
 	if (reportProgress()) return 1;
@@ -244,7 +245,7 @@ int AES_GCM::encryptRemain() {
 }
 
 int AES_GCM::encryptFinal() {
-	uint8_t final[BLOCK_SIZE];
+	uint8_t final[kBlockSize];
 	int finalLen;
 	
 	if (EVP_EncryptFinal_ex(ctx, final, &finalLen) != 1) {
@@ -260,16 +261,16 @@ int AES_GCM::encryptFinal() {
 }
 
 int AES_GCM::encryptTag() {
-	uint8_t tag[TAG_SIZE];
+	uint8_t tag[kTagSize];
 	
-	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, TAG_SIZE, tag) != 1) {
+	if (EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, kTagSize, tag) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Tag Error - Cannot get authentication tag\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	if (fwrite(tag, sizeof(uint8_t), TAG_SIZE, dst) != TAG_SIZE) {
+	if (fwrite(tag, sizeof(uint8_t), kTagSize, dst) != kTagSize) {
 		// LCOV_EXCL_START
 		reportError("[File] Write failed - Cannot write authentication tag on destination file\n");
 		return 1;

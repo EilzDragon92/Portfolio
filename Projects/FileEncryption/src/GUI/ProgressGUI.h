@@ -6,7 +6,12 @@
 
 #pragma once
 
-#include "Common/header.h"
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QProgressBar>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QWidget>
 
 /**
  * @class	ProgressGUI
