@@ -5,6 +5,7 @@
  */
 
 #include "Core/Entry.h"
+#include <cstring>
 
 size_t Entry::size() const {
     return sizeof(uint32_t) + site.size() + sizeof(uint32_t) + acc.size() + sizeof(uint32_t) + pw.getSize();
