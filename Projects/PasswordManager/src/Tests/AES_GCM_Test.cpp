@@ -7,6 +7,7 @@
 #include "Core/AES_GCM.h"
 #include <gtest/gtest.h>
 
+
 /* ==================================================
  * Encryption/Decryption Tests
  * ================================================== */

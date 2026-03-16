@@ -8,6 +8,7 @@
 #include "Utils/library.h"
 #include <gtest/gtest.h>
 
+
 /**
  * @class   VaultFileTest
  * @brief   Test fixture for Vault file operations

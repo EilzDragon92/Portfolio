@@ -5,6 +5,8 @@
  */
 
 #include "Utils/Password.h"
+#include <cstdint>
+#include <cstddef>
 #include <gtest/gtest.h>
 
 
@@ -34,7 +36,7 @@ TEST(PasswordTest, IsDefaultEmpty) {
 TEST(PasswordTest, SetDataCString) {
     Password pw;
     const char *data = "password";
-    int size = strlen(data);
+    size_t size = strlen(data);
 
     pw.setData(data, size);
 
@@ -50,7 +52,7 @@ TEST(PasswordTest, SetDataCString) {
 TEST(PasswordTest, SetDataPassword) {
     Password pw0;
     const char *data = "password";
-    int size = strlen(data);
+    size_t size = strlen(data);
 
     pw0.setData(data, size);
 
@@ -72,8 +74,8 @@ TEST(PasswordTest, SetDataReplace) {
 
     const char *data0 = "qwerty1234";
     const char *data1 = "password";
-    int size0 = strlen(data0);
-    int size1 = strlen(data1);
+    size_t size0 = strlen(data0);
+    size_t size1 = strlen(data1);
 
     pw.setData(data0, size0);
     pw.setData(data1, size1);
@@ -96,7 +98,7 @@ TEST(PasswordTest, CopyConstructor) {
     Password pw0;
 
     const char *data = "password";
-    int size = strlen(data);
+    size_t size = strlen(data);
 
     pw0.setData(data, size);
 
@@ -117,8 +119,8 @@ TEST(PasswordTest, CopyAssignment) {
 
     const char *data0 = "qwerty1234";
     const char *data1 = "password";
-    int size0 = strlen(data0);
-    int size1 = strlen(data1);
+    size_t size0 = strlen(data0);
+    size_t size1 = strlen(data1);
 
     pw0.setData(data0, size0);
     pw1.setData(data1, size1);
@@ -138,7 +140,7 @@ TEST(PasswordTest, CopyAssignment) {
 TEST(PasswordTest, MoveConstructor) {
     Password pw0;
     const char *data = "password";
-    int size = strlen(data);
+    size_t size = strlen(data);
 
     pw0.setData(data, size);
 
@@ -158,7 +160,7 @@ TEST(PasswordTest, MoveConstructor) {
 TEST(PasswordTest, MoveAssignment) {
     Password pw0;
     const char *data = "password";
-    int size = strlen(data);
+    size_t size = strlen(data);
 
     pw0.setData(data, size);
 
@@ -183,7 +185,7 @@ TEST(PasswordTest, MoveAssignment) {
 TEST(PasswordTest, SelfAssignmentSafe) {
     Password pw;
     const char *data = "password";
-    int size = strlen(data);
+    size_t size = strlen(data);
 
     pw.setData(data, size);
 
@@ -209,7 +211,7 @@ TEST(PasswordTest, SetDataNull) {
 TEST(PasswordTest, DestructorAfterMove) {
     Password *pw0 = new Password();
     const char *data = "password";
-    int size = strlen(data);
+    size_t size = strlen(data);
 
     pw0->setData(data, size);
 

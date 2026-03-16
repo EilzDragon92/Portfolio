@@ -6,7 +6,10 @@
 
 #include "Common/constants.h"
 #include "Utils/Password.h"
+#include <cstdint>
+#include <cstddef>
 #include <gtest/gtest.h>
+
 
 /* ==================================================
  * Construction and Initialization Test
