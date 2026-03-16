@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <cstddef>
+
 /**
  * @class	Password
  * @brief	RAII class that securely handles password
