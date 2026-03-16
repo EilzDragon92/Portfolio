@@ -86,8 +86,14 @@ int Vault::openVault(const QString &path) {
 		// LCOV_EXCL_STOP
 	}
 
+	if (srcSize < MIN_SIZE) {
+		reportError("[File] Validation failed - File is too small to be a valid vault\n");
+		return 1;
+	}
+
+
 	if (srcSize > MAX_SIZE) {
-		reportError("[File] Validation failed - File should be at most 64 GiB\n");
+		reportError("[File] Validation failed - File exceeds maximum size (2 GiB)\n");
 		return 1;
 	}
 
@@ -229,7 +235,7 @@ int Vault::changePW(const Password &newPW, const QString &path) {
 	lastError.clear();
 
 	if (pw.setData(newPW)) {
-		reportError("[Auth] Password change failed - Password exceeds maximum length (32 characters)\n");
+		reportError("[Auth] Password change failed - Password exceeds maximum length (256 characters)\n");
 		return 1;
 	}
 

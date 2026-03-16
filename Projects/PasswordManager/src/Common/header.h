@@ -67,13 +67,16 @@
 #define IV_SIZE 12		/// Initial vector size in bytes
 #define TAG_SIZE 16		/// Authentication tag size in bytes
 
-#define MAX_SIZE 64ULL * (1024 * 1024 * 1024)	/// Maximum vault file size (64 GiB)
-
 #define MAGIC_NUM 0x63a5baf3			/// Magic number to distinguish vault file
 #define MAGIC_SIZE 4					/// Magic number size
 #define COUNT_SIZE sizeof(uint32_t)		/// Entry count field size
 
-#define MAX_PWSIZE 256	// Maximum length of password
+#define MIN_SIZE (MAGIC_SIZE + SALT_SIZE + IV_SIZE + COUNT_SIZE + TAG_SIZE)		/// Mininum vault file size
+#define MAX_SIZE 2ULL * (1024 * 1024 * 1024)									/// Maximum vault file size (2 GiB)
+
+#define MAX_SITELEN 256		/// Maximum length of site name
+#define MAX_ACCLEN 256		/// Maximum length of account
+#define MAX_PWLEN 256		/// Maximum length of password
 
 /**
  * @brief	Get the size of a file in bytes

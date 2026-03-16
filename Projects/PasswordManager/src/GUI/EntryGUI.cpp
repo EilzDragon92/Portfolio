@@ -28,15 +28,17 @@ EntryGUI::EntryGUI(QWidget *parent) : QDialog(parent) {
 	vBox = new QVBoxLayout;
 
 
-	/* Set placeholder text */
+	/* Configure input lines */
 
 	siteLine->setPlaceholderText("Site");
+	siteLine->setMaxLength(MAX_SITELEN);
 	accLine->setPlaceholderText("Account");
+	accLine->setMaxLength(MAX_ACCLEN);
 
 
 	/* Configure password length slider */
 
-	lenSlider->setRange(8, MAX_PWSIZE);
+	lenSlider->setRange(8, MAX_PWLEN);
 	lenSlider->setValue(16);
 
 	lenBox->addWidget(lenLabel);
@@ -157,7 +159,7 @@ void EntryGUI::onOKClicked() {
 	Password tmp;
 
 	if (pwLine->extract(tmp)) {
-		errMsg->setText("Password exceeds maximum length (32 characters)");
+		errMsg->setText("Password exceeds maximum length (256 characters)");
 		return;
 	}
 

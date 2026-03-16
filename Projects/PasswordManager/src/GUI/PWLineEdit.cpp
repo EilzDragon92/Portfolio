@@ -14,9 +14,10 @@ PWLineEdit::PWLineEdit(QWidget *parent) : QWidget(parent) {
     pwLine = new QLineEdit;
 
 
-    /* Set placeholder text that indicates password field */
+    /* Configure input line */
 
     pwLine->setPlaceholderText("Password");
+    pwLine->setMaxLength(MAX_PWLEN);
     pwLine->setEchoMode(QLineEdit::Password);
 
 

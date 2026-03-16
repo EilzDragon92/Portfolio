@@ -7,6 +7,10 @@
 /Projects/FileEncryption/out
 /Projects/FileEncryption/vcpkg_installed
 /Projects/FileEncryption/x64
+/Projects/FileEncryption/CMakeUserPresets.json
+/Projects/FileEncryption/CMakePresets.json
 /Projects/FileEncryption/plain.txt
 /Projects/PasswordManager/.vs
 /Projects/PasswordManager/build
+/Projects/PasswordManager/CMakeUserPresets.json
+/Projects/PasswordManager/CMakePresets.json

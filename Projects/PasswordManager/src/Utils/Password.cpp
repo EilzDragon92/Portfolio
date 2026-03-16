@@ -10,7 +10,7 @@ bool Password::equal(const Password &other) const {
 	volatile uint8_t diff = (size != other.size) ? 1 : 0;
 	size_t minSize = (size < other.size) ? size : other.size;
 
-	for (size_t i = 0; i < MAX_PWSIZE; i++) {
+	for (size_t i = 0; i < MAX_PWLEN; i++) {
 		uint8_t a = (i >= minSize) ? 0 : static_cast<uint8_t>(data[i]);
 		uint8_t b = (i >= minSize) ? 0 : static_cast<uint8_t>(other.data[i]);
 
@@ -37,7 +37,7 @@ int Password::setData(const Password &pw) {
 }
 
 int Password::setData(const char *str, size_t len) {
-	if (len > MAX_PWSIZE) return 1;
+	if (len > MAX_PWLEN) return 1;
 
 	clean();
 

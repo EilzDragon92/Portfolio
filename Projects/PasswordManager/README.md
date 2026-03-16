@@ -48,9 +48,9 @@ This is the GUI-based password manager tool using AES-256-GCM.
 
 ## 3. Specifications
 
-* **Maximum Vault File Size:** 64 GiB (2 ^ 32 blocks, limitation of 32-bit counter)
+* **Maximum Vault File Size:** 2 GiB
 
-* **Maximum Password Size:** 32 characters
+* **Maximum Password Size:** 256 characters
 
 * **AES-256-GCM**
 	* **IV Size:** 96 bits (recommended for AES-256-GCM)
