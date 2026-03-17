@@ -138,12 +138,36 @@ TEST_F(VaultFileTest, OpenNonExistent) {
  */
 TEST_F(VaultFileTest, OpenCorruptedFile) {
     FILE *file = nullptr;
-    std::vector<uint8_t> vec(kMagicSize, 0x00);
+    std::vector<uint8_t> vec(kMinSize, 0x00);
 
     OpenFile(&file, path, "wb");
 
     if (file) {
         fwrite(vec.data(), sizeof(uint8_t), vec.size(), file);
+        fclose(file);
+    }
+
+    EXPECT_NE(reload(), 0);
+}
+
+/**
+ * @brief   Verify opening a file exceeding maximum size fails
+ */
+TEST_F(VaultFileTest, OpenOversizedFile) {
+    FILE *file = nullptr;
+
+    OpenFile(&file, path, "wb");
+
+    if (file) {
+    #ifdef _WIN32
+        _fseeki64(file, kMaxSize + 1, SEEK_SET);
+
+    #else
+        fseeko(file, kMaxSize + 1, SEEK_SET);
+
+    #endif
+
+        fputc(0, file);
         fclose(file);
     }
 

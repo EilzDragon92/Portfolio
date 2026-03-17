@@ -189,7 +189,7 @@ cmake --build build
 ## 5. Testing
 ### 5-1. Coverage
 
-![Coverage](https://codecov.io/gh/EilzDragon92/Portfolio/tree/main/Projects/PasswordManager/badge.svg)
+![Coverage](https://codecov.io/gh/EilzDragon92/Portfolio/branch/main/graph/badge.svg?flag=passwordmanager)
 
 | Module   | Test File            | Test Cases                                                                 |
 | -------- | -------------------- | -------------------------------------------------------------------------- |

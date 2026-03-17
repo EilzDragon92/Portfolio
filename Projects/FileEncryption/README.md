@@ -153,7 +153,7 @@ cmake --build build
 ## 5. Testing
 ### 5-1. Coverage
 
-![Coverage](https://codecov.io/gh/EilzDragon92/Portfolio/tree/main/Projects/FileEncryption/badge.svg)
+![Coverage](https://codecov.io/gh/EilzDragon92/Portfolio/branch/main/graph/badge.svg?flag=fileencryption)
 
 | File                 | Tracked Lines | Covered | Partial | Missed | Coverage % |
 | -------------------- | ------------- | ------- | ------- | ------ | ---------- |

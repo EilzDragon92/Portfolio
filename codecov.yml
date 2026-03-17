@@ -1,9 +1,26 @@
 coverage:
   status:
     project:
-      default:
+      fileencryption:
         target: 80%
         threshold: 5%
+        flags:
+          - fileencryption
+      passwordmanager:
+        target: 80%
+        threshold: 5%
+        flags:
+          - passwordmanager
+
+flags:
+  fileencryption:
+    paths:
+      - Projects/FileEncryption/src/
+    carryforward: true
+  passwordmanager:
+    paths:
+      - Projects/PasswordManager/src/
+    carryforward: true
 
 ignore:
   - "Projects/FileEncryption/src/Benchmark/Benchmark.cpp"
