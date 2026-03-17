@@ -101,24 +101,24 @@ int AES_GCM::decryptTag() {
 }
 
 int AES_GCM::decryptBuff() {
-	int len = size - kSaltSize - kIVSize - kTagSize;
-	int res;
+	int inLen = size - kSaltSize - kIVSize - kTagSize;
+	int outLen;
 
-	if (EVP_DecryptUpdate(ctx, dst, &res, src + srcCrs, len) != 1) {
+	if (EVP_DecryptUpdate(ctx, dst, &outLen, src + srcCrs, inLen) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Decryption failed - Cannot decrypt buffer\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	if (res != len) {
+	if (outLen != inLen) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Decryption failed - Cannot decrypt buffer\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	dstCrs += len;
+	dstCrs += inLen;
 
 	return 0;
 }
@@ -134,7 +134,12 @@ int AES_GCM::decryptFinal() {
 		// LCOV_EXCL_STOP
 	}
 
-	if (finalLen > 0) return 1;
+	if (finalLen > 0) {
+		// LCOV_EXCL_START
+		reportError("[Crypto] Finalization failed - Unexpected output from finalization\n");
+		return 1;
+		// LCOV_EXCL_STOP
+	}
 
 	memcpy(dst + dstCrs, final, finalLen);
 	dstCrs += finalLen;

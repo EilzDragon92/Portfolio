@@ -58,6 +58,7 @@ int Vault::newVault(const QString &path) {
 }
 
 int Vault::openVault(const QString &path) {
+	std::set<Entry, EntryCmp> tmp;
 	size_t cur = 0;
 	uint32_t entryCnt = 0;
 
@@ -148,8 +149,10 @@ int Vault::openVault(const QString &path) {
 
 		cur += bytes;
 
-		entrySet.insert(std::move(entry));
+		tmp.insert(std::move(entry));
 	}
+
+	entrySet = std::move(tmp);
 
 
 	clear();

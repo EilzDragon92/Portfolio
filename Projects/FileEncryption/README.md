@@ -72,7 +72,7 @@ Salt (16 Bytes) │ IV (12 Bytes) │ Encrypted Data │ Tag (16 Bytes)
 ```
 Source
 ├── Common
-│   ├── header.h           # Common includes, macros, function definitions
+│   ├── constants.h        # Constant values
 │   └── main.cpp           # Application entry point
 ├── Core
 │   ├── AES_GCM.h/cpp      # AES-GCM engine
@@ -87,7 +87,7 @@ Source
 │   └── PWLineEdit.h/cpp   # Password input widget
 └── Utils
     ├── Password.h/cpp     # Secure password container
-    └── library.cpp        # Utility functions
+    └── library.h.cpp      # Utility functions
 ```
 
 ### 3-3. Limitations

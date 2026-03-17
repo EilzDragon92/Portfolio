@@ -100,7 +100,7 @@ Site Name Length (4 Bytes) | Site Name | Account Length (4 Bytes) | Account | Pa
 ```
 Source
 ├── Common
-│   ├── header.h           # Common includes, macros, function definitions
+│   ├── constants.h        # Constant values
 │   └── main.cpp           # Application entry point
 ├── Core
 │   ├── AES_GCM.h/cpp      # AES-GCM engine
@@ -120,7 +120,7 @@ Source
 │   └── PWLineEdit.h/cpp   # Password input component with show/hide toggle
 └── Utils
     ├── Password.h/cpp     # Secure password container
-    └── library.cpp        # Utility functions
+    └── library.h.cpp        # Utility functions
 ```
 
 ### 3-3. Limitations

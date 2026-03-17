@@ -103,16 +103,16 @@ int AES_GCM::encryptInit(const char *pw, size_t plen) {
 }
 
 int AES_GCM::encryptBuff() {
-	int res;
+	int outLen;
 
-	if (EVP_EncryptUpdate(ctx, dst + dstCrs, &res, src, size) != 1) {
+	if (EVP_EncryptUpdate(ctx, dst + dstCrs, &outLen, src, size) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Encryption failed - Cannot encrypt buffer\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
-	if (res != size) {
+	if (outLen != size) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Encryption failed - Cannot encrypt buffer\n");
 		return 1;
@@ -135,7 +135,12 @@ int AES_GCM::encryptFinal() {
 		// LCOV_EXCL_STOP
 	}
 
-	if (finalLen > 0) return 1;
+	if (finalLen > 0) {
+		// LCOV_EXCL_START
+		reportError("[Crypto] Finalization failed - Unexpected output from finalization\n");
+		return 1;
+		// LCOV_EXCL_STOP
+	}
 
 	memcpy(dst + dstCrs, final, finalLen);
 	dstCrs += finalLen;

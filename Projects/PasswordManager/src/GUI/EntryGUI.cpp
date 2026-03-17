@@ -243,15 +243,15 @@ bool EntryGUI::hasSpecialSelected() const {
 
 int EntryGUI::genPW(Password &dst, const std::vector<bool> &spcList, int pwSize) {
 	std::string pool;
-	size_t poolSize;
+	size_t poolSize = 62;
 	const char lower[] = "abcdefghijklmnopqrstuvwxyz";
 	const char upper[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	const char num[] = "0123456789";
 	char *pw;
-	int res = 0;
+	int crs = 0, res = 0;
 
 
-	/* Check the list size is valid */
+	/* Check the special character list size is valid */
 
 	if (spcList.size() != 32) return 1;
 
@@ -263,13 +263,14 @@ int EntryGUI::genPW(Password &dst, const std::vector<bool> &spcList, int pwSize)
 
 	/* Add characters to pool */
 
-	pool += lower;
-	pool += upper;
-	pool += num;
+	for (int i = 0; i < 32; i++) if (spcList[i]) poolSize++;
 
-	for (int i = 0; i < 32; i++) if (spcList[i]) pool += spcs[i];
+	pool.resize(poolSize);
 
-	poolSize = pool.size();
+	for (int i = 0; i < 26; i++) pool[crs++] = lower[i];
+	for (int i = 0; i < 26; i++) pool[crs++] = upper[i];
+	for (int i = 0; i < 10; i++) pool[crs++] = num[i];
+	for (int i = 0; i < 32; i++) if (spcList[i]) pool[crs++] = spcs[i];
 
 
 	/* Check at least one special character is selected */
