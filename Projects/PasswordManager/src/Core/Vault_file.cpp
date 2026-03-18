@@ -137,6 +137,12 @@ int Vault::openVault(const QString &path) {
 	memcpy(&entryCnt, dstBuff, kCountSize);
 	cur += kCountSize;
 
+	if (entryCnt * kMinEntrySize > dstSize - kCountSize) {
+		reportError("[Data] Validation failed - Entry count exceeds available data\n");
+		return 1;
+	}
+
+
 	for (uint32_t i = 0; i < entryCnt; i++) {
 		Entry entry;
 
@@ -201,26 +207,42 @@ int Vault::saveVault(const QString &path) {
 	}
 
 
-	/* Save vault */
+	/* Save to temporary file */
 
-	OpenFile(&file, path, "wb");
+	QString tmpPath = path + ".tmp";
+
+	OpenFile(&file, tmpPath, "wb");
 
 	if (file == nullptr) {
 		// LCOV_EXCL_START
-		reportError("[File] Open failed - Cannot open vault file for writing\n");
+		reportError("[File] Open failed - Cannot open temporary file for writing\n");
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
 	if (fwrite(dstBuff, sizeof(uint8_t), dstSize, file) != dstSize) {
 		// LCOV_EXCL_START
-		reportError("[File] Write failed - Cannot write vault file\n");
+		reportError("[File] Write failed - Cannot write temporary file\n");
+		RemoveFile(tmpPath);
 		return 1;
 		// LCOV_EXCL_STOP
 	}
 
 
+	/* Close file handles before rename */
+
 	clear();
+
+
+	/* Atomic replace: rename temporary file to vault file */
+
+	if (RenameFile(tmpPath, path)) {
+		// LCOV_EXCL_START
+		RemoveFile(tmpPath);
+		reportError("[File] Rename failed - Cannot replace vault file\n");
+		return 1;
+		// LCOV_EXCL_STOP
+	}
 
 	return 0;
 }

@@ -120,6 +120,24 @@ int RemoveFile(const QString &path) {
 #endif
 }
 
+int RenameFile(const QString &src, const QString &dst) {
+#ifdef _WIN32
+    std::wstring wsrc = src.toStdWString();
+    std::wstring wdst = dst.toStdWString();
+
+    if (!MoveFileExW(wsrc.c_str(), wdst.c_str(), MOVEFILE_REPLACE_EXISTING)) return 1;
+
+    return 0;
+
+#else
+    QByteArray qsrc = src.toUtf8();
+    QByteArray qdst = dst.toUtf8();
+
+    return rename(qsrc.constData(), qdst.constData());
+
+#endif
+}
+
 void Lock(void *buff, size_t size) {
 #ifdef _WIN32
     VirtualLock(buff, size);

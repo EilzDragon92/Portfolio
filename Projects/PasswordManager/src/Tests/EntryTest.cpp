@@ -318,3 +318,73 @@ TEST(EntryTest, DeserializationBoundaryCheck) {
 
     EXPECT_EQ(dst.deser(vec.data(), size), 0);
 }
+
+
+/* ==================================================
+ * Field Length Validation Test
+ * ================================================== */
+
+/**
+ * @brief   Build a serialized entry buffer with specified field lengths and deserialize
+ * @param   entry       Entry to deserialize into
+ * @param   siteLen     Site name length
+ * @param   accLen      Account length
+ * @param   pwLen       Password length
+ * @return  Number of bytes read on success, 0 on failure
+ */
+static size_t buildAndDeser(Entry &entry, uint32_t siteLen, uint32_t accLen, uint32_t pwLen) {
+    size_t totalSize = sizeof(uint32_t) + siteLen + sizeof(uint32_t) + accLen + sizeof(uint32_t) + pwLen;
+ 
+    std::vector<uint8_t> vec(totalSize, 'a');
+ 
+    size_t cur = 0;
+ 
+    memcpy(vec.data() + cur, &siteLen, sizeof(uint32_t));
+    cur += sizeof(uint32_t) + siteLen;
+ 
+    memcpy(vec.data() + cur, &accLen, sizeof(uint32_t));
+    cur += sizeof(uint32_t) + accLen;
+ 
+    memcpy(vec.data() + cur, &pwLen, sizeof(uint32_t));
+ 
+    return entry.deser(vec.data(), vec.size());
+}
+ 
+/**
+ * @brief   Verify deserialization fails when site name exceeds maximum length
+ */
+TEST(EntryTest, DeserializeOversizedSite) {
+    Entry entry;
+ 
+    EXPECT_EQ(buildAndDeser(entry, kMaxSiteLen + 1, 1, 1), 0);
+}
+ 
+/**
+ * @brief   Verify deserialization fails when account exceeds maximum length
+ */
+TEST(EntryTest, DeserializeOversizedAccount) {
+    Entry entry;
+ 
+    EXPECT_EQ(buildAndDeser(entry, 1, kMaxAccLen + 1, 1), 0);
+}
+ 
+/**
+ * @brief   Verify deserialization fails when password exceeds maximum length
+ */
+TEST(EntryTest, DeserializeOversizedPassword) {
+    Entry entry;
+ 
+    EXPECT_EQ(buildAndDeser(entry, 1, 1, kMaxPWLen + 1), 0);
+}
+ 
+/**
+ * @brief   Verify deserialization succeeds at exact maximum field lengths
+ */
+TEST(EntryTest, DeserializeMaxFieldLengths) {
+    Entry entry;
+ 
+    EXPECT_NE(buildAndDeser(entry, kMaxSiteLen, kMaxAccLen, kMaxPWLen), 0);
+    EXPECT_EQ(entry.site.size(), kMaxSiteLen);
+    EXPECT_EQ(entry.acc.size(), kMaxAccLen);
+    EXPECT_EQ(entry.pw.getSize(), kMaxPWLen);
+}

@@ -65,6 +65,14 @@ int Random(uint8_t *dst, size_t size);
 int RemoveFile(const QString &path);
 
 /**
+ * @brief	Rename (move) a file, replacing destination if it exists
+ * @param	src		Source file path
+ * @param	dst		Destination file path
+ * @return	0 on success, non-zero on failure
+ */
+int RenameFile(const QString &src, const QString &dst);
+
+/**
  * @brief	Lock memory space so that it cannot be swapped
  * @param	buff	Buffer to lock
  * @param	size	Buffer size in bytes

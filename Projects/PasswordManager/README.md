@@ -120,7 +120,7 @@ Source
 │   └── PWLineEdit.h/cpp   # Password input component with show/hide toggle
 └── Utils
     ├── Password.h/cpp     # Secure password container
-    └── library.h.cpp        # Utility functions
+    └── library.h/cpp        # Utility functions
 ```
 
 ### 3-3. Limitations

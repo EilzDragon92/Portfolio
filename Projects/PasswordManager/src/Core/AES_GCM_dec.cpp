@@ -124,10 +124,10 @@ int AES_GCM::decryptBuff() {
 }
 
 int AES_GCM::decryptFinal() {
-	uint8_t final[kBlockSize];
+	uint8_t finalBuff[kBlockSize];
 	int finalLen;
 
-	if (EVP_DecryptFinal_ex(ctx, final, &finalLen) != 1) {
+	if (EVP_DecryptFinal_ex(ctx, finalBuff, &finalLen) != 1) {
 		// LCOV_EXCL_START
 		reportError("[Crypto] Finalization failed - Cannot finalize decryption\n");
 		return 1;
@@ -141,7 +141,7 @@ int AES_GCM::decryptFinal() {
 		// LCOV_EXCL_STOP
 	}
 
-	memcpy(dst + dstCrs, final, finalLen);
+	memcpy(dst + dstCrs, finalBuff, finalLen);
 	dstCrs += finalLen;
 
 	return 0;

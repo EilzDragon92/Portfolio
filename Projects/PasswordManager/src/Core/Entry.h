@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "Common/constants.h"
 #include "Utils/Password.h"
 #include <cstdint>
 #include <cstddef>
@@ -37,7 +38,7 @@ struct Entry {
      * @brief   Deserialize entry from buffer
      * @param   src         Source buffer
      * @param   srcLen      Source buffer size
-     * @return  Number of bytes read, or 0 on failure
+     * @return  Number of bytes read on success, 0 on failure
      */
     size_t deser(const uint8_t *src, size_t srcLen);
 };

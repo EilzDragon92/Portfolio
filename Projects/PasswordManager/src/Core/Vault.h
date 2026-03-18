@@ -10,6 +10,7 @@
 #include "Core/AES_GCM.h"
 #include "Core/Entry.h"
 #include <QString>
+#include <functional>
 #include <set>
 #include <string>
 

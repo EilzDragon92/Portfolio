@@ -330,6 +330,53 @@ TEST(RandomRangeTest, MinEqualsMax) {
 
 
 /* ==================================================
+ * RenameFile Test
+ * ================================================== */
+
+ /**
+  * @brief   Verify renaming a file succeeds
+  */
+TEST(UtilsTest, RenameFileBasic) {
+    QString src = "rename_src.tmp";
+    QString dst = "rename_dst.tmp";
+
+
+    /* Create source file */
+
+    FILE *file = nullptr;
+
+    OpenFile(&file, src, "wb");
+    ASSERT_NE(file, nullptr);
+
+    const char *data = "test data";
+
+    fwrite(data, 1, strlen(data), file);
+    fclose(file);
+
+    EXPECT_TRUE(FileExists(src));
+
+
+    /* Rename */
+
+    EXPECT_EQ(RenameFile(src, dst), 0);
+    EXPECT_FALSE(FileExists(src));
+    EXPECT_TRUE(FileExists(dst));
+
+
+    /* Cleanup */
+
+    RemoveFile(dst);
+}
+
+/**
+ * @brief   Verify renaming a non-existent file fails
+ */
+TEST(UtilsTest, RenameFileNonExistent) {
+    EXPECT_NE(RenameFile("nonexistent.tmp", "dst.tmp"), 0);
+}
+
+
+/* ==================================================
  * Wipe Test
  * ================================================== */
 

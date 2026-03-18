@@ -7,6 +7,7 @@
 #pragma once
 
 #include "Common/constants.h"
+#include <functional>
 #include <future>
 #include <openssl/evp.h>
 
