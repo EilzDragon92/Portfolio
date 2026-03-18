@@ -11,6 +11,7 @@
 
 #ifdef _WIN32
     #include <windows.h>
+    #include <io.h>
     #include <bcrypt.h>
 
 #else
@@ -136,6 +137,23 @@ int RenameFile(const QString &src, const QString &dst) {
     return rename(qsrc.constData(), qdst.constData());
 
 #endif
+}
+
+int SyncFile(FILE *file) {
+    if (fflush(file)) return 1;
+
+#ifdef _WIN32
+    HANDLE h = (HANDLE)_get_osfhandle(_fileno(file));
+
+    if (h == INVALID_HANDLE_VALUE) return 1;
+    if (!FlushFileBuffers(h)) return 1;
+
+#else
+    if (fsync(fileno(file))) return 1;
+
+#endif
+
+    return 0;
 }
 
 void Lock(void *buff, size_t size) {

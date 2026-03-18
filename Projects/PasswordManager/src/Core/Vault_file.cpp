@@ -52,6 +52,16 @@ int Vault::newVault(const QString &path) {
 	}
 
 
+	/* Sync file data to disk */
+
+	if (SyncFile(file)) {
+		// LCOV_EXCL_START
+		reportError("[File] Sync failed - Cannot flush vault file to disk\n");
+		return 1;
+		// LCOV_EXCL_STOP 
+	}
+
+
 	clear();
 
 	return 0;
@@ -229,20 +239,29 @@ int Vault::saveVault(const QString &path) {
 	}
 
 
-	/* Close file handles before rename */
+	/* Sync file data to disk */
 
-	clear();
+	if (SyncFile(file)) {
+		// LCOV_EXCL_START
+		reportError("[File] Sync failed - Cannot flush vault file to disk\n");
+		RemoveFile(tmpPath);
+		return 1;
+		// LCOV_EXCL_STOP 
+	}
 
 
 	/* Atomic replace: rename temporary file to vault file */
 
 	if (RenameFile(tmpPath, path)) {
 		// LCOV_EXCL_START
-		RemoveFile(tmpPath);
 		reportError("[File] Rename failed - Cannot replace vault file\n");
+		RemoveFile(tmpPath);
 		return 1;
 		// LCOV_EXCL_STOP
 	}
+
+
+	clear();
 
 	return 0;
 }

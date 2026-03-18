@@ -73,6 +73,13 @@ int RemoveFile(const QString &path);
 int RenameFile(const QString &src, const QString &dst);
 
 /**
+ * @brief	Flush and sync file data to disk
+ * @param	file	File pointer
+ * @return	0 on success, non-zero on failure
+ */
+int SyncFile(FILE *file);
+
+/**
  * @brief	Lock memory space so that it cannot be swapped
  * @param	buff	Buffer to lock
  * @param	size	Buffer size in bytes
