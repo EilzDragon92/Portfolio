@@ -99,15 +99,19 @@ target_link_libraries(FileEncryption-tests PRIVATE
 include(GoogleTest)
 gtest_discover_tests(FileEncryption-tests)
 
-find_package(benchmark CONFIG REQUIRED)
+find_package(benchmark CONFIG QUIET)
 
-set(BENCH_SOURCES
-    src/Benchmark/Benchmark.cpp
-)
+if(benchmark_FOUND)
 
-add_executable(FileEncryption-bench ${BENCH_SOURCES})
-target_link_libraries(FileEncryption-bench PRIVATE
-    FileEncryption-lib
-    benchmark::benchmark
-    benchmark::benchmark_main
-)
+    set(BENCH_SOURCES
+        src/Benchmark/Benchmark.cpp
+    )
+
+    add_executable(FileEncryption-bench ${BENCH_SOURCES})
+    target_link_libraries(FileEncryption-bench PRIVATE
+        FileEncryption-lib
+        benchmark::benchmark
+        benchmark::benchmark_main
+    )
+
+endif()
