@@ -333,9 +333,9 @@ TEST(RandomRangeTest, MinEqualsMax) {
  * RenameFile Test
  * ================================================== */
 
- /**
-  * @brief   Verify renaming a file succeeds
-  */
+/**
+ * @brief   Verify renaming a file succeeds
+ */
 TEST(UtilsTest, RenameFileBasic) {
     QString src = "rename_src.tmp";
     QString dst = "rename_dst.tmp";

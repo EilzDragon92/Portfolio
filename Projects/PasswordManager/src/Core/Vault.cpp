@@ -36,15 +36,13 @@ void Vault::clear() {
 	}
 
 	if (srcBuff) {
-		Wipe(srcBuff, srcSize);
-		delete[] srcBuff;
-		srcBuff = nullptr;
+		Wipe(srcBuff.get(), srcSize);
+		srcBuff.reset();
 	}
 
 	if (dstBuff) {
-		Wipe(dstBuff, dstSize);
-		delete[] dstBuff;
-		dstBuff = nullptr;
+		Wipe(dstBuff.get(), dstSize);
+		dstBuff.reset();
 	}
 
 	srcSize = 0;

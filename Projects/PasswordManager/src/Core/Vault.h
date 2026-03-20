@@ -11,6 +11,7 @@
 #include "Core/Entry.h"
 #include <QString>
 #include <functional>
+#include <memory>
 #include <set>
 #include <string>
 
@@ -176,7 +177,8 @@ private:
 	ErrorCallback ecb = nullptr;
 
 	FILE *file = nullptr;
-	uint8_t *srcBuff = nullptr, *dstBuff = nullptr;
+	std::unique_ptr<uint8_t[]> srcBuff;
+	std::unique_ptr<uint8_t[]> dstBuff;
 	int64_t srcSize = 0, dstSize = 0;
 	uint32_t magicNum = kMagicNum;
 
