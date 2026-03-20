@@ -250,6 +250,10 @@ int Vault::saveVault(const QString &path) {
 	}
 
 
+	fclose(file);
+	file = nullptr;
+
+
 	/* Rename temporary file to vault file */
 
 	if (RenameFile(tmpPath, path)) {
