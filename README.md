@@ -1,6 +1,9 @@
+
+[![Build](https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml/badge.svg)](https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml) [![codecov](https://codecov.io/gh/EilzDragon92/Portfolio/branch/main/graph/badge.svg)](https://codecov.io/gh/EilzDragon92/Portfolio) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+
 ## 1. Introduction
 
-I'm EilzDragon92, C/C++ software engineer. I'm interested in security and system programming. I like simple and efficient design, with minimal but necessary features.
+I'm EilzDragon92, C/C++ software engineer. I mainly build desktop applications with a focus on security and practicality. I value simple, efficient design with minimal but necessary features.
 
 ## 2. Tech Stack
 
@@ -8,7 +11,7 @@ I'm EilzDragon92, C/C++ software engineer. I'm interested in security and system
 * **Languages:** C, C++ 20
 * **Libraries & Frameworks:** C++ STL, Argon2, OpenSSL, Qt6
 * **Build & Package:** CMake, vcpkg
-* **Testing:** Codecov, Google Benchmark, Google Test, cppcheck, Icov
+* **Testing:** Codecov, Google Benchmark, Google Test, cppcheck, lcov
 * **CI/CD:** GitHub Actions
 * **Platforms:** Windows, Linux
 
