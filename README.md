@@ -13,20 +13,28 @@ I'm EilzDragon92, C/C++ software engineer. I'm interested in security and system
 * **Platforms:** Windows, Linux
 
 ## 3. Projects
-
 ### 3-1. [FileEncryption](./Projects/FileEncryption)
 
-GUI, password-based file encryption/decryption tool using AES-256-GCM.
+GUI, password-based file encryption/decryption tool.
 
 **Features:**
-* About 2 GB/s throughput
+* 2 GB/s throughput
+* AES-256-GCM for encryption and integrity check
+* Argon2id memory hard and data independent key derivation
+* Real-time progress tracking and cancellation support
 * Cross-platform support for Windows and Linux
-* Various security considerations: 
-	* Widely used and widely trusted AES encryption algorithm
-	* Memory hard and data independent Argon2id key derivation
-	* Integrity check for corrupted or tampered ciphertext
-	* Random salt and IV newly generated each time
-	* Ensured memory wipe for sensitive data
+
+### 3-2. [PasswordManager](./Projects/PasswordManager)
+
+GUI-based password manager tool.
+
+**Features:**
+* AES-256-GCM for encryption and integrity check
+* Argon2id memory hard and data independent key derivation
+* Random password generator with customizable length and special characters
+* Automatic clipboard clear after password copy
+* Search and filter entries by keyword
+* Cross-platform support for Windows and Linux
 
 ## 4. LeetCode
 

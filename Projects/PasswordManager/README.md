@@ -2,19 +2,18 @@
 
 This is the GUI-based password manager tool using AES-256-GCM.
 
-![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white) ![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)</br>
+![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white) ![Linux|57](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)</br>
 ![C++](https://img.shields.io/badge/C++-20-00599C?logo=cplusplus) ![OpenSSL](https://img.shields.io/badge/OpenSSL-3.0-721412?logo=openssl&logoColor=white) ![Qt](https://img.shields.io/badge/Qt-6-41CD52?logo=qt&logoColor=white)</br>
 ![Build](https://github.com/EilzDragon92/Portfolio/actions/workflows/build.yml/badge.svg)
 
 ## 2. Features
 
-* Vault file encrypted with AES-GCM algorithm
+* AES-256-GCM algorithm for vault encryption and integrity check
 * Argon2id for key derivation from master password
 * Qt library for graphical user interface
-* Random password generation with selectable special characters
+* Random password generator with customizable length and special characters
 * Automatic clipboard clear after 30 seconds of password copy
 * Search and filter entries by keyword
-* Re-encryption of vault file for each save or master password change
 * Cross-platform support for Windows and Linux
 
 ### 2-1. Why use this?
@@ -37,14 +36,14 @@ This is the GUI-based password manager tool using AES-256-GCM.
 
 ### 2-2. Security Considerations
 
-* Keys are locked in memory using `VirtualLock`/`mlock` to prevent swapping to disk
-* RAII class for secure password handling, which ensures data wipe on error or cancellation
-* Salt and IV are newly and randomly generated each time using OS-provided CSPRNG (`BCryptGenRandom`/`getrandom`)
-* Sensitive data (passwords, keys, buffers) are ensured to be wiped using `SecureZeroMemory`/`explicit_bzero`
-* Tampered or corrupted files are rejected before any decrypted data output
-* Magic number validation to distinguish vault files
+* AES-GCM tag checks integrity; corrupted or tampered vault files are rejected before decryption starts
 * Automatic clipboard clear after 30 seconds of password copy
-* Random password generator guarantees at least one each of uppercase, lowercase, digit, and special character
+* Constant time password comparison
+* Ensured memory wipe for sensitive data using RAII pattern and `SecureZeroMemory`/`explicit_bzero`
+* Keys are locked in memory using `VirtualLock`/`mlock` to prevent them from being swapped to disk
+* Newly and randomly generated salt and initial vector for each session, using OS-provided CSPRNG (`BCryptGenRandom`/`getrandom`)
+* Password generator guarantees at least one each of uppercase, lowercase, digit, and special character
+* Vault files are re-encrypted with new salt and initial vector for each save or master password change
 
 ## 3. Specifications
 

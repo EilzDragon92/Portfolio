@@ -151,6 +151,36 @@ TEST_F(VaultFileTest, OpenCorruptedFile) {
 }
 
 /**
+ * @brief   Verify opening an empty file fails
+ */
+TEST_F(VaultFileTest, OpenEmptyFile) {
+    FILE *file = nullptr;
+
+    OpenFile(&file, path, "wb");
+
+    if (file) fclose(file);
+
+    EXPECT_NE(reload(), 0);
+}
+
+/**
+ * @brief   Verify opening a file smaller than minimum vault size fails
+ */
+TEST_F(VaultFileTest, OpenUndersizedFile) {
+    FILE *file = nullptr;
+    std::vector<uint8_t> vec(kMinSize - 1, 0x00);
+
+    OpenFile(&file, path, "wb");
+
+    if (file) {
+        fwrite(vec.data(), sizeof(uint8_t), vec.size(), file);
+        fclose(file);
+    }
+
+    EXPECT_NE(reload(), 0);
+}
+
+/**
  * @brief   Verify opening a file exceeding maximum size fails
  */
 TEST_F(VaultFileTest, OpenOversizedFile) {
@@ -168,6 +198,106 @@ TEST_F(VaultFileTest, OpenOversizedFile) {
     #endif
 
         fputc(0, file);
+        fclose(file);
+    }
+
+    EXPECT_NE(reload(), 0);
+}
+
+/**
+ * @brief   Verify opening a vault where entry count grossly exceeds available data fails
+ */
+TEST_F(VaultFileTest, OpenInflatedEntryCount) {
+    AES_GCM aes;
+    const char *pwstr = "password";
+    size_t psize = strlen(pwstr);
+
+
+    /* Entry count is 10, but there is no actual entries */
+
+    uint32_t entryCnt = 10;
+    size_t srcSize = sizeof(uint32_t);
+
+    std::vector<uint8_t> src(srcSize);
+
+    memcpy(src.data(), &entryCnt, sizeof(uint32_t));
+
+
+    /* Encrypt */
+
+    size_t encSize = kSaltSize + kIVSize + srcSize + kTagSize;
+
+    std::vector<uint8_t> enc(encSize);
+
+    aes.encrypt(src.data(), enc.data(), srcSize, pwstr, psize);
+
+
+    /* Write vault file */
+
+    FILE *file = nullptr;
+    uint32_t magic = kMagicNum;
+
+    OpenFile(&file, path, "wb");
+
+    if (file) {
+        fwrite(&magic, sizeof(uint32_t), 1, file);
+        fwrite(enc.data(), sizeof(uint8_t), encSize, file);
+        fclose(file);
+    }
+
+    EXPECT_NE(reload(), 0);
+}
+
+/**
+ * @brief   Verify opening a vault where entry count exceeds actual entries fails during deserialization
+ */
+TEST_F(VaultFileTest, OpenPartialEntryData) {
+    AES_GCM aes;
+    const char *pwstr = "password";
+    size_t psize = strlen(pwstr);
+
+
+    /* Entry count is 2, but only 1 entry is valid */
+
+    Entry entry;
+
+    entry.site = "Google";
+    entry.acc = "user@google.com";
+    entry.pw.setData("password", 8);
+
+    uint32_t entryCnt = 2;
+    size_t entrySize = entry.size();
+    size_t srcSize = sizeof(uint32_t) + entrySize + kMinEntrySize;
+
+    std::vector<uint8_t> src(srcSize, 0xFF);
+
+    size_t cur = 0;
+
+    memcpy(src.data() + cur, &entryCnt, sizeof(uint32_t));
+    cur += sizeof(uint32_t);
+
+    entry.ser(src.data() + cur);
+
+
+    /* Encrypt */
+
+    size_t encSize = kSaltSize + kIVSize + srcSize + kTagSize;
+
+    std::vector<uint8_t> enc(encSize);
+
+    aes.encrypt(src.data(), enc.data(), srcSize, pwstr, psize);
+
+
+    /* Write vault file */
+
+    FILE *file = nullptr;
+    uint32_t magic = kMagicNum;
+
+    OpenFile(&file, path, "wb");
+
+    if (file) {
+        fwrite(&magic, sizeof(uint32_t), 1, file);
+        fwrite(enc.data(), sizeof(uint8_t), encSize, file);
         fclose(file);
     }
 

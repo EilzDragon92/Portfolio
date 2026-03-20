@@ -375,6 +375,71 @@ TEST(UtilsTest, RenameFileNonExistent) {
     EXPECT_NE(RenameFile("nonexistent.tmp", "dst.tmp"), 0);
 }
 
+/**
+ * @brief   Verify renaming overwrites existing destination file
+ */
+TEST(UtilsTest, RenameFileOverwrite) {
+    QString src = "src.tmp";
+    QString dst = "dst.tmp";
+
+
+    /* Create source file */
+
+    FILE *file = nullptr;
+
+    OpenFile(&file, src, "wb");
+    ASSERT_NE(file, nullptr);
+
+    const char *srcData = "Hello, world!";
+
+    fwrite(srcData, 1, strlen(srcData), file);
+    fclose(file);
+
+
+    /* Create destination file with different data */
+
+    OpenFile(&file, dst, "wb");
+    ASSERT_NE(file, nullptr);
+
+    const char *dstData = "Goodbye, world!";
+
+    fwrite(dstData, 1, strlen(dstData), file);
+    fclose(file);
+
+    EXPECT_TRUE(FileExists(src));
+    EXPECT_TRUE(FileExists(dst));
+
+
+    /* Rename (overwrite) */
+
+    EXPECT_EQ(RenameFile(src, dst), 0);
+    EXPECT_FALSE(FileExists(src));
+    EXPECT_TRUE(FileExists(dst));
+
+
+    /* Verify destination contains source data */
+
+    OpenFile(&file, dst, "rb");
+    ASSERT_NE(file, nullptr);
+
+    int64_t size = GetFileSize(file);
+
+    EXPECT_EQ(size, static_cast<int64_t>(strlen(srcData)));
+
+    char buff[32] = { 0 };
+
+    fread(buff, 1, size, file);
+    fclose(file);
+
+    EXPECT_EQ(memcmp(buff, srcData, strlen(srcData)), 0);
+
+
+    /* Cleanup */
+
+    RemoveFile(dst);
+}
+
+
 
 /* ==================================================
  * Wipe Test
